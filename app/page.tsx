@@ -10,6 +10,11 @@ import { Autoplay, Navigation, FreeMode } from 'swiper/modules';
 import 'swiper/css';
 import land1 from "./assets/images/uragaha.jpg";
 import land2 from "./assets/images/dambulla.jpg";
+import land3 from "./assets/images/kaluthara.png"
+import land4 from "./assets/images/dambulla2.png"
+import land5 from "./assets/images/yatidola.png"
+import land6 from "./assets/images/pitigala.png"
+
 import CTASection from "../app/components/CTASection";
 import callusbg from "../app/assets/call-us.png";
 
@@ -53,81 +58,81 @@ export default function HomePage() {
   const PREMIUM_LAND_LIST = [
     {
       id: 1,
-      title: "Mon Vie Residential Phase I",
-      district: "Colombo District",
-      neighborhood: "Colombo 05",
-      price: "86,000,000",
+      title: "Ambalangoda Uragaha Plots",
+      district: "Galle District",
+      neighborhood: "Uragasmanhandiya",
+      price: "120,000",
       currency: "LKR",
-      pricingNote: "Per Unit Upwards",
-      size: "15 Perches",
-      access: "20ft Carpet Road",
-      zoning: "Residential",
-      imageUrl: "https://unsplash.com"
+      pricingNote: "Per Perch Upwards",
+      size: "-- Perches",
+      access: "50m to Bus Route",
+      zoning: "Residential / Investment",
+      imageUrl: land1.src
     },
     {
       id: 2,
-      title: "Urban Commercial Hub Plots",
-      district: "Gampaha District",
-      neighborhood: "Kadawatha",
-      price: "2,450,000",
+      title: "Heritage Dambulla",
+      district: "Matale District",
+      neighborhood: "Dambulla (Municipal Council Limits)",
+      price: "125,000",
       currency: "LKR",
       pricingNote: "Per Perch Upwards",
-      size: "20 Perches",
-      access: "40ft Main Road",
-      zoning: "Commercial",
+      size: "-- Perches",
+      access: "100m to Kandy Road",
+      zoning: "Residential / Commercial",
       imageUrl: land2.src
     },
     {
       id: 3,
-      title: "Clear Deed Luxury Land Blocks",
-      district: "Colombo District",
-      neighborhood: "Malabe",
-      price: "1,200,000",
+      title: "Kalutara Residences",
+      district: "Kalutara District",
+      neighborhood: "Kalutara",
+      price: "Contact for Price",
       currency: "LKR",
-      pricingNote: "Per Perch Upwards",
-      size: "10-12 Perches",
-      access: "15ft Private Access",
-      zoning: "Residential",
-      imageUrl: "https://unsplash.com"
+      pricingNote: "Best Investment",
+      size: " -- Perches",
+      access: "Facing Galle Road",
+      zoning: "Residential / Highly Commercial",
+      imageUrl: land3.src
     },
     {
       id: 4,
-      title: "Mon Vie Residential Phase I",
-      district: "Colombo District",
-      neighborhood: "Colombo 05",
-      price: "86,000,000",
+      title: "Sahana Lands - Dambulla",
+      district: "Matale District",
+      neighborhood: "Dambulla (Municipal Council Limits)",
+      price: "100,000",
       currency: "LKR",
       pricingNote: "Per Unit Upwards",
-      size: "15 Perches",
-      access: "20ft Carpet Road",
-      zoning: "Residential",
-      imageUrl: "https://unsplash.com"
+      size: " -- Perches",
+      access: "100m to Kandy Road",
+      zoning: "Residential/Investment",
+      imageUrl: land4.src
     },
     {
       id: 5,
-      title: "Urban Commercial Hub Plots",
-      district: "Gampaha District",
-      neighborhood: "Kadawatha",
-      price: "2,450,000",
+      title: "Sahana Lands - Yatidola",
+      district: "Kalutara District",
+      neighborhood: "Yatidola (Mathugama)",
+      price: "Coming Soon",
       currency: "LKR",
-      pricingNote: "Per Perch Upwards",
-      size: "20 Perches",
-      access: "40ft Main Road",
-      zoning: "Commercial",
-      imageUrl: land2.src
+      pricingNote: "Upcoming Project Development",
+      size: "---",
+      access: "Initial Ground Clearing Stage",
+      zoning: "Residential/Investment",
+      imageUrl: land5.src
     },
     {
       id: 6,
-      title: "Clear Deed Luxury Land Blocks",
-      district: "Colombo District",
-      neighborhood: "Malabe",
-      price: "1,200,000",
+      title: "Sahana Lands - Pitigala",
+      district: "Galle District",
+      neighborhood: "Pitigala",
+      price: "Coming soon",
       currency: "LKR",
-      pricingNote: "Per Perch Upwards",
-      size: "10-12 Perches",
-      access: "15ft Private Access",
-      zoning: "Residential",
-      imageUrl: "https://unsplash.com"
+      pricingNote: "Upcoming Project Development",
+      size: " -- ",
+      access: "Initial Ground Clearing Stage",
+      zoning: "Residential/Investment",
+      imageUrl: land6.src
     }
   ];
 
