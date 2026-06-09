@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { Search, RotateCcw, SlidersHorizontal, MapPin } from "lucide-react";
+import { LAND_PROJECTS } from "./data";
 
 import propertyHeroBg from "../assets/property-hero.png";
 
@@ -11,52 +12,7 @@ import landBg from "../assets/property-hero.png";
 import CTASection from "../components/CTASection";
 import callusbg from "../assets//call-us.png";
 
-const LAND_PROJECTS = [
-  {
-    id: 1,
-    title: "Green View Estate",
-    location: "Gampaha, Western Province",
-    type: "Residential Land",
-    typeColor: "bg-[#E6008E]",
-    price: "LKR 850,000",
-    perch: "15 Perches",
-    desc: "Well-planned residential land plots in a peaceful and fast developing area.",
-    img: landBg.src,
-  },
-  {
-    id: 2,
-    title: "Sahana Commercial Hub",
-    location: "Colombo, Western Province",
-    type: "Commercial Land",
-    typeColor: "bg-[#0D2B4D]",
-    price: "LKR 1,650,000",
-    perch: "20 Perches",
-    desc: "Prime commercial land facing the main road with high visibility and access.",
-    img: landBg.src,
-  },
-  {
-    id: 3,
-    title: "Royal City Plots",
-    location: "Kurunegala, North Western Province",
-    type: "Residential Land",
-    typeColor: "bg-[#E6008E]",
-    price: "LKR 720,000",
-    perch: "12 Perches",
-    desc: "Spacious residential plots in a gated community with modern infrastructure.",
-    img: landBg.src,
-  },
-  {
-    id: 4,
-    title: "Nature's Harvest Land",
-    location: "Kalutara, Western Province",
-    type: "Agricultural Land",
-    typeColor: "bg-[#00A884]",
-    price: "LKR 450,000",
-    perch: "25 Perches",
-    desc: "Fertile agricultural land ideal for farming and long-term investment.",
-    img: landBg.src,
-  },
-];
+
 
 export default function PropertyListPage() {
   const [activeTab, setActiveTab] = useState("All Projects");
@@ -283,7 +239,7 @@ export default function PropertyListPage() {
             >
               <div className="relative aspect-[4/3] overflow-hidden bg-gray-100">
                 <img
-                  src={property.img}
+                  src={property.images[0]}
                   alt={property.title}
                   className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
                 />

@@ -5,6 +5,7 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Link from "next/link";
 import backgroundImage from "./assets/bgimg.png";
+import mobileBackgroundImage from "./assets/mobbgimg.png";
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Autoplay, Navigation, FreeMode } from 'swiper/modules';
 import 'swiper/css';
@@ -57,7 +58,7 @@ export default function HomePage() {
 
   const PREMIUM_LAND_LIST = [
     {
-      id: 1,
+      id: 4,
       title: "Ambalangoda Uragaha Plots",
       district: "Galle District",
       neighborhood: "Uragasmanhandiya",
@@ -83,7 +84,7 @@ export default function HomePage() {
       imageUrl: land2.src
     },
     {
-      id: 3,
+      id: 1,
       title: "Kalutara Residences",
       district: "Kalutara District",
       neighborhood: "Kalutara",
@@ -96,7 +97,7 @@ export default function HomePage() {
       imageUrl: land3.src
     },
     {
-      id: 4,
+      id: 3,
       title: "Sahana Lands - Dambulla",
       district: "Matale District",
       neighborhood: "Dambulla (Municipal Council Limits)",
@@ -229,7 +230,7 @@ export default function HomePage() {
           trigger: searchPanelRef.current,
           start: "top 72%",
           toggleActions: "play none none reverse",
-          markers: true,
+          markers: false,
           
         },
       });
@@ -260,7 +261,13 @@ export default function HomePage() {
         <img
           src={backgroundImage.src}
           alt="Sahana Group Background"
-          className="h-full w-full object-cover object-center "
+          className="hidden md:block h-full w-full object-cover object-center "
+        />
+
+        <img
+          src={mobileBackgroundImage.src}
+          alt="Sahana Group Mobile Background"
+          className="block md:hidden h-full w-full object-cover object-center "
         />
       </div>
 
