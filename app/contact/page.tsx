@@ -291,8 +291,8 @@ export default function ContactUsPage() {
                   <div className="flex items-start gap-4 text-white/90">
                     <Clock size={18} className="mt-1 text-white/70" />
                     <div className="text-sm font-light">
-                      <p>Mon - Fri: 9:00 AM - 6:00 PM</p>
-                      <p>Sat: 9:00 AM - 1:00 PM</p>
+                      <p>Mon - Fri: 8:30 AM - 5:30 PM</p>
+                      <p>Sat | Sun: closed</p>
                     </div>
                   </div>
                 </div>
