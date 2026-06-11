@@ -194,7 +194,7 @@ export default function PropertyDetailPage({ params }: PropertyPageProps) {
                                     }}
                                     className="h-full w-full"
                                 >
-                                    {property?.images.map((imgUrl, index) => (
+                                    {property?.images?.map((imgUrl: string, index: number) => (
                                         <SwiperSlide key={index}>
                                             <img
                                                 src={imgUrl}
@@ -236,7 +236,7 @@ export default function PropertyDetailPage({ params }: PropertyPageProps) {
                                     }}
                                     className="h-24 w-full"
                                 >
-                                    {property?.images.map((imgUrl, index) => (
+                                    {property?.images?.map((imgUrl: string, index: number) => (
                                         <SwiperSlide key={index}>
                                             <div className="h-full cursor-pointer overflow-hidden rounded-xl border border-gray-200 opacity-70 transition hover:opacity-100">
                                                 <img
@@ -342,7 +342,7 @@ export default function PropertyDetailPage({ params }: PropertyPageProps) {
                     <div className="mt-3 h-[3px] w-12 rounded-full bg-[#E6008E]" />
 
                     <div className="mt-7 grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-6">
-                        {property?.amenities.map((amenity, index) => (
+                        {property?.amenities.map( (amenity: { title: string; description: string; icon: string },index: number ) => (
                             <AmenityCard
                                 key={index}
                                 title={amenity.title}
@@ -380,7 +380,7 @@ export default function PropertyDetailPage({ params }: PropertyPageProps) {
                                 <h3 className="mb-4 text-sm font-black">Nearby Landmarks</h3>
 
                                 {/* DYNAMIC MATRIX LOOP: Maps out whatever landmarks belong to this ID page */}
-                                {property?.landmarks && property?.landmarks.map((landmark, index) => (
+                                {property?.landmarks?.map((landmark: { name: string; distance: string }, index: number) => (
                                     <LocationRow
                                         key={index}
                                         name={landmark.name}
