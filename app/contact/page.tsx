@@ -6,7 +6,8 @@ import gsap from "gsap";
 import contactHeroBg from "../assets/contact-HeroBg.png";
 import faqImage from "../assets/contact-faq.png"
 import single from "../assets/sahana-single-logo.png"
-import { Map, Eye  } from "lucide-react"; 
+import { Map, Eye, Icon } from "lucide-react";
+import { BsInstagram,BsFacebook, BsWhatsapp ,BsMailbox } from "react-icons/bs";
 
 
 import {
@@ -204,8 +205,8 @@ export default function ContactUsPage() {
                   />
                   <span
                     className={`mt-0.5 flex h-4 w-4 items-center justify-center rounded border ${agreed
-                        ? "border-[#E6008E] bg-[#E6008E]"
-                        : "border-gray-300 bg-white"
+                      ? "border-[#E6008E] bg-[#E6008E]"
+                      : "border-gray-300 bg-white"
                       }`}
                   >
                     {agreed && <Check size={11} className="text-white" />}
@@ -255,22 +256,41 @@ export default function ContactUsPage() {
 
                 <div className="my-7 h-px bg-white/15" />
 
+                {/* CONTACT LINKS MATRIX */}
                 <div className="space-y-5">
-                  <div className="flex items-center gap-4">
-                    <Phone size={18} className="text-white/70" />
-                    <span>+94 11 2 581 581</span>
-                  </div>
-                  <div className="flex items-center gap-4">
-                    <Smartphone size={18} className="text-white/70" />
-                    <span>+94 77 7 581 581</span>
-                  </div>
-                  <div className="flex items-center gap-4">
-                    <Mail size={18} className="text-white/70" />
-                    <span>info@sahanagroup.lk</span>
-                  </div>
-                  <div className="flex items-start gap-4">
+                  {/* 1. Landline Call Link */}
+                  <a
+                    href="tel:+94342267979"
+                    className="flex items-center gap-4 group/item w-fit transition-colors hover:text-[#2196F3]"
+                  >
+                    <Phone size={18} className="text-white/70 group-hover/item:text-[#2196F3] transition-colors" />
+                    <span className="font-medium">+94 34 22 679 79</span>
+                  </a>
+
+                  {/* 2. Mobile Call Link */}
+                  <a
+                    href="tel:+94342262125"
+                    className="flex items-center gap-4 group/item w-fit transition-colors hover:text-[#2196F3]"
+                  >
+                    <Smartphone size={18} className="text-white/70 group-hover/item:text-[#2196F3] transition-colors" />
+                    <span className="font-medium">+94 34 22 621 25</span>
+                  </a>
+
+                  {/* 3. Direct Email Link */}
+                  <a
+                    href="mailto:info@sahanagroup.lk"
+                    className="flex items-center gap-4 group/item w-fit transition-colors hover:text-[#2196F3]"
+                  >
+                    <Mail size={18} className="text-white/70 group-hover/item:text-[#2196F3] transition-colors" />
+                    <span className="font-medium underline decoration-white/20 group-hover/item:decoration-[#2196F3]">
+                      info@sahanagroup.lk
+                    </span>
+                  </a>
+
+                  {/* 4. Operational Hours Block */}
+                  <div className="flex items-start gap-4 text-white/90">
                     <Clock size={18} className="mt-1 text-white/70" />
-                    <div>
+                    <div className="text-sm font-light">
                       <p>Mon - Fri: 9:00 AM - 6:00 PM</p>
                       <p>Sat: 9:00 AM - 1:00 PM</p>
                     </div>
@@ -279,21 +299,40 @@ export default function ContactUsPage() {
 
                 <div className="my-7 h-px bg-white/15" />
 
+               {/* SOCIAL MEDIA HOVER SYSTEM */}
                 <div className="flex items-center justify-between">
                   <span className="text-sm text-white/70">Follow us</span>
                   <div className="flex gap-3">
-                    {["f", "ig", "in", "yt"].map((item) => (
-                      <button
-                        key={item}
-                        className="flex h-9 w-9 items-center justify-center rounded-full bg-white/10 text-xs font-bold uppercase transition hover:bg-[#2196F3]"
-                      >
-                        {item}
-                      </button>
-                    ))}
+                    {[
+                      { icon: BsFacebook, url: "https://www.facebook.com/SahanaIdamHorana" },
+                      { icon: BsInstagram, url: "https://www.instagram.com/sahana_idam/" },
+                      { icon: BsWhatsapp, url: "https://api.whatsapp.com/send/?phone=%2B94772647356&text&type=phone_number&app_absent=0" }, // FIX 1: Standardized key name to 'icon'
+                      { icon: BsMailbox, url: "mailto:info@sahanagroup.lk" } 
+                    ].map((item, index) => {
+                      
+                      {/* FIX 2: Assign the object property to a Capitalized variable tag */}
+                      const IconComponent = item.icon;
+
+                      return (
+                        <a
+                          key={index}
+                          href={item.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="flex h-9 w-9 items-center justify-center rounded-full bg-white/10 text-white/80 transition-all duration-200 hover:bg-[#2196F3] hover:text-white hover:scale-105"
+                        >
+                          {/* FIX 3: Render the actual component inside the link wrapper */}
+                          <IconComponent size={16} />
+                        </a>
+                      );
+                    })}
                   </div>
                 </div>
+
+
               </div>
             </div>
+
           </div>
 
           {/* QUICK CONTACT CARDS */}
@@ -356,8 +395,8 @@ export default function ContactUsPage() {
                 type="button"
                 onClick={() => setMapType("3d")}
                 className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition-all duration-200 cursor-pointer ${mapType === "3d"
-                    ? "bg-[#E6008E] text-white shadow-md shadow-pink-500/10"
-                    : "text-[#0D2B4D] hover:bg-gray-100"
+                  ? "bg-[#E6008E] text-white shadow-md shadow-pink-500/10"
+                  : "text-[#0D2B4D] hover:bg-gray-100"
                   }`}
               >
                 <Eye size={14} />
@@ -369,8 +408,8 @@ export default function ContactUsPage() {
                 type="button"
                 onClick={() => setMapType("normal")}
                 className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition-all duration-200 cursor-pointer ${mapType === "normal"
-                    ? "bg-[#2196F3] text-white shadow-md shadow-blue-500/10"
-                    : "text-[#0D2B4D] hover:bg-gray-100"
+                  ? "bg-[#2196F3] text-white shadow-md shadow-blue-500/10"
+                  : "text-[#0D2B4D] hover:bg-gray-100"
                   }`}
               >
                 <Map size={14} />
