@@ -1,22 +1,128 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { Search, RotateCcw, SlidersHorizontal, MapPin } from "lucide-react";
 import { LAND_PROJECTS } from "./data";
 
 import propertyHeroBg from "../assets/property-hero.png";
 
+import { createClient } from "@/app/utils/supabase/client";
+
 // Replace these with your real land images later
 import landBg from "../assets/property-hero.png";
 import CTASection from "../components/CTASection";
 import callusbg from "../assets//call-us.png";
+import { error } from "console";
 
 
 
 export default function PropertyListPage() {
   const [activeTab, setActiveTab] = useState("All Projects");
-  const [priceValue, setPriceValue] = useState(500000);
+  const [priceValue, setPriceValue] = useState(0);
+  const [landType, setLandType] = useState("");
+  const [property, setProperty] = useState<any[]>([]);
+  const [district, setDistrict] = useState("");
+  const [max, setMax] = useState(1500000);
+  const [blockSize, setBlockSize] = useState("");
+  const[sortBy,setSortBY] = useState (1);
+
+
+  const fetchFromDB = async () => {
+    const supabase = createClient();
+    const { data, error, count } = await supabase
+      .from("projects")
+      .select("*").order("price", { ascending: false });
+
+    if (data) {
+      setProperty(data)
+
+      // data.forEach(element => {
+      //   priceValue < element?.price && setPriceValue(element.price);
+      // });
+
+      setMax(data[0].price);
+
+    } else if (error) {
+      console.log(data);
+    }
+
+
+  }
+
+
+  const addFilters = async () => {
+    const supabase = createClient();
+    let query = supabase.from("projects").select();
+    if (priceValue > 0) {
+      query = query.lte("price", priceValue);
+    }
+
+    if (landType.trim() != "") {
+      query = query.ilike('type', `%${landType}%`);
+    }
+
+    if (district.trim() !== "")
+      query = query.ilike("district", `${district}`);
+
+
+
+    if (blockSize === "below10") {
+      query = query.lt("perch", 10);
+    }
+
+    if (blockSize === "10to20") {
+      query = query.gte("perch", 10).lte("perch", 20);
+    }
+
+    if (blockSize === "above20") {
+      query = query.gt("perch", 20);
+    }
+
+    if (sortBy === 1){
+      query = query.order("id", {ascending: false});
+    }
+
+    if (sortBy === 2){
+      query = query.order("price", {ascending: true});
+    }
+
+    if (sortBy === 3){
+       query = query.order("price", {ascending: false});
+    }
+
+    const { data, error } = await query;
+    if (data) {
+      setProperty(data);
+       data.forEach(element => {
+        max < element?.price && setMax(element.price);
+      });
+
+    } else if (error) {
+      console.log(error);
+    }
+
+
+
+
+  }
+
+  const resetFilters = () => {
+    setLandType("");
+    setPriceValue(0)
+    setActiveTab("All Projects")
+    setDistrict(" ")
+    setBlockSize(" ")
+  }
+
+
+  useEffect(() => {
+    fetchFromDB();
+  }, []);
+
+  useEffect(() => {
+    addFilters();
+  }, [priceValue, landType, district, blockSize,sortBy])
 
   return (
     <main className="min-h-screen w-full bg-[#F8FAFC] text-[#0D2B4D]">
@@ -47,7 +153,7 @@ export default function PropertyListPage() {
           <div className="mt-3">
             <div className="mb-4 h-[2px] w-20 bg-gradient-to-r from-[#29D6ED] to-[#E6008E]" />
             <p className="text-xl font-bold text-white">
-            {" "}
+              {" "}
             </p>
           </div>
         </div>
@@ -66,15 +172,19 @@ export default function PropertyListPage() {
             </h3>
 
             <div className="space-y-3 text-sm text-[#0D2B4D]/70">
-              {["Residential Land", "Commercial Land", "Agricultural Land"].map(
+              {["Residential", "Commercial", "Agricultural"].map(
                 (item) => (
                   <label key={item} className="flex cursor-pointer items-center gap-3">
                     <input
                       type="radio"
                       name="landType"
+                      checked={landType === item}
+                     
+                      onChange={e => { setLandType(item); console.log(landType) }}
+
                       className="h-4 w-4 accent-[#E6008E]"
                     />
-                    {item}
+                    {item} Land
                   </label>
                 )
               )}
@@ -88,47 +198,30 @@ export default function PropertyListPage() {
               Price
             </h3>
 
-            <div className="space-y-3 text-sm text-[#0D2B4D]/70">
-              {[
-                "Any Price",
-                "Below LKR 500,000",
-                "LKR 500,000 - 1,000,000",
-                "Above LKR 1,000,000",
-              ].map((item, index) => (
-                <label key={item} className="flex cursor-pointer items-center gap-3">
-                  <input
-                    type="radio"
-                    name="price"
-                    defaultChecked={index === 0}
-                    className="h-4 w-4 accent-[#E6008E]"
-                  />
-                  {item}
-                </label>
-              ))}
-            </div>
+
 
             {/* Price Scroll Bar */}
             <div className="pt-2">
               <div className="mb-2 flex items-center justify-between text-[11px] font-semibold text-[#0D2B4D]/60">
                 <span>LKR 0</span>
+                <span>LKR {priceValue}</span>
                 <span>LKR 1,000K+</span>
               </div>
 
               <input
                 type="range"
                 min="0"
-                max="1500000"
+                max={max.toString()}
                 step="50000"
                 value={priceValue}
-                onChange={(e) => setPriceValue(Number(e.target.value))}
+                onChange={(e) => { setPriceValue(Number(e.target.value)); console.log(priceValue) }}
                 className="h-2 w-full cursor-pointer appearance-none rounded-full bg-gray-200 accent-[#E6008E]"
               />
 
               <div className="mt-2 flex items-center justify-between text-[11px] font-semibold text-[#0D2B4D]/50">
                 <span>0</span>
-                <span>500K</span>
-                <span>1M</span>
-                <span>1.5M+</span>
+
+                <span>LKR {max}</span>
               </div>
             </div>
           </div>
@@ -137,43 +230,54 @@ export default function PropertyListPage() {
           <div className="space-y-4 border-gray-100 lg:border-r lg:pr-6">
             <h3 className="flex items-center gap-3 text-lg font-bold text-[#0D2B4D]">
               <span className="text-[#E6008E]">⌖</span>
-              Location
+              District
             </h3>
 
-            <div className="space-y-3 text-sm text-[#0D2B4D]/70">
-              {["Colombo", "Gampaha", "Kurunegala", "Kalutara"].map((item) => (
-                <label key={item} className="flex cursor-pointer items-center gap-3">
-                  <input
-                    type="radio"
-                    name="location"
-                    className="h-4 w-4 accent-[#E6008E]"
-                  />
-                  {item}
-                </label>
-              ))}
-            </div>
+            <select
+              value={district}
+              onChange={(e) => setDistrict(e.target.value)}
+              className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm outline-none focus:border-[#E6008E]"
+            >
+              <option value="">All Districts</option>
+              <option value="Colombo">Colombo</option>
+              <option value="Gampaha">Gampaha</option>
+              <option value="Kurunegala">Kurunegala</option>
+              <option value="Kalutara">Kalutara</option>
+            </select>
           </div>
 
-          {/* Perches */}
+
+
+
+          {/* Block size */}
+          
+
           <div className="space-y-4 border-gray-100 lg:border-r lg:pr-6">
             <h3 className="flex items-center gap-3 text-lg font-bold text-[#0D2B4D]">
               <span className="text-[#E6008E]">▦</span>
-              Perches
+              Block Size
             </h3>
 
             <div className="space-y-3 text-sm text-[#0D2B4D]/70">
-              {["Below 10 Perches", "10 - 20 Perches", "Above 20 Perches"].map(
-                (item) => (
-                  <label key={item} className="flex cursor-pointer items-center gap-3">
-                    <input
-                      type="radio"
-                      name="perches"
-                      className="h-4 w-4 accent-[#E6008E]"
-                    />
-                    {item}
-                  </label>
-                )
-              )}
+              {[
+                { label: "Below 10 Block Size", value: "below10" },
+                { label: "10 - 20 Block Size", value: "10to20" },
+                { label: "Above 20 Block Size", value: "above20" },
+              ].map((item) => (
+                <label
+                  key={item.value}
+                  className="flex cursor-pointer items-center gap-3"
+                >
+                  <input
+                    type="radio"
+                    name="blockSize"
+                    checked={blockSize === item.value}
+                    onChange={() => setBlockSize(item.value)}
+                    className="h-4 w-4 accent-[#E6008E]"
+                  />
+                  {item.label}
+                </label>
+              ))}
             </div>
           </div>
 
@@ -184,7 +288,9 @@ export default function PropertyListPage() {
               Search Lands
             </button>
 
-            <button className="flex w-full items-center justify-center gap-3 rounded-full border border-gray-200 bg-white px-6 py-4 text-sm font-bold text-[#0D2B4D] transition hover:border-[#2196F3] hover:text-[#2196F3]">
+            <button
+              onClick={resetFilters}
+              className="flex w-full items-center justify-center gap-3 rounded-full border border-gray-200 bg-white px-6 py-4 text-sm font-bold text-[#0D2B4D] transition hover:border-[#2196F3] hover:text-[#2196F3]">
               <RotateCcw size={18} />
               Reset Filters
             </button>
@@ -205,12 +311,18 @@ export default function PropertyListPage() {
           ].map((tab) => (
             <button
               key={tab}
-              onClick={() => setActiveTab(tab)}
-              className={`rounded-full px-7 py-3 text-sm font-semibold transition ${
-                activeTab === tab
-                  ? "bg-[#0D2B4D] text-white shadow-lg"
-                  : "bg-white text-[#0D2B4D] shadow-sm hover:bg-[#F1F4FA]"
-              }`}
+              onClick={() => {
+                setActiveTab(tab);
+
+                if (tab === "All Projects") setLandType("");
+                else if (tab === "Residential Land") setLandType("Residential");
+                else if (tab === "Commercial Land") setLandType("Commercial");
+                else if (tab === "Agricultural Land") setLandType("Agricultural");
+              }}
+              className={`rounded-full px-7 py-3 text-sm font-semibold transition ${activeTab === tab
+                ? "bg-[#0D2B4D] text-white shadow-lg"
+                : "bg-white text-[#0D2B4D] shadow-sm hover:bg-[#F1F4FA]"
+                }`}
             >
               {tab}
             </button>
@@ -219,10 +331,12 @@ export default function PropertyListPage() {
 
         <div className="flex items-center gap-3 rounded-full border border-gray-200 bg-white px-5 py-3 text-sm shadow-sm">
           <span className="text-gray-500">Sort by:</span>
-          <select className="bg-transparent font-bold text-[#0D2B4D] outline-none">
-            <option>Newest First</option>
-            <option>Price: Low to High</option>
-            <option>Price: High to Low</option>
+          <select 
+          onChange={e => {setSortBY(parseInt(e.target.value))}}
+          className="bg-transparent font-bold text-[#0D2B4D] outline-none">
+            <option value={1}>Newest First</option>
+            <option value={2}>Price: Low to High</option>
+            <option value={3} >Price: High to Low</option>
           </select>
         </div>
       </section>
@@ -231,58 +345,65 @@ export default function PropertyListPage() {
       {/* PROPERTY GRID                                              */}
       {/* ========================================================== */}
       <section className="mx-auto max-w-7xl px-6 pb-16">
+
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
-          {LAND_PROJECTS.map((property) => (
+          {property.map((property) => (
             <article
               key={property.id}
               className="group overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-[0_12px_35px_rgba(13,43,77,0.06)] transition hover:-translate-y-1 hover:shadow-[0_22px_55px_rgba(13,43,77,0.12)]"
-            >
-              <div className="relative aspect-[4/3] overflow-hidden bg-gray-100">
-                <img
-                  src={property.images[0]}
-                  alt={property.title}
-                  className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
-                />
+            > <Link href={`/properties/${property.id}`}>
+                <div className="relative aspect-[4/3] overflow-hidden bg-gray-100">
+                  <img
+                    src={property?.images[0]}
+                    alt={property.title}
+                    className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
+                  />
 
-                <span
-                  className={`absolute left-4 top-4 rounded-md px-3 py-1.5 text-[10px] font-black text-white ${property.typeColor}`}
-                >
-                  {property.type}
-                </span>
-              </div>
-
-              <div className="p-5">
-                <div className="flex items-center gap-1.5 text-[11px] font-semibold text-gray-400">
-                  <MapPin size={13} />
-                  <span>{property.location}</span>
+                  <span
+                    className={`absolute left-4 top-4 rounded-md px-3 py-1.5 text-[10px] font-black text-white ${property.typeColor}`}
+                  >
+                    {property.type}
+                  </span>
                 </div>
 
-                <h3 className="mt-3 text-lg font-bold text-[#0D2B4D]">
-                  {property.title}
-                </h3>
+                <div className="p-5">
+                  <div className="flex items-center gap-1.5 text-[11px] font-semibold text-gray-400">
+                    <MapPin size={13} />
+                    <span>{property.location}</span>
+                  </div>
 
-                <p className="mt-2 line-clamp-2 text-sm leading-relaxed text-gray-500">
-                  {property.desc}
-                </p>
+                  <h3 className="mt-3 text-lg font-bold text-[#0D2B4D]">
+                    {property.project_name}
+                  </h3>
 
-                <div className="mt-4 flex items-center justify-between">
-                  <p className="text-sm font-black text-[#E6008E]">
-                    {property.price}{" "}
-                    <span className="text-xs text-gray-400">/ Perch</span>
+                  <p className="mt-2 line-clamp-2 text-sm leading-relaxed text-gray-500">
+                    {property.desc}
                   </p>
 
-                  <p className="text-sm font-bold text-[#0D2B4D]">
-                    {property.perch}
-                  </p>
+                  <div className="mt-4 flex items-center justify-between">
+                    <p className="text-sm font-black text-[#E6008E]">
+                      {property.price}{" LKR"}
+                      <span className="text-xs text-gray-400">/ Perch</span>
+                    </p>
+
+                    <p className="text-sm font-bold text-[#0D2B4D]">
+                      {property.perch} perches
+                    </p>
+                  </div>
+
+                  <div
+
+                    className="mt-5 flex w-full items-center justify-center gap-2 rounded-xl border border-gray-200 py-3 text-sm font-bold text-[#0D2B4D] transition hover:border-[#E6008E] hover:bg-[#E6008E] hover:text-white"
+                  >
+                    View Details →
+                  </div>
+
+
+
+
+
                 </div>
-
-                <Link
-                  href={`/properties/${property.id}`}
-                  className="mt-5 flex w-full items-center justify-center gap-2 rounded-xl border border-gray-200 py-3 text-sm font-bold text-[#0D2B4D] transition hover:border-[#2196F3] hover:bg-[#2196F3] hover:text-white"
-                >
-                  View Details →
-                </Link>
-              </div>
+              </Link>
             </article>
           ))}
         </div>
@@ -313,7 +434,7 @@ export default function PropertyListPage() {
         </div>
       </section> */}
 
-       <CTASection
+      <CTASection
         description="Whether you're looking to buy, sell, or invest, our team is here to help you every step of the way. Let's turn your property goals into reality."
         primaryBtnText="Explore Properties"
         primaryBtnHref="/properties"

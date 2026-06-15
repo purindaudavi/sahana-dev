@@ -59,12 +59,12 @@ export default function Footer() {
             <ul className="space-y-3 text-sm text-gray-300">
               <li className="flex items-start gap-3">
                 <MapPin size={18} className="text-[#E6008E] shrink-0 mt-0.5" />
-                <span>No. 123, Galle Road, Colombo 03, Sri Lanka</span>
+                <span>No. 240 Ratnapura - Horana - Panadura Hwy, Horana</span>
               </li>
               <li className="flex items-center gap-3">
                 <Phone size={18} className="text-[#E6008E] shrink-0" />
                 <a href="tel:+94112345678" className="hover:text-white transition-colors">
-                  +94 11 234 5678
+                  +94342267979
                 </a>
               </li>
               <li className="flex items-center gap-3">

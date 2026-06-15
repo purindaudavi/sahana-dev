@@ -274,7 +274,7 @@ export default function PropertyDetailPage({ params }: PropertyPageProps) {
                                     <p className="text-[11px] font-bold uppercase tracking-wider text-gray-400">
                                         Price
                                     </p>
-                                    <p className="mt-1 text-2xl font-black text-[#2196F3]">
+                                    <p className="mt-1 text-2xl font-black text-[#E6008E]">
                                         {property?.price || "0"}
                                     </p>
                                     <p className="text-xs text-gray-500">Per Perch</p>
@@ -302,7 +302,7 @@ export default function PropertyDetailPage({ params }: PropertyPageProps) {
                             <div className="mt-7 space-y-3">
                                 <Link
                                     href="/contact"
-                                    className="flex w-full items-center justify-center gap-2 rounded-full bg-[#2196F3] px-6 py-4 text-sm font-bold text-white shadow-lg shadow-blue-500/25 transition hover:bg-[#0D2B4D]"
+                                    className="flex w-full items-center justify-center gap-2 rounded-full bg-[#0D2B4D] px-6 py-4 text-sm font-bold text-white shadow-lg shadow-blue-500/25 transition hover:bg-[#E6008E]"
                                 >
                                     Enquire Now
                                     <ArrowRight size={17} />

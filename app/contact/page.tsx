@@ -249,9 +249,9 @@ export default function ContactUsPage() {
                 </div>
 
                 <p className="max-w-sm text-sm leading-relaxed text-white/75">
-                  No. 60, Dharmapala Mawatha,
+                  240 Ratnapura - Horana ,
                   <br />
-                  Colombo 07, Sri Lanka.
+                  Panadura Hwy, Horana.
                 </p>
 
                 <div className="my-7 h-px bg-white/15" />
