@@ -7,7 +7,6 @@ import Link from "next/link";
 import { Search, RotateCcw, SlidersHorizontal, MapPin } from "lucide-react";
 import { LAND_PROJECTS } from "./data";
 
-import { Suspense } from "react";
 
 import propertyHeroBg from "../assets/property-hero.png";
 
@@ -18,7 +17,7 @@ import landBg from "../assets/property-hero.png";
 import CTASection from "../components/CTASection";
 import callusbg from "../assets//call-us.png";
 import { error } from "console";
-import { useSearchParams } from "next/navigation";
+// import { useSearchParams } from "next/navigation";
 
 
 
@@ -31,7 +30,7 @@ export default function PropertyListPage() {
   const [max, setMax] = useState(1500000);
   const [blockSize, setBlockSize] = useState("");
   const [sortBy, setSortBY] = useState(1);
-  const searchParams = useSearchParams();
+  // const searchParams = useSearchParams();
 
   const fetchFromDB = async () => {
     const supabase = createClient();
