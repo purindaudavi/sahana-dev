@@ -30,7 +30,7 @@ export default function PropertyListPage() {
   const [district, setDistrict] = useState("");
   const [max, setMax] = useState(1500000);
   const [blockSize, setBlockSize] = useState("");
-  const[sortBy,setSortBY] = useState (1);
+  const [sortBy, setSortBY] = useState(1);
   const searchParams = useSearchParams();
 
   const fetchFromDB = async () => {
@@ -46,7 +46,9 @@ export default function PropertyListPage() {
       //   priceValue < element?.price && setPriceValue(element.price);
       // });
 
-      setMax(data[0].price);
+      if (data.length > 0) {
+        setMax(data[0].price);
+      }
 
     } else if (error) {
       console.log(data);
@@ -84,22 +86,22 @@ export default function PropertyListPage() {
       query = query.gt("perch", 20);
     }
 
-    if (sortBy === 1){
-      query = query.order("id", {ascending: false});
+    if (sortBy === 1) {
+      query = query.order("id", { ascending: false });
     }
 
-    if (sortBy === 2){
-      query = query.order("price", {ascending: true});
+    if (sortBy === 2) {
+      query = query.order("price", { ascending: true });
     }
 
-    if (sortBy === 3){
-       query = query.order("price", {ascending: false});
+    if (sortBy === 3) {
+      query = query.order("price", { ascending: false });
     }
 
     const { data, error } = await query;
     if (data) {
       setProperty(data);
-       data.forEach(element => {
+      data.forEach(element => {
         max < element?.price && setMax(element.price);
       });
 
@@ -116,40 +118,40 @@ export default function PropertyListPage() {
     setLandType("");
     setPriceValue(0)
     setActiveTab("All Projects")
-    setDistrict(" ")
-    setBlockSize(" ")
+    setDistrict("")
+    setBlockSize("")
     setSortBY(1)
   }
 
-useEffect(() => {
-  const params = new URLSearchParams(window.location.search);
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
 
-  const type = params.get("type");
-  const district = params.get("district");
-  const blockSize = params.get("blockSize");
+    const type = params.get("type");
+    const district = params.get("district");
+    const blockSize = params.get("blockSize");
 
-  if (type) setLandType(type);
-  if (district) setDistrict(district);
-  if (blockSize) setBlockSize(blockSize);
-}, []);
-//   useEffect(() => {
-//   const type = searchParams.get("type");
-//   const districtParam = searchParams.get("district");
-//   const blockSizeParam = searchParams.get("blockSize");
-//   const priceParam = searchParams.get("price");
+    if (type) setLandType(type);
+    if (district) setDistrict(district);
+    if (blockSize) setBlockSize(blockSize);
+  }, []);
+  //   useEffect(() => {
+  //   const type = searchParams.get("type");
+  //   const districtParam = searchParams.get("district");
+  //   const blockSizeParam = searchParams.get("blockSize");
+  //   const priceParam = searchParams.get("price");
 
-//   if (type) setLandType(type);
-//   if (districtParam) setDistrict(districtParam);
-//   if (blockSizeParam) setBlockSize(blockSizeParam);
+  //   if (type) setLandType(type);
+  //   if (districtParam) setDistrict(districtParam);
+  //   if (blockSizeParam) setBlockSize(blockSizeParam);
 
-//   if (priceParam) {
-//     if (priceParam === "500000") {
-//       setPriceValue(500000);
-//     } else if (priceParam === "1000000") {
-//       setPriceValue(1000000);
-//     }
-//   }
-// }, [searchParams]);
+  //   if (priceParam) {
+  //     if (priceParam === "500000") {
+  //       setPriceValue(500000);
+  //     } else if (priceParam === "1000000") {
+  //       setPriceValue(1000000);
+  //     }
+  //   }
+  // }, [searchParams]);
 
   useEffect(() => {
     fetchFromDB();
@@ -157,7 +159,7 @@ useEffect(() => {
 
   useEffect(() => {
     addFilters();
-  }, [priceValue, landType, district, blockSize,sortBy])
+  }, [priceValue, landType, district, blockSize, sortBy])
 
   return (
     <main className="min-h-screen w-full bg-[#F8FAFC] text-[#0D2B4D]">
@@ -214,7 +216,7 @@ useEffect(() => {
                       type="radio"
                       name="landType"
                       checked={landType === item}
-                     
+
                       onChange={e => { setLandType(item); console.log(landType) }}
 
                       className="h-4 w-4 accent-[#E6008E]"
@@ -285,7 +287,7 @@ useEffect(() => {
 
 
           {/* Block size */}
-          
+
 
           <div className="space-y-4 border-gray-100 lg:border-r lg:pr-6">
             <h3 className="flex items-center gap-3 text-lg font-bold text-[#0D2B4D]">
@@ -366,9 +368,9 @@ useEffect(() => {
 
         <div className="flex items-center gap-3 rounded-full border border-gray-200 bg-white px-5 py-3 text-sm shadow-sm">
           <span className="text-gray-500">Sort by:</span>
-          <select 
-          onChange={e => {setSortBY(parseInt(e.target.value))}}
-          className="bg-transparent font-bold text-[#0D2B4D] outline-none">
+          <select
+            onChange={e => { setSortBY(parseInt(e.target.value)) }}
+            className="bg-transparent font-bold text-[#0D2B4D] outline-none">
             <option value={1}>Newest First</option>
             <option value={2}>Price: Low to High</option>
             <option value={3} >Price: High to Low</option>
