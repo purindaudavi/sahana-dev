@@ -21,6 +21,7 @@ import CTASection from "../app/components/CTASection";
 import callusbg from "../app/assets/call-us.png";
 
 
+
 import "swiper/css/navigation";
 import "swiper/css/free-mode";
 
@@ -36,6 +37,8 @@ export default function HomePage() {
   const searchPanelRef = useRef<HTMLDivElement | null>(null);
   const propertyIntroRef = useRef<HTMLDivElement | null>(null);
 
+  
+
 
   const router = useRouter();
 
@@ -43,7 +46,31 @@ export default function HomePage() {
   const [district, setDistrict] = useState("");
   const [priceRange, setPriceRange] = useState("");
   const [blockSize, setBlockSize] = useState("");
-   const [activeTab, setActiveTab] = useState("All Projects");
+  const [activeTab, setActiveTab] = useState("All Projects");
+  const [priceValue, setPriceValue] = useState(0);
+
+   
+
+  useEffect(() => {
+  const params = new URLSearchParams(window.location.search);
+
+  const type = params.get("type");
+  const district = params.get("district");
+  const blockSize = params.get("blockSize");
+  const price = params.get("price");
+
+  if (type) setLandType(type);
+  if (district) setDistrict(district);
+  if (blockSize) setBlockSize(blockSize);
+
+  if (price === "500000") {
+    setPriceValue(500000);
+  }
+
+  if (price === "1000000") {
+    setPriceValue(1000000);
+  }
+}, []);
 
   const slides = [
     {
@@ -147,6 +174,7 @@ export default function HomePage() {
       imageUrl: land6.src
     }
   ];
+
 
 
 
@@ -454,10 +482,10 @@ export default function HomePage() {
                 onChange={(e) => setBlockSize(e.target.value)}
                 className="w-full rounded-2xl bg-gray-100 px-4 py-4" 
               >
-                <option value="">Any Perches</option>
-                <option value="below10">Below 10 Perches</option>
-                <option value="10to20">10 - 20 Perches</option>
-                <option value="above20">Above 20 Perches</option>
+                <option value="">Any Block Size</option>
+                <option value="below10">Below 10 Block Size</option>
+                <option value="10to20">10 - 20 Block Size</option>
+                <option value="above20">Above 20 Block Size</option>
               </select>
             </div>
           </div>

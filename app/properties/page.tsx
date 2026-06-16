@@ -17,7 +17,7 @@ import landBg from "../assets/property-hero.png";
 import CTASection from "../components/CTASection";
 import callusbg from "../assets//call-us.png";
 import { error } from "console";
-// import { useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 
 
 
@@ -30,7 +30,11 @@ export default function PropertyListPage() {
   const [max, setMax] = useState(1500000);
   const [blockSize, setBlockSize] = useState("");
   const [sortBy, setSortBY] = useState(1);
-  // const searchParams = useSearchParams();
+  const [searchTerm, setSearchTerm] = useState("");
+  const [showSearch, setShowSearch] = useState(false);
+  const searchParams = useSearchParams();
+  const [paramsReady, setParamsReady] = useState(false);
+
 
   const fetchFromDB = async () => {
     const supabase = createClient();
@@ -57,10 +61,25 @@ export default function PropertyListPage() {
   }
 
 
-  const addFilters = async () => {
+  const fetchfromDB = async () => {
     const supabase = createClient();
     let query = supabase.from("projects").select();
-    if (priceValue > 0) {
+
+
+
+
+    if (searchTerm.trim() !== "") {
+      query = query.ilike(
+        "project_name",
+        `%${searchTerm.trim()}%`
+      );
+    }
+
+
+
+    if (priceValue === 1000001) {
+      query = query.gt("price", 1000000);
+    } else if (priceValue > 0) {
       query = query.lte("price", priceValue);
     }
 
@@ -104,6 +123,9 @@ export default function PropertyListPage() {
         max < element?.price && setMax(element.price);
       });
 
+
+
+
     } else if (error) {
       console.log(error);
     }
@@ -122,17 +144,7 @@ export default function PropertyListPage() {
     setSortBY(1)
   }
 
-  useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
 
-    const type = params.get("type");
-    const district = params.get("district");
-    const blockSize = params.get("blockSize");
-
-    if (type) setLandType(type);
-    if (district) setDistrict(district);
-    if (blockSize) setBlockSize(blockSize);
-  }, []);
   //   useEffect(() => {
   //   const type = searchParams.get("type");
   //   const districtParam = searchParams.get("district");
@@ -152,13 +164,53 @@ export default function PropertyListPage() {
   //   }
   // }, [searchParams]);
 
-  useEffect(() => {
-    fetchFromDB();
-  }, []);
+
 
   useEffect(() => {
-    addFilters();
-  }, [priceValue, landType, district, blockSize, sortBy])
+    const typeParam = searchParams.get("type") || "";
+    const districtParam = searchParams.get("district") || "";
+    const blockSizeParam = searchParams.get("blockSize") || "";
+    const priceParam = searchParams.get("price") || "";
+
+    setLandType(typeParam);
+    setDistrict(districtParam);
+    setBlockSize(blockSizeParam);
+
+    if (priceParam === "500000") {
+      setPriceValue(500000);
+    } else if (priceParam === "1000000") {
+      setPriceValue(1000000);
+    } else if (priceParam === "above1000000") {
+      setPriceValue(1000001);
+    } else {
+      setPriceValue(0);
+    }
+
+    if (typeParam === "") setActiveTab("All Projects");
+    else if (typeParam === "Residential") setActiveTab("Residential Land");
+    else if (typeParam === "Commercial") setActiveTab("Commercial Land");
+    else if (typeParam === "Agricultural") setActiveTab("Agricultural Land");
+    setParamsReady(true);
+  }, [searchParams]);
+
+
+  useEffect(() => {
+  if (!paramsReady) return;
+
+  const hasAnyFilter =
+    priceValue > 0 ||
+    landType !== "" ||
+    district !== "" ||
+    blockSize !== "" ||
+    searchTerm !== "";
+
+  if (hasAnyFilter) {
+    fetchfromDB();
+  } else {
+    fetchFromDB();
+  }
+}, [paramsReady, priceValue, landType, district, blockSize, sortBy, searchTerm]);
+
 
   return (
     <main className="min-h-screen w-full bg-[#F8FAFC] text-[#0D2B4D]">
@@ -318,18 +370,46 @@ export default function PropertyListPage() {
           </div>
 
           {/* Buttons */}
-          <div className="flex flex-col justify-center gap-4">
-            <button className="flex w-full items-center justify-center gap-3 rounded-full bg-[#0D2B4D] px-6 py-4 text-sm font-bold text-white shadow-lg transition hover:bg-[#2196F3]">
-              <Search size={18} />
-              Search Lands
-            </button>
+          <div className="flex flex-col gap-4">
+
+            {!showSearch ? (
+              <button
+                onClick={() => setShowSearch(true)}
+                className="flex w-full items-center justify-center gap-3 rounded-full bg-[#0D2B4D] px-6 py-4 text-sm font-bold text-white"
+              >
+                <Search size={18} />
+                Search Lands
+              </button>
+            ) : (
+              <>
+                <input
+                  type="text"
+                  placeholder="Search land by name..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  className="w-full rounded-full border border-gray-300 px-4 py-3"
+                />
+
+                <button
+                  onClick={fetchfromDB}
+                  className="flex w-full items-center justify-center gap-3 rounded-full bg-[#0D2B4D] px-6 py-4 text-sm font-bold text-white"
+                >
+                  Search
+                </button>
+
+
+
+              </>
+            )}
 
             <button
+
               onClick={resetFilters}
               className="flex w-full items-center justify-center gap-3 rounded-full border border-gray-200 bg-white px-6 py-4 text-sm font-bold text-[#0D2B4D] transition hover:border-[#2196F3] hover:text-[#2196F3]">
               <RotateCcw size={18} />
               Reset Filters
             </button>
+
           </div>
         </div>
       </section>
