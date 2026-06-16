@@ -1,9 +1,13 @@
 "use client";
 
+export const dynamic = "force-dynamic";
+
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { Search, RotateCcw, SlidersHorizontal, MapPin } from "lucide-react";
 import { LAND_PROJECTS } from "./data";
+
+import { Suspense } from "react";
 
 import propertyHeroBg from "../assets/property-hero.png";
 
@@ -117,7 +121,17 @@ export default function PropertyListPage() {
     setSortBY(1)
   }
 
+useEffect(() => {
+  const params = new URLSearchParams(window.location.search);
 
+  const type = params.get("type");
+  const district = params.get("district");
+  const blockSize = params.get("blockSize");
+
+  if (type) setLandType(type);
+  if (district) setDistrict(district);
+  if (blockSize) setBlockSize(blockSize);
+}, []);
 //   useEffect(() => {
 //   const type = searchParams.get("type");
 //   const districtParam = searchParams.get("district");
