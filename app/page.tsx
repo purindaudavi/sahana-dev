@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef,useState } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Link from "next/link";
@@ -15,6 +15,7 @@ import land3 from "./assets/images/kaluthara.png"
 import land4 from "./assets/images/dambulla2.png"
 import land5 from "./assets/images/yatidola.png"
 import land6 from "./assets/images/pitigala.png"
+import { useRouter } from "next/navigation";
 
 import CTASection from "../app/components/CTASection";
 import callusbg from "../app/assets/call-us.png";
@@ -34,6 +35,16 @@ export default function HomePage() {
   const heroTextRef = useRef<HTMLDivElement | null>(null);
   const searchPanelRef = useRef<HTMLDivElement | null>(null);
   const propertyIntroRef = useRef<HTMLDivElement | null>(null);
+
+
+  const router = useRouter();
+
+  const [landType, setLandType] = useState("");
+  const [district, setDistrict] = useState("");
+  const [priceRange, setPriceRange] = useState("");
+  const [blockSize, setBlockSize] = useState("");
+   const [activeTab, setActiveTab] = useState("All Projects");
+
   const slides = [
     {
       imageUrl: land1.src,
@@ -179,7 +190,7 @@ export default function HomePage() {
         scale: 0.9,
         filter: "blur(12px)",
         duration: 1.2,
-        
+
 
 
       });
@@ -231,7 +242,7 @@ export default function HomePage() {
           start: "top 72%",
           toggleActions: "play none none reverse",
           markers: false,
-          
+
         },
       });
 
@@ -350,10 +361,10 @@ export default function HomePage() {
                       />
                     </div>
 
-                   
-                   
 
-                   
+
+
+
                   </div>
                 </SwiperSlide>
               ))}
@@ -389,11 +400,15 @@ export default function HomePage() {
               <label className="mb-2 block text-sm font-bold text-[#0D2B4D]">
                 Looking for
               </label>
-              <select className="w-full rounded-2xl bg-gray-100 px-4 py-4 text-sm text-gray-600 outline-none transition focus:ring-2 focus:ring-[#2196F3]">
-                <option>Enter type</option>
-                <option>Residential Land</option>
-                <option>Commercial Land</option>
-                <option>Agricultural Land</option>
+              <select
+                value={landType}
+                onChange={(e) => setLandType(e.target.value)}
+                className="w-full rounded-2xl bg-gray-100 px-4 py-4"
+              >
+                <option value="">Enter type</option>
+                <option value="Residential">Residential Land</option>
+                <option value="Commercial">Commercial Land</option>
+                <option value="Agricultural">Agricultural Land</option>
               </select>
             </div>
 
@@ -401,36 +416,48 @@ export default function HomePage() {
               <label className="mb-2 block text-sm font-bold text-[#0D2B4D]">
                 Price
               </label>
-              <select className="w-full rounded-2xl bg-gray-100 px-4 py-4 text-sm text-gray-600 outline-none transition focus:ring-2 focus:ring-[#2196F3]">
-                <option>Any Price</option>
-                <option>Below LKR 500,000</option>
-                <option>LKR 500,000 - 1,000,000</option>
-                <option>Above LKR 1,000,000</option>
+              <select
+                value={priceRange}
+                onChange={(e) => setPriceRange(e.target.value)}
+                className="w-full rounded-2xl bg-gray-100 px-4 py-4"
+              >
+                <option value="">Any Price</option>
+                <option value="500000">Below LKR 500,000</option>
+                <option value="1000000">LKR 500,000 - 1,000,000</option>
+                <option value="above1000000">Above LKR 1,000,000</option>
               </select>
             </div>
 
             <div>
               <label className="mb-2 block text-sm font-bold text-[#0D2B4D]">
-                Location
+                Disrtrict
               </label>
-              <select className="w-full rounded-2xl bg-gray-100 px-4 py-4 text-sm text-gray-600 outline-none transition focus:ring-2 focus:ring-[#2196F3]">
-                <option>Location</option>
-                <option>Colombo</option>
-                <option>Gampaha</option>
-                <option>Kurunegala</option>
-                <option>Kalutara</option>
+              <select
+                value={district}
+                onChange={(e) => setDistrict(e.target.value)}
+                className="w-full rounded-2xl bg-gray-100 px-4 py-4"
+              >
+                <option value="">Location</option>
+                <option value="Colombo">Colombo</option>
+                <option value="Gampaha">Gampaha</option>
+                <option value="Kurunegala">Kurunegala</option>
+                <option value="Kalutara">Kalutara</option>
               </select>
             </div>
 
             <div>
               <label className="mb-2 block text-sm font-bold text-[#0D2B4D]">
-                Land Size
+                Block size
               </label>
-              <select className="w-full rounded-2xl bg-gray-100 px-4 py-4 text-sm text-gray-600 outline-none transition focus:ring-2 focus:ring-[#2196F3]">
-                <option>Any Perches</option>
-                <option>Below 10 Perches</option>
-                <option>10 - 20 Perches</option>
-                <option>Above 20 Perches</option>
+              <select
+                value={blockSize}
+                onChange={(e) => setBlockSize(e.target.value)}
+                className="w-full rounded-2xl bg-gray-100 px-4 py-4" 
+              >
+                <option value="">Any Perches</option>
+                <option value="below10">Below 10 Perches</option>
+                <option value="10to20">10 - 20 Perches</option>
+                <option value="above20">Above 20 Perches</option>
               </select>
             </div>
           </div>
@@ -439,17 +466,49 @@ export default function HomePage() {
             <div className="flex flex-wrap items-center gap-3">
               <span className="text-sm font-bold text-[#0D2B4D]">Filter:</span>
 
-              {["City", "House", "Residential", "Apartment"].map((item) => (
-                <button
-                  key={item}
-                  className="rounded-full border border-gray-200 bg-white px-5 py-2.5 text-sm font-medium text-gray-600 shadow-sm transition hover:border-[#2196F3] hover:text-[#2196F3]"
-                >
-                  {item}
-                </button>
+              {["All Projects", "Residential Land", "Commercial Land", "Agricultural Land"]
+
+              .map((tab) => (
+            <button
+              key={tab}
+              onClick={() => {
+                setActiveTab(tab);
+
+                if (tab === "All Projects") setLandType("");
+                else if (tab === "Residential Land") setLandType("Residential");
+                else if (tab === "Commercial Land") setLandType("Commercial");
+                else if (tab === "Agricultural Land") setLandType("Agricultural");
+              }}
+              className={`rounded-full px-7 py-3 text-sm font-semibold transition ${activeTab === tab
+                ? "bg-[#0D2B4D] text-white shadow-lg"
+                : "bg-white text-[#0D2B4D] shadow-sm hover:bg-[#F1F4FA]"
+                }`}
+            >
+              {tab}
+            </button>
+              // .map((item) => (
+              //   <button
+              //     key={item}
+              //     className="rounded-full border border-gray-200 bg-white px-5 py-2.5 text-sm font-medium text-gray-600 shadow-sm transition hover:border-[#2196F3] hover:text-[#2196F3]"
+              //   >
+              //     {item}
+              //   </button>
               ))}
             </div>
 
-            <button className="rounded-full bg-[#0D2B4D] px-8 py-3.5 text-sm font-bold text-white shadow-lg transition hover:bg-[#2196F3]">
+            <button
+              onClick={() => {
+                const params = new URLSearchParams();
+
+                if (landType) params.append("type", landType);
+                if (district) params.append("district", district);
+                if (priceRange) params.append("price", priceRange);
+                if (blockSize) params.append("blockSize", blockSize);
+
+                router.push(`/properties?${params.toString()}`);
+              }}
+              className="rounded-full bg-[#0D2B4D] px-8 py-3.5 text-sm font-bold text-white"
+            >
               Search Properties
             </button>
           </div>

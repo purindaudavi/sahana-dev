@@ -14,6 +14,7 @@ import landBg from "../assets/property-hero.png";
 import CTASection from "../components/CTASection";
 import callusbg from "../assets//call-us.png";
 import { error } from "console";
+import { useSearchParams } from "next/navigation";
 
 
 
@@ -26,7 +27,7 @@ export default function PropertyListPage() {
   const [max, setMax] = useState(1500000);
   const [blockSize, setBlockSize] = useState("");
   const[sortBy,setSortBY] = useState (1);
-
+  const searchParams = useSearchParams();
 
   const fetchFromDB = async () => {
     const supabase = createClient();
@@ -113,8 +114,28 @@ export default function PropertyListPage() {
     setActiveTab("All Projects")
     setDistrict(" ")
     setBlockSize(" ")
+    setSortBY(1)
   }
 
+
+  useEffect(() => {
+  const type = searchParams.get("type");
+  const districtParam = searchParams.get("district");
+  const blockSizeParam = searchParams.get("blockSize");
+  const priceParam = searchParams.get("price");
+
+  if (type) setLandType(type);
+  if (districtParam) setDistrict(districtParam);
+  if (blockSizeParam) setBlockSize(blockSizeParam);
+
+  if (priceParam) {
+    if (priceParam === "500000") {
+      setPriceValue(500000);
+    } else if (priceParam === "1000000") {
+      setPriceValue(1000000);
+    }
+  }
+}, [searchParams]);
 
   useEffect(() => {
     fetchFromDB();
