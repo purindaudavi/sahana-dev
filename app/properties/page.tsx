@@ -2,7 +2,7 @@
 
 export const dynamic = "force-dynamic";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect ,Suspense } from "react";
 import Link from "next/link";
 import { Search, RotateCcw, SlidersHorizontal, MapPin } from "lucide-react";
 import { LAND_PROJECTS } from "./data";
@@ -21,7 +21,7 @@ import { useSearchParams } from "next/navigation";
 
 
 
-export default function PropertyListPage() {
+ function PropertyListContent() {
   const [activeTab, setActiveTab] = useState("All Projects");
   const [priceValue, setPriceValue] = useState(0);
   const [landType, setLandType] = useState("");
@@ -209,7 +209,7 @@ export default function PropertyListPage() {
   } else {
     fetchFromDB();
   }
-}, [paramsReady, priceValue, landType, district, blockSize, sortBy, searchTerm]);
+    }, [paramsReady, priceValue, landType, district, blockSize, sortBy, searchTerm]);
 
 
   return (
@@ -560,5 +560,19 @@ export default function PropertyListPage() {
       />
 
     </main>
+  );
+}
+
+export default function PropertyListPage() {
+  return (
+    <Suspense
+      fallback={
+        <main className="min-h-screen w-full bg-[#F8FAFC] text-[#0D2B4D] flex items-center justify-center">
+          <p className="text-sm font-bold">Loading properties...</p>
+        </main>
+      }
+    >
+      <PropertyListContent />
+    </Suspense>
   );
 }
