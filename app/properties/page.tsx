@@ -118,24 +118,24 @@ export default function PropertyListPage() {
   }
 
 
-  useEffect(() => {
-  const type = searchParams.get("type");
-  const districtParam = searchParams.get("district");
-  const blockSizeParam = searchParams.get("blockSize");
-  const priceParam = searchParams.get("price");
+//   useEffect(() => {
+//   const type = searchParams.get("type");
+//   const districtParam = searchParams.get("district");
+//   const blockSizeParam = searchParams.get("blockSize");
+//   const priceParam = searchParams.get("price");
 
-  if (type) setLandType(type);
-  if (districtParam) setDistrict(districtParam);
-  if (blockSizeParam) setBlockSize(blockSizeParam);
+//   if (type) setLandType(type);
+//   if (districtParam) setDistrict(districtParam);
+//   if (blockSizeParam) setBlockSize(blockSizeParam);
 
-  if (priceParam) {
-    if (priceParam === "500000") {
-      setPriceValue(500000);
-    } else if (priceParam === "1000000") {
-      setPriceValue(1000000);
-    }
-  }
-}, [searchParams]);
+//   if (priceParam) {
+//     if (priceParam === "500000") {
+//       setPriceValue(500000);
+//     } else if (priceParam === "1000000") {
+//       setPriceValue(1000000);
+//     }
+//   }
+// }, [searchParams]);
 
   useEffect(() => {
     fetchFromDB();
