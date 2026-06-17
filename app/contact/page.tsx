@@ -349,7 +349,7 @@ export default function ContactUsPage() {
               />
               <QuickContact
                 icon={<Phone size={22} />}
-                title="tel:+9434226212"
+                title="Call Us"
                 text="Speak with our property experts directly."
                 link="Call Now"
                 href="tel:+1234567890" // 👈 Replace with phone number
@@ -357,7 +357,7 @@ export default function ContactUsPage() {
               />
               <QuickContact
                 icon={<Mail size={22} />}
-                title="mailto:info@sahanagroup.lk"
+                title="Email Us"
                 text="Drop us an email anytime, we’ll reply soon."
                 link="Send Email"
                 href="mailto:info@yourdomain.com" // 👈 Replace with email address
