@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef,useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Link from "next/link";
@@ -16,6 +16,8 @@ import land4 from "./assets/images/dambulla2.png"
 import land5 from "./assets/images/yatidola.png"
 import land6 from "./assets/images/pitigala.png"
 import { useRouter } from "next/navigation";
+import { createClient } from "@/app/utils/supabase/client";
+
 
 import CTASection from "../app/components/CTASection";
 import callusbg from "../app/assets/call-us.png";
@@ -36,8 +38,10 @@ export default function HomePage() {
   const heroTextRef = useRef<HTMLDivElement | null>(null);
   const searchPanelRef = useRef<HTMLDivElement | null>(null);
   const propertyIntroRef = useRef<HTMLDivElement | null>(null);
+  const [premiumLands, setPremiumLands] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  
+
 
 
   const router = useRouter();
@@ -49,28 +53,50 @@ export default function HomePage() {
   const [activeTab, setActiveTab] = useState("All Projects");
   const [priceValue, setPriceValue] = useState(0);
 
-   
+
+
 
   useEffect(() => {
-  const params = new URLSearchParams(window.location.search);
+    const params = new URLSearchParams(window.location.search);
 
-  const type = params.get("type");
-  const district = params.get("district");
-  const blockSize = params.get("blockSize");
-  const price = params.get("price");
+    const type = params.get("type");
+    const district = params.get("district");
+    const blockSize = params.get("blockSize");
+    const price = params.get("price");
 
-  if (type) setLandType(type);
-  if (district) setDistrict(district);
-  if (blockSize) setBlockSize(blockSize);
+    if (type) setLandType(type);
+    if (district) setDistrict(district);
+    if (blockSize) setBlockSize(blockSize);
 
-  if (price === "500000") {
-    setPriceValue(500000);
-  }
+    if (price === "500000") {
+      setPriceValue(500000);
+    }
 
-  if (price === "1000000") {
-    setPriceValue(1000000);
-  }
-}, []);
+    if (price === "1000000") {
+      setPriceValue(1000000);
+    }
+  }, []);
+
+
+  useEffect(() => {
+    const fetchPremiumLands = async () => {
+      const supabase = createClient();
+      const { data, error } = await supabase
+        .from("projects")
+        .select("*")
+        .order("id", { ascending: false }) // Get newest first
+        .limit(6);
+
+      if (data) {
+        setPremiumLands(data);
+      } else if (error) {
+        console.error("Error fetching homepage lands:", error);
+      }
+      setLoading(false);
+    };
+
+    fetchPremiumLands();
+  }, []);
 
   const slides = [
     {
@@ -296,6 +322,14 @@ export default function HomePage() {
 
     <main ref={pageRef} className=" absolute inset-0 z-10 bg-gradient-to-b from-black/50 via-black/30 to-[#F1F4FA]/20 relative w-full overflow-hidden">
       {/* Full website background image */}
+
+      <style dangerouslySetInnerHTML={{
+        __html: `
+        .swiper-wrapper { display: flex !important; align-items: stretch !important; }
+        .swiper-slide { height: auto !important; display: flex !important; }
+        .swiper-slide > div { width: 100%; }
+      ` }} />
+
       <div className="fixed inset-0 -z-20">
         <img
           src={backgroundImage.src}
@@ -480,7 +514,7 @@ export default function HomePage() {
               <select
                 value={blockSize}
                 onChange={(e) => setBlockSize(e.target.value)}
-                className="w-full rounded-2xl bg-gray-100 px-4 py-4" 
+                className="w-full rounded-2xl bg-gray-100 px-4 py-4"
               >
                 <option value="">Any Block Size</option>
                 <option value="below10">Below 10 Block Size</option>
@@ -496,32 +530,32 @@ export default function HomePage() {
 
               {["All Projects", "Residential Land", "Commercial Land", "Agricultural Land"]
 
-              .map((tab) => (
-            <button
-              key={tab}
-              onClick={() => {
-                setActiveTab(tab);
+                .map((tab) => (
+                  <button
+                    key={tab}
+                    onClick={() => {
+                      setActiveTab(tab);
 
-                if (tab === "All Projects") setLandType("");
-                else if (tab === "Residential Land") setLandType("Residential");
-                else if (tab === "Commercial Land") setLandType("Commercial");
-                else if (tab === "Agricultural Land") setLandType("Agricultural");
-              }}
-              className={`rounded-full px-7 py-3 text-sm font-semibold transition ${activeTab === tab
-                ? "bg-[#0D2B4D] text-white shadow-lg"
-                : "bg-white text-[#0D2B4D] shadow-sm hover:bg-[#F1F4FA]"
-                }`}
-            >
-              {tab}
-            </button>
-              // .map((item) => (
-              //   <button
-              //     key={item}
-              //     className="rounded-full border border-gray-200 bg-white px-5 py-2.5 text-sm font-medium text-gray-600 shadow-sm transition hover:border-[#2196F3] hover:text-[#2196F3]"
-              //   >
-              //     {item}
-              //   </button>
-              ))}
+                      if (tab === "All Projects") setLandType("");
+                      else if (tab === "Residential Land") setLandType("Residential");
+                      else if (tab === "Commercial Land") setLandType("Commercial");
+                      else if (tab === "Agricultural Land") setLandType("Agricultural");
+                    }}
+                    className={`rounded-full px-7 py-3 text-sm font-semibold transition ${activeTab === tab
+                      ? "bg-[#0D2B4D] text-white shadow-lg"
+                      : "bg-white text-[#0D2B4D] shadow-sm hover:bg-[#F1F4FA]"
+                      }`}
+                  >
+                    {tab}
+                  </button>
+                  // .map((item) => (
+                  //   <button
+                  //     key={item}
+                  //     className="rounded-full border border-gray-200 bg-white px-5 py-2.5 text-sm font-medium text-gray-600 shadow-sm transition hover:border-[#2196F3] hover:text-[#2196F3]"
+                  //   >
+                  //     {item}
+                  //   </button>
+                ))}
             </div>
 
             <button
@@ -600,16 +634,11 @@ export default function HomePage() {
       {/* ========================================================== */}
       {/* MINIMALIST PREMIUM PROPERTIES SECTION                      */}
       {/* ========================================================== */}
-
       <section className="w-full py-24 bg-white border-t border-gray-100">
         <div className="max-w-7xl mx-auto px-6">
 
-          {/* Clean Minimalist Header Row */}
           <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-6 mb-16">
             <div className="space-y-2">
-              <span className="text-[#2196F3] text-xs font-bold uppercase tracking-widest block">
-                {/* Optional brand text placeholder */}
-              </span>
               <h2 className="text-3xl sm:text-4xl font-black text-[#0D2B4D] tracking-tight">
                 Latest Land Releases
               </h2>
@@ -623,140 +652,132 @@ export default function HomePage() {
             </Link>
           </div>
 
-          {/* 3-Column Luxury Real Estate Grid */}
-          {/* Swiper Luxury Real Estate Slider */}
           <div className="relative w-full">
-            <Swiper
-              modules={[Navigation, FreeMode, Autoplay]}
-              loop={true}
+            {loading ? (
+              <div className="flex justify-center py-20 text-gray-400 font-medium">Loading premium listings...</div>
+            ) : (
+              <Swiper
+                modules={[Navigation, Autoplay, FreeMode]}
+                loop={premiumLands.length > 3}
 
-              speed={600} //. Slows down the transition snap animation for a more premium glide feel 800 to 600 
-              touchRatio={1.2}   //  Adjusts touch sensitivity physics so swiping feels effortless
-              loopAddBlankSlides={true}
-              watchSlidesProgress={true}
+                /* 1. Smoothness Settings */
+                speed={1000}                // Slower, more elegant transitions
+                grabCursor={true}           // Shows the hand-grab icon
+                touchRatio={1.5}            // Makes the swipe feel "lighter" and more responsive
 
-              autoplay={{
-                delay: 2500,           // Time between auto slides (3.5 seconds)
-                disableOnInteraction: false, // Continue autoplay after user interaction
-                pauseOnMouseEnter: true,     // Pause autoplay on hover for better UX
-              }}
+                /* 2. FreeMode Glide (The Secret Sauce) */
+                freeMode={{
+                  enabled: true,
+                  sticky: true,             // Snaps to the nearest card after gliding
+                  momentumRatio: 0.6,       // How far it glides after you let go
+                  momentumVelocityRatio: 0.6,
+                }}
 
-              freeMode={{
-                enabled: true,
-                sticky: true,            // TRUE prevents cards from stopping halfway cut-off in the middle
-                momentumRatio: 0.8,      // Higher value makes it glide further after a quick flick
-                momentumVelocityRatio: 0.6,
-              }}
-              spaceBetween={32}
-              slidesPerView={1}
-              navigation={{
-                nextEl: ".prop-swiper-next",
-                prevEl: ".prop-swiper-prev",
-              }}
-              breakpoints={{
-                640: {
-                  slidesPerView: 2,
-                  spaceBetween: 24,
-                },
-                1024: {
-                  slidesPerView: 3,
-                  spaceBetween: 40,
-                },
-              }}
-              className="w-full !pb-20"
-            >
-              {PREMIUM_LAND_LIST.map((land) => (
-                <SwiperSlide key={land.id} className="h-auto flex">
-                  <div className="group w-full flex flex-col h-full bg-white rounded-3xl overflow-hidden border border-gray-300 transition-all duration-300 ease-out hover:scale-[1.03] hover:shadow-xl cursor-pointer">
+                /* 3. Auto-play behavior */
+                autoplay={{
+                  delay: 3500,
+                  disableOnInteraction: false,
+                  pauseOnMouseEnter: true,
+                }}
 
-                    {/* 1. UPPER SECTION */}
-                    <div className="bg-[#0D2B4D] relative w-full h-72 overflow-hidden transition-all duration-500 ease-out group-hover:scale-[0.95] group-hover:rounded-2xl mt-0 group-hover:mt-2 mx-0 group-hover:mx-2 group-hover:w-[calc(100%-1rem)]">
-                      <img
-                        src={land.imageUrl}
-                        alt={land.title}
-                        className="w-full h-full object-cover transition-transform duration-500 ease-out group-hover:scale-110"
-                      />
+                /* 4. Layout */
+                spaceBetween={32}
+                slidesPerView={1}
+                navigation={{
+                  nextEl: ".prop-swiper-next",
+                  prevEl: ".prop-swiper-prev",
+                }}
+                breakpoints={{
+                  640: { slidesPerView: 2, spaceBetween: 24 },
+                  1024: { slidesPerView: 3, spaceBetween: 40 },
+                }}
 
-                      <div className="absolute inset-x-0 top-0 h-20 bg-gradient-to-b from-black/20 to-transparent pointer-events-none"></div>
+                /* 5. Loop Stability */
+                watchSlidesProgress={true}
+                className="w-full !pb-20"
+              >
+                {premiumLands.map((land) => (
+                  <SwiperSlide key={land.id} className="h-auto flex">
+                    <div className="group w-full flex flex-col h-full bg-white rounded-3xl overflow-hidden border border-gray-300 transition-all duration-300 ease-out hover:scale-[1.03] hover:shadow-xl cursor-pointer">
 
-                      <div className="absolute bottom-4 right-4 bg-[#0D2B4D]/90 backdrop-blur-md px-4 py-2.5 rounded-2xl border border-white/10 text-white shadow-lg transition-transform duration-300 group-hover:scale-[1.05]">
-                        <p className="text-xs font-medium text-blue-200/80 uppercase tracking-wider text-right -mb-0.5">
-                          {land.pricingNote}
-                        </p>
-                        <p className="text-lg font-black tracking-wide">
-                          {land.price}{" "}
-                          <span className="text-xs font-bold text-gray-300">
-                            {land.currency}
-                          </span>
-                        </p>
-                      </div>
-                    </div>
+                      {/* Image Section */}
+                      <div className="bg-[#0D2B4D] relative w-full h-72 overflow-hidden transition-all duration-500 ease-out  group-hover:scale-[0.94] 
+                  group-hover:translate-y-2 
+                  group-hover:rounded-2xl 
+                  overflow-hidden">
+                        <img
+                          src={land.images?.[0] || "/placeholder-land.jpg"}
+                          alt={land.project_name}
+                          className="w-full h-full object-cover transition-transform duration-500 ease-out group-hover:scale-110"
+                        />
 
-                    {/* 2. LOWER SECTION */}
-                    <div className="p-6 flex-1 flex flex-col justify-between space-y-6">
-                      <div className="space-y-4">
-                        <div className="flex items-center gap-1.5 text-xs font-bold text-[#2196F3] tracking-widest uppercase">
-                          <span>{land.neighborhood}</span>
-                          <span className="text-gray-300">•</span>
-                          <span className="text-gray-500 font-medium">
-                            {land.district}
-                          </span>
-                        </div>
-
-                        <h3 className="text-xl font-bold text-[#0D2B4D] tracking-tight leading-snug line-clamp-2 min-h-[3.5rem]">
-                          {land.title}
-                        </h3>
-
-                        <div className="flex flex-wrap gap-2 pt-1  min-h-[4.5rem] items-start">
-                          <span className="bg-[#F1F4FA] px-3 py-1.5 rounded-xl text-xs font-bold text-[#0D2B4D]/80">
-                            {land.size}
-                          </span>
-                          <span className="bg-[#F1F4FA] px-3 py-1.5 rounded-xl text-xs font-bold text-[#0D2B4D]/80">
-                            {land.access}
-                          </span>
-                          <span className="bg-[#F1F4FA] px-3 py-1.5 rounded-xl text-xs font-bold text-[#0D2B4D]/80">
-                            {land.zoning}
-                          </span>
+                        <div className="absolute bottom-4 right-4 bg-[#0D2B4D]/90 backdrop-blur-md px-4 py-2.5 rounded-2xl border border-white/10 text-white shadow-lg">
+                          <p className="text-xs font-medium text-blue-200/80 uppercase tracking-wider text-right -mb-0.5">
+                            Starting From
+                          </p>
+                          <p className="text-lg font-black tracking-wide">
+                            {land.price.toLocaleString()} <span className="text-xs font-bold text-gray-300">LKR</span>
+                          </p>
                         </div>
                       </div>
 
-                      <div className="space-y-4 pt-2">
-                        <hr className="border-gray-100" />
+                      {/* Content Section */}
+                      <div className="p-6 flex-1 flex flex-col justify-between space-y-6">
+                        <div className="space-y-4">
+                          <div className="flex items-center gap-1.5 text-xs font-bold text-[#2196F3] tracking-widest uppercase">
+                            <span>{land.location}</span>
+                            <span className="text-gray-300">•</span>
+                            <span className="text-gray-500 font-medium">{land.district}</span>
+                          </div>
 
-                        <Link
-                          href={`/properties/${land.id}`}
-                          className="flex items-center justify-between w-full group/link"
-                        >
-                          <span className="text-sm font-black text-[#0D2B4D] group-hover/link:text-[#2196F3] transition-colors duration-200">
-                            Explore Land Plot
-                          </span>
+                          <h3 className="text-xl font-bold text-[#0D2B4D] tracking-tight leading-snug line-clamp-2 min-h-[3.5rem]">
+                            {land.project_name}
+                          </h3>
 
-                          <div className="w-9 h-9 rounded-full bg-gray-50 flex items-center justify-center border border-gray-100 text-[#0D2B4D] group-hover/link:bg-[#2196F3] group-hover/link:text-white group-hover/link:border-[#2196F3] transition-all duration-300">
-                            <span className="transform transition-transform duration-300 group-hover/link:translate-x-0.5 text-sm">
-                              ➔
+                          <div className="flex flex-wrap gap-2 pt-1 min-h-[4.5rem] items-start">
+                            <span className="bg-[#F1F4FA] px-3 py-1.5 rounded-xl text-xs font-bold text-[#0D2B4D]/80">
+                              {land.perch} Perches
+                            </span>
+                            <span className="bg-[#F1F4FA] px-3 py-1.5 rounded-xl text-xs font-bold text-[#0D2B4D]/80">
+                              {land.type}
                             </span>
                           </div>
-                        </Link>
+                        </div>
+
+                        <div className="space-y-4 pt-2">
+                          <hr className="border-gray-100" />
+                          <Link
+                            href={`/properties/${land.id}`}
+                            className="flex items-center justify-between w-full group/link"
+                          >
+                            <span className="text-sm font-black text-[#0D2B4D] group-hover/link:text-[#2196F3] transition-colors duration-200">
+                              Explore Land Plot
+                            </span>
+                            <div className="w-9 h-9 rounded-full bg-gray-50 flex items-center justify-center border border-gray-100 text-[#0D2B4D] group-hover/link:bg-[#2196F3] group-hover/link:text-white transition-all duration-300">
+                              ➔
+                            </div>
+                          </Link>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                </SwiperSlide>
-              ))}
-            </Swiper>
+                  </SwiperSlide>
+                ))}
+              </Swiper>
+            )}
 
-            {/* Custom Swiper Arrows */}
+            {/* Navigation Arrows */}
             <div className="absolute bottom-0 left-1/2 z-20 flex -translate-x-1/2 items-center gap-4">
-              <button className="prop-swiper-prev w-12 h-12 rounded-full bg-white border border-gray-200 flex items-center justify-center text-[#0D2B4D] shadow-sm hover:bg-[#2196F3] hover:text-white hover:border-[#2196F3] transition-all duration-200 active:scale-95">
+              <button className="prop-swiper-prev w-12 h-12 rounded-full bg-white border border-gray-200 flex items-center justify-center text-[#0D2B4D] shadow-sm hover:bg-[#2196F3] hover:text-white transition-all duration-200">
                 ←
               </button>
-
-              <button className="prop-swiper-next w-12 h-12 rounded-full bg-white border border-gray-200 flex items-center justify-center text-[#0D2B4D] shadow-sm hover:bg-[#2196F3] hover:text-white hover:border-[#2196F3] transition-all duration-200 active:scale-95">
+              <button className="prop-swiper-next w-12 h-12 rounded-full bg-white border border-gray-200 flex items-center justify-center text-[#0D2B4D] shadow-sm hover:bg-[#2196F3] hover:text-white transition-all duration-200">
                 →
               </button>
             </div>
           </div>
-
         </div>
+
+
         <CTASection
           description="Whether you're looking to buy, sell, or invest, our team is here to help you every step of the way. Let's turn your property goals into reality."
           primaryBtnText="Explore Properties"

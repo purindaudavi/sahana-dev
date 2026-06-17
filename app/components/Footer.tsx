@@ -14,7 +14,7 @@ export default function Footer() {
           <div className="md:col-span-5 space-y-4">
             <Link href="/" className="inline-block">
               <Image
-                src="/images/sahana-group-logo-upscaled.png"
+                src="/images/sahana-group-logo-upscaledd.png"
                 alt="Sahana Group"
                 width={180}
                 height={60}
