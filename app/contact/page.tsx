@@ -7,7 +7,8 @@ import contactHeroBg from "../assets/contact-HeroBg.png";
 import faqImage from "../assets/contact-faq.png"
 import single from "../assets/sahana-single-logo.png"
 import { Map, Eye, Icon } from "lucide-react";
-import { BsInstagram,BsFacebook, BsWhatsapp ,BsMailbox } from "react-icons/bs";
+import { BsInstagram, BsFacebook, BsWhatsapp, BsMailbox } from "react-icons/bs";
+
 
 
 import {
@@ -299,7 +300,7 @@ export default function ContactUsPage() {
 
                 <div className="my-7 h-px bg-white/15" />
 
-               {/* SOCIAL MEDIA HOVER SYSTEM */}
+                {/* SOCIAL MEDIA HOVER SYSTEM */}
                 <div className="flex items-center justify-between">
                   <span className="text-sm text-white/70">Follow us</span>
                   <div className="flex gap-3">
@@ -307,10 +308,10 @@ export default function ContactUsPage() {
                       { icon: BsFacebook, url: "https://www.facebook.com/SahanaIdamHorana" },
                       { icon: BsInstagram, url: "https://www.instagram.com/sahana_idam/" },
                       { icon: BsWhatsapp, url: "https://api.whatsapp.com/send/?phone=%2B94772647356&text&type=phone_number&app_absent=0" }, // FIX 1: Standardized key name to 'icon'
-                      { icon: BsMailbox, url: "mailto:info@sahanagroup.lk" } 
+                      { icon: BsMailbox, url: "mailto:info@sahanagroup.lk" }
                     ].map((item, index) => {
-                      
-                      {/* FIX 2: Assign the object property to a Capitalized variable tag */}
+
+                      {/* FIX 2: Assign the object property to a Capitalized variable tag */ }
                       const IconComponent = item.icon;
 
                       return (
@@ -343,20 +344,23 @@ export default function ContactUsPage() {
                 title="WhatsApp"
                 text="Chat with our team instantly on WhatsApp."
                 link="Chat Now"
+                href="https://api.whatsapp.com/send/?phone=%2B94772647356&text&type=phone_number&app_absent=0" // 👈 Replace with phone number
                 color="text-emerald-500 bg-emerald-50"
               />
               <QuickContact
                 icon={<Phone size={22} />}
-                title="Call Us"
+                title="tel:+9434226212"
                 text="Speak with our property experts directly."
                 link="Call Now"
+                href="tel:+1234567890" // 👈 Replace with phone number
                 color="text-[#2196F3] bg-blue-50"
               />
               <QuickContact
                 icon={<Mail size={22} />}
-                title="Email Us"
+                title="mailto:info@sahanagroup.lk"
                 text="Drop us an email anytime, we’ll reply soon."
                 link="Send Email"
+                href="mailto:info@yourdomain.com" // 👈 Replace with email address
                 color="text-[#E6008E] bg-pink-50"
               />
               <QuickContact
@@ -364,10 +368,12 @@ export default function ContactUsPage() {
                 title="Visit Office"
                 text="Walk in anytime during office hours."
                 link="Get Directions"
+                href="https://maps.app.goo.gl/BvSyJFNM2Umd9pTv6" // 👈 Replace with address
                 color="text-orange-500 bg-orange-50"
               />
             </div>
           </div>
+
         </div>
       </section>
 
@@ -513,31 +519,41 @@ function QuickContact({
   text,
   link,
   color,
+  href = '#', // 👈 1. Added the href prop with a fallback default value
 }: {
   icon: React.ReactNode;
   title: string;
   text: string;
   link: string;
   color: string;
+  href?: string; // 👈 2. Added href type definition (optional string)
 }) {
+  // 3. Automatically open external links (WhatsApp, Maps) in a new browser tab
+  const isExternal = href.startsWith('http');
+
   return (
-    <div className="flex gap-4 p-6">
+    <div className="flex gap-4 p-6 transition-colors duration-200 hover:bg-gray-50/50 first:rounded-t-[1.5rem] last:rounded-b-[1.5rem] md:first:rounded-l-[1.5rem] md:first:rounded-tr-none md:last:rounded-r-[1.5rem] md:last:rounded-bl-none group">
       <div
-        className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-full ${color}`}
+        className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-full transition-transform duration-200 group-hover:scale-105 ${color}`}
       >
         {icon}
       </div>
 
-      <div>
+      <div className="flex flex-col flex-grow">
         <h3 className="font-bold text-[#0D2B4D]">{title}</h3>
-        <p className="mt-1 text-xs leading-relaxed text-gray-500">{text}</p>
+        <p className="mt-1 text-xs leading-relaxed text-gray-500 flex-grow">{text}</p>
+        
+        {/* 4. Swapped static '#' with the dynamic href prop */}
         <Link
-          href="#"
-          className="mt-3 inline-flex text-xs font-bold text-[#2196F3]"
+          href={href}
+          target={isExternal ? "_blank" : undefined}
+          rel={isExternal ? "noopener noreferrer" : undefined}
+          className="mt-3 inline-flex text-xs font-bold text-[#2196F3] items-center hover:underline"
         >
-          {link} →
+          {link} 
+          <span className="ml-1 transition-transform duration-200 group-hover:translate-x-1">→</span>
         </Link>
       </div>
     </div>
   );
-}
+} 

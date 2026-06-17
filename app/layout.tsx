@@ -66,7 +66,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 
         {/* WhatsApp Float */}
         <a 
-          href="https://wa.me" 
+          href="https://api.whatsapp.com/send/?phone=%2B94772647356&text&type=phone_number&app_absent=0" 
           target="_blank" 
           rel="noopener noreferrer"
           className="fixed z-50 bottom-10 right-10 bg-green-600 hover:bg-green-700 text-white w-12 h-12 flex items-center justify-center rounded-full shadow-lg transition-transform hover:scale-110"
