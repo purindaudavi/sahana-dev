@@ -750,10 +750,10 @@ export default function HomePage() {
                             href={`/properties/${land.id}`}
                             className="flex items-center justify-between w-full group/link"
                           >
-                            <span className="text-sm font-black text-[#0D2B4D] group-hover/link:text-[#2196F3] transition-colors duration-200">
+                            <span className="text-sm font-black text-[#0D2B4D] group-hover/link:text-[#E6008E] transition-colors duration-200">
                               Explore Land Plot
                             </span>
-                            <div className="w-9 h-9 rounded-full bg-gray-50 flex items-center justify-center border border-gray-100 text-[#0D2B4D] group-hover/link:bg-[#2196F3] group-hover/link:text-white transition-all duration-300">
+                            <div className="w-9 h-9 rounded-full bg-gray-50 flex items-center justify-center border border-gray-100 text-[#0D2B4D] group-hover/link:bg-[#E6008E] group-hover/link:text-white transition-all duration-300">
                               ➔
                             </div>
                           </Link>
@@ -767,10 +767,10 @@ export default function HomePage() {
 
             {/* Navigation Arrows */}
             <div className="absolute bottom-0 left-1/2 z-20 flex -translate-x-1/2 items-center gap-4">
-              <button className="prop-swiper-prev w-12 h-12 rounded-full bg-white border border-gray-200 flex items-center justify-center text-[#0D2B4D] shadow-sm hover:bg-[#2196F3] hover:text-white transition-all duration-200">
+              <button className="prop-swiper-prev w-12 h-12 rounded-full bg-white border border-gray-200 flex items-center justify-center text-[#0D2B4D] shadow-sm hover:bg-[#E6008E] hover:text-white transition-all duration-200">
                 ←
               </button>
-              <button className="prop-swiper-next w-12 h-12 rounded-full bg-white border border-gray-200 flex items-center justify-center text-[#0D2B4D] shadow-sm hover:bg-[#2196F3] hover:text-white transition-all duration-200">
+              <button className="prop-swiper-next w-12 h-12 rounded-full bg-white border border-gray-200 flex items-center justify-center text-[#0D2B4D] shadow-sm hover:bg-[#E6008E] hover:text-white transition-all duration-200">
                 →
               </button>
             </div>
