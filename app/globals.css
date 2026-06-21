@@ -11,3 +11,19 @@
   --color-brand-gray: #F1F4FA;
 }
 
+/* Hide only Artibot default launcher button */
+
+
+body button[class*="artibot-launcher"] {
+  display: none !important;
+}
+
+
+
+/* Hide Artibot "Contact us." bubble text */
+#artibot-wrapper--3PaNf div[class*="artibot-launcher-bubble"] {
+  display: none !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
