@@ -1,9 +1,10 @@
 "use client";
 
-import { useState } from "react";
+
 import { MessageCircle, X, Send } from "lucide-react";
 import chatpic from "../assets/chatbot.png";
 import { FaWhatsapp } from "react-icons/fa6";
+import { useState, useEffect, useRef } from "react";
 
 type Message = {
   from: "bot" | "user";
@@ -119,6 +120,7 @@ const flows: Record<
   contact: {
     bot: "Please contact our sales team on WhatsApp. They will help you with prices, availability, deeds, and payment plans.",
     options: [
+      { label: "Contact-us", next: "contactus" },
       { label: "Open WhatsApp", next: "whatsapp" },
       { label: "Start Again", next: "start" },
     ],
@@ -163,6 +165,30 @@ export default function SahanaChatBot() {
   ]);
   const [currentFlow, setCurrentFlow] = useState("start");
 
+  const chatWindowRef = useRef<HTMLDivElement>(null);
+
+  // Effect to close the chat when clicking outside
+useEffect(() => {
+  function handleClickOutside(event: MouseEvent) {
+    if (
+      chatWindowRef.current &&
+      !chatWindowRef.current.contains(event.target as Node)
+    ) {
+      setIsOpen(false);
+    }
+  }
+
+  if (isOpen) {
+    // Listen for click/mousedown events on the entire document
+    document.addEventListener("mousedown", handleClickOutside);
+  }
+
+  return () => {
+    // Clean up the event listener on unmount or when closed
+    document.removeEventListener("mousedown", handleClickOutside);
+  };
+}, [isOpen]);
+
   const handleOptionClick = (option: Option) => {
     setMessages((prev) => [
       ...prev,
@@ -202,6 +228,10 @@ export default function SahanaChatBot() {
       return;
     }
 
+       if (option.next === "contactus") {
+      window.location.href = "/contact  ";
+      return;
+    }
 
     const nextFlow = flows[option.next];
 
@@ -220,12 +250,14 @@ export default function SahanaChatBot() {
 
   return (
     <>
-<div className="fixed bottom-8 right-8 z-[9999] flex flex-col items-center gap-4 md:flex-row  ">
+<div 
+
+className="fixed bottom-8 right-8 z-[9999] flex flex-col items-center gap-4 md:flex-row    ">
     <a
             href="https://api.whatsapp.com/send/?phone=%2B94772647356&text&type=phone_number&app_absent=0"
             target="_blank"
             rel="noopener noreferrer"
-            className=" bottom-8 right-8 bg-green-600 hover:bg-green-700 text-white w-14 h-14 flex items-center justify-center rounded-full shadow-xl transition-transform hover:scale-110"
+            className=" bottom-8 right-8 bg-green-600 hover:bg-green-700 text-white md:w-13 md:h-13  h-11 w-11 flex items-center justify-center rounded-full shadow-xl transition-transform hover:scale-110"
           >
             <FaWhatsapp size={25} />
           </a>
@@ -242,7 +274,7 @@ export default function SahanaChatBot() {
          <img 
       src={chatpic.src} 
       alt="Chat icon" 
-      className="h-20 w-20 object-contain" 
+      className="h-16 w-16 object-contain md:h-18 md:w-18" 
     />
            {/* <MessageCircle size={21} /> */}
         </button>
@@ -252,7 +284,9 @@ export default function SahanaChatBot() {
 
       {/* Chat Window */}
       {isOpen && (
-        <div className="fixed bottom-8 right-8 z-[9999] w-[360px] overflow-hidden rounded-3xl border border-white/30 bg-white shadow-[0_25px_80px_rgba(13,43,77,0.25)]">
+        <div 
+        ref={chatWindowRef}
+        className="fixed bottom-8 right-8 z-[9999] w-[360px] overflow-hidden rounded-3xl border border-white/30 bg-white shadow-[0_25px_80px_rgba(13,43,77,0.25)]">
           {/* Header */}
           <div className="flex items-center justify-between bg-[#0D2B4D] px-5 py-4 text-white">
             <div>
