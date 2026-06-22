@@ -67,8 +67,9 @@ const flows: Record<
     bot: "Which location are you interested in?",
     options: [
       { label: "Kalutara", next: "kalutara" },
-      { label: "Panadura", next: "panadura" },
-      { label: "Dambulla", next: "dambulla" },
+      { label: "Gampaha", next: "gampaha" },
+      { label: "Colombo", next: "colombo" },
+      { label: "Kurunegala", next: "kurunegala" },
       { label: "Other Location", next: "contact" },
     ],
   },
@@ -81,18 +82,18 @@ const flows: Record<
     ],
   },
 
-  panadura: {
-    bot: "We have selected projects around Panadura. Our team can guide you with current availability.",
+  gampaha: {
+    bot: "We have selected projects around Gampaha. Our team can guide you with current availability.",
     options: [
-      { label: "View Panadura Lands", next: "viewPanadura" },
+      { label: "View Gampaha Lands", next: "viewGampaha" },
       { label: "Contact Sales Team", next: "contact" },
     ],
   },
 
-  dambulla: {
-    bot: "We have land opportunities in Dambulla with good investment potential.",
+  colombo: {
+    bot: "We have land opportunities in Colombo with good investment potential.",
     options: [
-      { label: "View Dambulla Lands", next: "viewDambulla" },
+      { label: "View Colombo Lands", next: "viewColombo" },
       { label: "Contact Sales Team", next: "contact" },
     ],
   },
@@ -126,9 +127,9 @@ const flows: Record<
     options: [{ label: "Go to Kalutara Lands", next: "kalutaraLink" }],
   },
 
-  viewPanadura: {
-    bot: "Opening Panadura land projects for you.",
-    options: [{ label: "Go to Panadura Lands", next: "panaduraLink" }],
+  viewGampaha: {
+    bot: "Opening Gampaha land projects for you.",
+    options: [{ label: "Go to Gampaha Lands", next: "gampahaaLink" }],
   },
 
   viewDambulla: {
@@ -171,12 +172,12 @@ export default function SahanaChatBot() {
       return;
     }
 
-    if (option.next === "panaduraLink") {
-      window.location.href = "/properties?district=Panadura";
+    if (option.next === "gampahaaLink") { 
+      window.location.href = "/properties?district=Gampaha";
       return;
     }
 
-    if (option.next === "dambullaLink") {
+    if (option.next === "colomboaLink") {
       window.location.href = "/properties?district=Dambulla";
       return;
     }
@@ -206,7 +207,7 @@ export default function SahanaChatBot() {
           className="fixed bottom-8 right-28 z-[9999] flex h-14 items-center gap-3 rounded-full bg-[#0D2B4D] px-5 text-sm font-bold text-white shadow-xl transition hover:scale-105 hover:bg-[#E6008E]"
         >
           <MessageCircle size={21} />
-          Property Assistant
+          
         </button>
       )}
 
