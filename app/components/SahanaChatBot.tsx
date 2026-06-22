@@ -224,7 +224,7 @@ export default function SahanaChatBot() {
         <button
           type="button"
           onClick={() => setIsOpen(true)}
-          className="  fixed bottom-8 right-24 z-[9999] flex h-14 items-center gap-2 rounded-full hover:scale-105 shadow-xl"
+          className="  fixed bottom-8 right-24 z-[9999] flex h-14 items-center gap-2 rounded-full hover:scale-105 "
           // bg-[#0D2B4D] px-5 text-sm font-bold text-white shadow-xl transition hover:scale-105 hover:bg-[#E6008E]
         >
          <img 
