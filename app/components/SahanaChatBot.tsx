@@ -252,12 +252,12 @@ useEffect(() => {
     <>
 <div 
 
-className="fixed bottom-8 right-8 z-[9999] flex flex-col items-center gap-4 md:flex-row    ">
+className="fixed md:bottom-8 bottom-2 md:right-8 right-1 z-[9999] flex flex-col items-center gap-4 md:flex-row    ">
     <a
             href="https://api.whatsapp.com/send/?phone=%2B94772647356&text&type=phone_number&app_absent=0"
             target="_blank"
             rel="noopener noreferrer"
-            className=" bottom-8 right-8 bg-green-600 hover:bg-green-700 text-white md:w-13 md:h-13  h-11 w-11 flex items-center justify-center rounded-full shadow-xl transition-transform hover:scale-110"
+            className=" bottom-8 right-8 bg-green-600 hover:bg-green-700 text-white md:w-13 md:h-13  h-12 w-12 flex items-center justify-center rounded-full shadow-xl transition-transform hover:scale-110"
           >
             <FaWhatsapp size={25} />
           </a>
@@ -274,7 +274,7 @@ className="fixed bottom-8 right-8 z-[9999] flex flex-col items-center gap-4 md:f
          <img 
       src={chatpic.src} 
       alt="Chat icon" 
-      className="h-16 w-16 object-contain md:h-18 md:w-18" 
+      className="h-18 w-18 object-contain md:h-18 md:w-18" 
     />
            {/* <MessageCircle size={21} /> */}
         </button>
