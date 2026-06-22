@@ -98,6 +98,14 @@ const flows: Record<
     ],
   },
 
+    kurunegala: {
+    bot: "We have land opportunities in Kurunegala with good investment potential.",
+    options: [
+      { label: "View Kurunegala Lands", next: "viewKurunegala" },
+      { label: "Contact Sales Team", next: "contact" },
+    ],
+  },
+
   payments: {
     bot: "Selected Sahana Group projects offer flexible payment plans. Final plans depend on the project and plot selection.",
     options: [
@@ -132,9 +140,14 @@ const flows: Record<
     options: [{ label: "Go to Gampaha Lands", next: "gampahaaLink" }],
   },
 
-  viewDambulla: {
-    bot: "Opening Dambulla land projects for you.",
-    options: [{ label: "Go to Dambulla Lands", next: "dambullaLink" }],
+  viewColombo: {
+    bot: "Opening Colombo land projects for you.",
+    options: [{ label: "Go to Colombo Lands", next: "colomboLink" }],
+  },
+
+  viewKurunegala: {
+    bot: "Opening Kurunegala land projects for you.",
+    options: [{ label: "Go to Kurunegala Lands", next: "kurunegalaLink" }],
   },
 };
 
@@ -177,10 +190,16 @@ export default function SahanaChatBot() {
       return;
     }
 
-    if (option.next === "colomboaLink") {
-      window.location.href = "/properties?district=Dambulla";
+    if (option.next === "colomboLink") {
+      window.location.href = "/properties?district=Colombo";
       return;
     }
+
+      if (option.next === "kurunegalaLink") {
+      window.location.href = "/properties?district=Kurunegala";
+      return;
+    }
+
 
     const nextFlow = flows[option.next];
 
