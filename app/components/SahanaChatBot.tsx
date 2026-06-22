@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { MessageCircle, X, Send } from "lucide-react";
+import chatpic from "../assets/chatbot.png";
 
 type Message = {
   from: "bot" | "user";
@@ -223,10 +224,15 @@ export default function SahanaChatBot() {
         <button
           type="button"
           onClick={() => setIsOpen(true)}
-          className="fixed bottom-8 right-28 z-[9999] flex h-14 items-center gap-3 rounded-full bg-[#0D2B4D] px-5 text-sm font-bold text-white shadow-xl transition hover:scale-105 hover:bg-[#E6008E]"
+          className="  fixed bottom-8 right-24 z-[9999] flex h-14 items-center gap-2 rounded-full hover:scale-105 shadow-xl"
+          // bg-[#0D2B4D] px-5 text-sm font-bold text-white shadow-xl transition hover:scale-105 hover:bg-[#E6008E]
         >
-          <MessageCircle size={21} />
-          
+         <img 
+      src={chatpic.src} 
+      alt="Chat icon" 
+      className="h-20 w-20 object-contain" 
+    />
+           {/* <MessageCircle size={21} /> */}
         </button>
       )}
 
