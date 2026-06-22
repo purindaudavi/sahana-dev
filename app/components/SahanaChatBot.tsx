@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { MessageCircle, X, Send } from "lucide-react";
 import chatpic from "../assets/chatbot.png";
+import { FaWhatsapp } from "react-icons/fa6";
 
 type Message = {
   from: "bot" | "user";
@@ -219,12 +220,23 @@ export default function SahanaChatBot() {
 
   return (
     <>
+<div className="fixed bottom-8 right-8 z-[9999] flex flex-col items-center gap-4 md:flex-row  ">
+    <a
+            href="https://api.whatsapp.com/send/?phone=%2B94772647356&text&type=phone_number&app_absent=0"
+            target="_blank"
+            rel="noopener noreferrer"
+            className=" bottom-8 right-8 bg-green-600 hover:bg-green-700 text-white w-14 h-14 flex items-center justify-center rounded-full shadow-xl transition-transform hover:scale-110"
+          >
+            <FaWhatsapp size={25} />
+          </a>
+
       {/* Floating Button */}
       {!isOpen && (
         <button
           type="button"
           onClick={() => setIsOpen(true)}
-          className="  fixed bottom-8 right-24 z-[9999] flex h-14 items-center gap-2 rounded-full hover:scale-105 "
+          className=" flex  h-14 items-center  rounded-full  hover:scale-110"
+          //        fixed bottom-8 right-8 z-[9999] flex flex-col items-center gap-4 md:flex-row md:right-24
           // bg-[#0D2B4D] px-5 text-sm font-bold text-white shadow-xl transition hover:scale-105 hover:bg-[#E6008E]
         >
          <img 
@@ -235,6 +247,8 @@ export default function SahanaChatBot() {
            {/* <MessageCircle size={21} /> */}
         </button>
       )}
+
+      </div>
 
       {/* Chat Window */}
       {isOpen && (

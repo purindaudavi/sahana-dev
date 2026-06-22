@@ -9,7 +9,7 @@ import Script from "next/script";
 // 1. IMPORT YOUR SEPARATE COMPONENTS HERE
 import SahanaHeader from "./components/Header";
 import Footer from "./components/Footer";
-import FloatingActions from "./components/FloatingActions";
+// import FloatingActions from "./components/FloatingActions";
 
 import SahanaChatBot from "./components/SahanaChatBot";
 
@@ -65,7 +65,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <Footer />
         </div>
 
-        <FloatingActions />
+        {/* <FloatingActions /> */}
         
 
 {/* <Script
