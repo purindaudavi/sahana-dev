@@ -8,7 +8,7 @@ export default function Footer() {
       <div className="max-w-7xl mx-auto px-6 py-12 lg:py-16">
         
         {/* Top Section: Branding and Links Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-10 pb-12 border-b border-white/10">
+        <div className="grid grid-cols-1 md:grid-cols-13 gap-10 pb-12 border-b border-white/10">
           
           {/* Column 1: Company Profile (5 cols wide on desktop) */}
           <div className="md:col-span-5 space-y-4">
@@ -27,8 +27,28 @@ export default function Footer() {
             </p>
           </div>
 
+          <div className="md:col-span-2 space-y-4">
+            <h4 className="text-xs font-bold uppercase tracking-wider text-[#29D6ED]">
+              Quick Links
+            </h4>
+            <ul className="space-y-2 text-sm text-gray-300">
+              <li>
+                <Link href="/about" className="hover:text-[#E6008E] transition-colors">
+                  About Us
+                </Link>
+              </li>
+              <li>
+                <Link href="/properties" className="hover:text-[#E6008E] transition-colors flex items-center gap-1">
+                  Properties <ArrowUpRight size={14} className="opacity-50" />
+                </Link>
+              </li>
+              
+            </ul>
+          </div>
+
+
           {/* Column 2: Quick Links (3 cols wide on desktop) */}
-          <div className="md:col-span-3 space-y-4">
+          <div className="md:col-span-2 space-y-4">
             <h4 className="text-xs font-bold uppercase tracking-wider text-[#29D6ED]">
               Our Portfolios
             </h4>
@@ -43,14 +63,11 @@ export default function Footer() {
                   Commercial Plots <ArrowUpRight size={14} className="opacity-50" />
                 </Link>
               </li>
-              <li>
-                <Link href="/about" className="hover:text-[#E6008E] transition-colors">
-                  About Sahana Group
-                </Link>
-              </li>
+             
             </ul>
           </div>
 
+          
           {/* Column 3: Contact Info (4 cols wide on desktop) */}
           <div className="md:col-span-4 space-y-4">
             <h4 className="text-xs font-bold uppercase tracking-wider text-[#29D6ED]">
