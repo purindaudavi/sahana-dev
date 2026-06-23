@@ -8,7 +8,7 @@ export default function Footer() {
       <div className="max-w-7xl mx-auto px-6 py-12 lg:py-16">
         
         {/* Top Section: Branding and Links Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-10 pb-12 border-b border-white/10">
+        <div className="grid grid-cols-1 md:grid-cols-13 gap-10 pb-12 border-b border-white/10">
           
           {/* Column 1: Company Profile (5 cols wide on desktop) */}
           <div className="md:col-span-5 space-y-4">
@@ -27,30 +27,53 @@ export default function Footer() {
             </p>
           </div>
 
+          <div className="md:col-span-2 space-y-4">
+            <h4 className="text-xs font-bold uppercase tracking-wider text-[#29D6ED]">
+              Quick Links
+            </h4>
+            <ul className="space-y-2 text-sm text-gray-300">
+              <li>
+                <Link href="/about" className="hover:text-[#E6008E] transition-colors">
+                  About Us
+                </Link>
+              </li>
+              <li>
+                <Link href="/properties" className="hover:text-[#E6008E] transition-colors flex items-center gap-1">
+                  Properties <ArrowUpRight size={14} className="opacity-50" />
+                </Link>
+              </li>
+              
+            </ul>
+          </div>
+
+
           {/* Column 2: Quick Links (3 cols wide on desktop) */}
-          <div className="md:col-span-3 space-y-4">
+          <div className="md:col-span-2 space-y-4">
             <h4 className="text-xs font-bold uppercase tracking-wider text-[#29D6ED]">
               Our Portfolios
             </h4>
             <ul className="space-y-2 text-sm text-gray-300">
               <li>
-                <Link href="/properties" className="hover:text-[#E6008E] transition-colors flex items-center gap-1">
+                <Link href="/properties?type=Residential" className="hover:text-[#E6008E] transition-colors flex items-center gap-1">
                   Residential Lands <ArrowUpRight size={14} className="opacity-50" />
                 </Link>
               </li>
               <li>
-                <Link href="/properties" className="hover:text-[#E6008E] transition-colors flex items-center gap-1">
-                  Commercial Plots <ArrowUpRight size={14} className="opacity-50" />
+                <Link href="/properties?type=Commercial" className="hover:text-[#E6008E] transition-colors flex items-center gap-1">
+                  Commercial Lands <ArrowUpRight size={14} className="opacity-50" />
                 </Link>
               </li>
+
               <li>
-                <Link href="/about" className="hover:text-[#E6008E] transition-colors">
-                  About Sahana Group
+                <Link href="/properties?type=Agricultural" className="hover:text-[#E6008E] transition-colors flex items-center gap-1">
+                  Agricultural Lands <ArrowUpRight size={14} className="opacity-50" />
                 </Link>
               </li>
+             
             </ul>
           </div>
 
+          
           {/* Column 3: Contact Info (4 cols wide on desktop) */}
           <div className="md:col-span-4 space-y-4">
             <h4 className="text-xs font-bold uppercase tracking-wider text-[#29D6ED]">
@@ -59,7 +82,8 @@ export default function Footer() {
             <ul className="space-y-3 text-sm text-gray-300">
               <li className="flex items-start gap-3">
                 <MapPin size={18} className="text-[#E6008E] shrink-0 mt-0.5" />
-                <span>No. 240 Ratnapura - Horana - Panadura Hwy, Horana</span>
+                <a href="https://maps.app.goo.gl/BvSyJFNM2Umd9pTv6">No. 240 Ratnapura - Horana - Panadura Hwy, Horana</a>
+                
               </li>
               <li className="flex items-center gap-3">
                 <Phone size={18} className="text-[#E6008E] shrink-0" />
