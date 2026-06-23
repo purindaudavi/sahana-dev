@@ -135,10 +135,10 @@ export default function SahanaHeader() {
           </button>
 
           <Link
-            href="/contact"
+            href="/sign-in"
             className="hidden rounded-full bg-[#E6008E] px-6 py-3 text-sm font-bold text-white shadow-lg shadow-pink-500/25 transition hover:bg-[#FF2FA6] md:inline-flex"
           >
-            Login 
+            Sign in
           </Link>
 
           {/* Interactive Mobile Hamburger Button */}
