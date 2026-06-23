@@ -1,10 +1,11 @@
 "use client";
 
 
-import { MessageCircle, X, Send } from "lucide-react";
+import { MessageCircle, X, Send, } from "lucide-react";
 import chatpic from "../assets/chatbot.png";
 import { FaWhatsapp } from "react-icons/fa6";
 import { useState, useEffect, useRef } from "react";
+import actionMenuPic from "../assets/actionMenuPic.png";
 
 type Message = {
   from: "bot" | "user";
@@ -101,7 +102,7 @@ const flows: Record<
     ],
   },
 
-    kurunegala: {
+  kurunegala: {
     bot: "We have land opportunities in Kurunegala with good investment potential.",
     options: [
       { label: "View Kurunegala Lands", next: "viewKurunegala" },
@@ -167,27 +168,62 @@ export default function SahanaChatBot() {
 
   const chatWindowRef = useRef<HTMLDivElement>(null);
 
-  // Effect to close the chat when clicking outside
-useEffect(() => {
-  function handleClickOutside(event: MouseEvent) {
-    if (
-      chatWindowRef.current &&
-      !chatWindowRef.current.contains(event.target as Node)
-    ) {
-      setIsOpen(false);
+  const [isMobileActionsOpen, setIsMobileActionsOpen] = useState(false);
+  const floatingActionsRef = useRef<HTMLDivElement>(null);
+  const [showFloatingActions, setShowFloatingActions] = useState(false);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setShowFloatingActions(true);
+    }, 4000);
+
+    return () => clearTimeout(timer);
+  }, []);
+  //effect for 3 second timeout for wachat
+
+
+  useEffect(() => {
+    function handleOutsideActionClick(event: MouseEvent) {
+      if (
+        floatingActionsRef.current &&
+        !floatingActionsRef.current.contains(event.target as Node)
+      ) {
+        setIsMobileActionsOpen(false);
+      }
     }
-  }
 
-  if (isOpen) {
-    // Listen for click/mousedown events on the entire document
-    document.addEventListener("mousedown", handleClickOutside);
-  }
+    if (isMobileActionsOpen) {
+      document.addEventListener("mousedown", handleOutsideActionClick);
+    }
 
-  return () => {
-    // Clean up the event listener on unmount or when closed
-    document.removeEventListener("mousedown", handleClickOutside);
-  };
-}, [isOpen]);
+    return () => {
+      document.removeEventListener("mousedown", handleOutsideActionClick);
+    };
+  }, [isMobileActionsOpen]);
+
+
+
+  // Effect to close the chat when clicking outside
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (
+        chatWindowRef.current &&
+        !chatWindowRef.current.contains(event.target as Node)
+      ) {
+        setIsOpen(false);
+      }
+    }
+
+    if (isOpen) {
+      // Listen for click/mousedown events on the entire document
+      document.addEventListener("mousedown", handleClickOutside);
+    }
+
+    return () => {
+      // Clean up the event listener on unmount or when closed
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [isOpen]);
 
   const handleOptionClick = (option: Option) => {
     setMessages((prev) => [
@@ -213,7 +249,7 @@ useEffect(() => {
       return;
     }
 
-    if (option.next === "gampahaaLink") { 
+    if (option.next === "gampahaaLink") {
       window.location.href = "/properties?district=Gampaha";
       return;
     }
@@ -223,12 +259,12 @@ useEffect(() => {
       return;
     }
 
-      if (option.next === "kurunegalaLink") {
+    if (option.next === "kurunegalaLink") {
       window.location.href = "/properties?district=Kurunegala";
       return;
     }
 
-       if (option.next === "contactus") {
+    if (option.next === "contactus") {
       window.location.href = "/contact  ";
       return;
     }
@@ -248,45 +284,86 @@ useEffect(() => {
 
   const currentOptions = flows[currentFlow]?.options || [];
 
+
   return (
     <>
-<div 
-
-className="fixed md:bottom-8 bottom-2 md:right-8 right-1 z-[9999] flex flex-col items-center gap-4 md:flex-row    ">
-    <a
-            href="https://api.whatsapp.com/send/?phone=%2B94772647356&text&type=phone_number&app_absent=0"
-            target="_blank"
-            rel="noopener noreferrer"
-            className=" bottom-8 right-8 bg-green-600 hover:bg-green-700 text-white md:w-13 md:h-13  h-12 w-12 flex items-center justify-center rounded-full shadow-xl transition-transform hover:scale-110"
-          >
-            <FaWhatsapp size={25} />
-          </a>
-
-      {/* Floating Button */}
-      {!isOpen && (
-        <button
-          type="button"
-          onClick={() => setIsOpen(true)}
-          className=" flex  h-14 items-center  rounded-full  hover:scale-110"
-          //        fixed bottom-8 right-8 z-[9999] flex flex-col items-center gap-4 md:flex-row md:right-24
-          // bg-[#0D2B4D] px-5 text-sm font-bold text-white shadow-xl transition hover:scale-105 hover:bg-[#E6008E]
+      {showFloatingActions && !isOpen && (
+        <div
+          ref={floatingActionsRef}
+          className="fixed bottom-5 right-5 z-[9999]"
         >
-         <img 
-      src={chatpic.src} 
-      alt="Chat icon" 
-      className="h-18 w-18 object-contain md:h-18 md:w-18" 
-    />
-           {/* <MessageCircle size={21} /> */}
-        </button>
+          {/* Desktop view - show both buttons normally */}
+          <div className="hidden items-center gap-4 md:flex">
+            <button
+              type="button"
+              onClick={() => setIsOpen(true)}
+              className="flex h-16 w-16 items-center justify-center rounded-full   hover:scale-110"
+            >
+              <img
+                src={chatpic.src}
+                alt="Sahana chat assistant"
+                className="h-16 w-16 object-contain"
+              />
+            </button>
+
+            <a
+              href="https://api.whatsapp.com/send/?phone=%2B94772647356&text&type=phone_number&app_absent=0"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex h-12 w-12 items-center justify-center rounded-full bg-green-600 text-white shadow-xl transition hover:scale-110 hover:bg-green-700"
+            >
+              <FaWhatsapp size={25} />
+            </a>
+          </div>
+
+          {/* Mobile view - first show only one combined circle */}
+          <div className="flex flex-col items-center gap-3 md:hidden">
+            {isMobileActionsOpen && (
+              <a
+                href="https://api.whatsapp.com/send/?phone=%2B94772647356&text&type=phone_number&app_absent=0"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex h-10 w-10 items-center justify-center rounded-full bg-green-600 text-white transition hover:scale-110 hover:bg-green-700"
+              >
+                <FaWhatsapp size={25} />
+              </a>
+            )}
+
+            <button
+              type="button"
+              onClick={() => {
+                if (!isMobileActionsOpen) {
+                  setIsMobileActionsOpen(true);
+                  return;
+                }
+
+                setIsOpen(true);
+                setIsMobileActionsOpen(false);
+              }}
+              className="flex h-14 w-14 items-center justify-center rounded-full bg-transparent  transition hover:scale-110"
+            >
+              {!isMobileActionsOpen ? (
+                <img
+                  src={actionMenuPic.src}
+                  alt="Open contact options"
+                  className="h-15 w-15 objeact-contain"
+                />
+              ) : (
+                <img
+                  src={chatpic.src}
+                  alt="Sahana chat assistant"
+                  className="h-16 w-16 object-contain rounded-full "
+                />
+              )}
+            </button>
+          </div>
+        </div>
       )}
-
-      </div>
-
       {/* Chat Window */}
       {isOpen && (
-        <div 
-        ref={chatWindowRef}
-        className="fixed bottom-8 right-8 z-[9999] w-[360px] overflow-hidden rounded-3xl border border-white/30 bg-white shadow-[0_25px_80px_rgba(13,43,77,0.25)]">
+        <div
+          ref={chatWindowRef}
+          className="fixed bottom-5 right-4 left-4 z-[9999] overflow-hidden rounded-3xl border border-white/30 bg-white shadow-[0_25px_80px_rgba(13,43,77,0.25)] md:left-auto md:right-8 md:w-[360px]">
           {/* Header */}
           <div className="flex items-center justify-between bg-[#0D2B4D] px-5 py-4 text-white">
             <div>
@@ -308,16 +385,14 @@ className="fixed md:bottom-8 bottom-2 md:right-8 right-1 z-[9999] flex flex-col 
             {messages.map((message, index) => (
               <div
                 key={index}
-                className={`flex ${
-                  message.from === "user" ? "justify-end" : "justify-start"
-                }`}
+                className={`flex ${message.from === "user" ? "justify-end" : "justify-start"
+                  }`}
               >
                 <div
-                  className={`max-w-[80%] rounded-2xl px-4 py-3 text-sm leading-relaxed ${
-                    message.from === "user"
+                  className={`max-w-[80%] rounded-2xl px-4 py-3 text-sm leading-relaxed ${message.from === "user"
                       ? "bg-[#2196F3] text-white"
                       : "bg-white text-[#0D2B4D] shadow-sm"
-                  }`}
+                    }`}
                 >
                   {message.text}
                 </div>

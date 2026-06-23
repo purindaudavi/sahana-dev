@@ -353,7 +353,7 @@ export default function HomePage() {
       {/* ========================================================== */}
       {/* NEW HERO SECTION WITH BACKGROUND IMAGE & MOVED CONTAINER   */}
       {/* ========================================================== */}
-      <section className="relative flex min-h-screen items-center justify-center overflow-hidden px-6 py-24">
+      <section className="relative flex min-h-screen items-center justify-center overflow-hidden px-6 py-10">
 
 
 
@@ -370,9 +370,14 @@ export default function HomePage() {
               </span>
             </div>
 
-            <h1 className="hero-heading text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight text-gray-100 leading-tight max-w-3xl">
-              Find Your Ideal Plot of Land With <span className="bg-gradient-to-r from-[#e80190] to-[#FF8BE8] bg-clip-text text-transparent drop-shadow-[0_3px_12px_rgba(230,0,142,0.45)] [-webkit-text-stroke:0.2px_black]">Sahana Group</span>
+            <h1 className="hero-heading max-w-3xl text-4xl font-bold leading-tight tracking-tight text-gray-100 sm:text-4xl md:text-5xl">
+              Find Your Ideal <br className="sm:hidden" />
+              Plot of Land With <br className="hidden sm:inline" />
+              <span className="bg-gradient-to-r from-[#e80190] to-[#FF8BE8] bg-clip-text text-transparent drop-shadow-[0_3px_12px_rgba(230,0,142,0.45)] [-webkit-text-stroke:0.2px_black]">
+                Sahana Group
+              </span>
             </h1>
+
 
 
             <p className="hero-paragraph text-white text-base sm:text-lg max-w-2xl leading-relaxed">
