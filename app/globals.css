@@ -27,3 +27,28 @@ body button[class*="artibot-launcher"] {
   visibility: hidden !important;
   pointer-events: none !important;
 }
+
+
+html.site-dark {
+  color-scheme: dark;
+  background: #020617;
+}
+
+html.site-dark body {
+  background: #020617;
+  color: #e5edf8;
+}
+
+/* Optional "force-dark-like" emulation */
+html.site-dark.force-invert body {
+  filter: invert(1) hue-rotate(180deg);
+}
+
+html.site-dark.force-invert img,
+html.site-dark.force-invert video,
+html.site-dark.force-invert picture,
+html.site-dark.force-invert canvas,
+html.site-dark.force-invert svg,
+html.site-dark.force-invert iframe {
+  filter: invert(1) hue-rotate(180deg);
+}
