@@ -82,7 +82,8 @@ export default function Footer() {
             <ul className="space-y-3 text-sm text-gray-300">
               <li className="flex items-start gap-3">
                 <MapPin size={18} className="text-[#E6008E] shrink-0 mt-0.5" />
-                <span>No. 240 Ratnapura - Horana - Panadura Hwy, Horana</span>
+                <a href="https://maps.app.goo.gl/BvSyJFNM2Umd9pTv6">No. 240 Ratnapura - Horana - Panadura Hwy, Horana</a>
+                
               </li>
               <li className="flex items-center gap-3">
                 <Phone size={18} className="text-[#E6008E] shrink-0" />
