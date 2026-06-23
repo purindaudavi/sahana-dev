@@ -574,7 +574,7 @@ export default function HomePage() {
 
                 router.push(`/properties?${params.toString()}`);
               }}
-              className="rounded-full bg-[#0D2B4D] px-8 py-3.5 text-sm font-bold text-white"
+              className="rounded-full bg-[#FF2FA6] px-8 py-3.5 text-sm font-bold text-white"
             >
               Search Properties
             </button>

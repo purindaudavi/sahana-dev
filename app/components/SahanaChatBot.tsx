@@ -346,7 +346,7 @@ export default function SahanaChatBot() {
                 <img
                   src={actionMenuPic.src}
                   alt="Open contact options"
-                  className="h-15 w-15 objeact-contain"
+                  className="h-15 w-20 objeact-contain"
                 />
               ) : (
                 <img
