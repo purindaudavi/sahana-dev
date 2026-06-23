@@ -115,7 +115,7 @@ export default function AddProperties({ propertyId }: { propertyId: number | nul
           setLandmarks(data.landmarks && data.landmarks.length > 0 ? data.landmarks : [{ name: "", distance: "" }]);
           setExistingUrls({
             main_img: data.main_img || "",
-            video_Image: data.video_image || "",
+            video_Image: data.video_Image || "",
             plan_image: data.plan_image || "",
             images: data.images || []
           });
@@ -219,7 +219,7 @@ export default function AddProperties({ propertyId }: { propertyId: number | nul
         ...formData,
         video_url: final_video_url,
         main_img: main_img_url,
-        video_image: video_image_url,
+        video_Image: video_image_url,
         plan_image: plan_image_url,
         images: gallery_urls,
         amenities: selectedAmenities,
