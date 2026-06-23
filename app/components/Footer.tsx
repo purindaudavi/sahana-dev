@@ -54,13 +54,19 @@ export default function Footer() {
             </h4>
             <ul className="space-y-2 text-sm text-gray-300">
               <li>
-                <Link href="/properties" className="hover:text-[#E6008E] transition-colors flex items-center gap-1">
+                <Link href="/properties?type=Residential" className="hover:text-[#E6008E] transition-colors flex items-center gap-1">
                   Residential Lands <ArrowUpRight size={14} className="opacity-50" />
                 </Link>
               </li>
               <li>
-                <Link href="/properties" className="hover:text-[#E6008E] transition-colors flex items-center gap-1">
-                  Commercial Plots <ArrowUpRight size={14} className="opacity-50" />
+                <Link href="/properties?type=Commercial" className="hover:text-[#E6008E] transition-colors flex items-center gap-1">
+                  Commercial Lands <ArrowUpRight size={14} className="opacity-50" />
+                </Link>
+              </li>
+
+              <li>
+                <Link href="/properties?type=Agricultural" className="hover:text-[#E6008E] transition-colors flex items-center gap-1">
+                  Agricultural Lands <ArrowUpRight size={14} className="opacity-50" />
                 </Link>
               </li>
              
