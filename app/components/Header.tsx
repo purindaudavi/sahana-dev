@@ -9,9 +9,11 @@ import { usePathname } from "next/navigation";
 import { gsap } from "gsap";
 import { Globe2, Menu, X } from "lucide-react";
 import logo from "../assets/logo-light.png";
+import Script from "next/script";
 
 export default function SahanaHeader() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [language, setLanguage] = useState<"en" | "si">("en");
 
   const headerRef = useRef<HTMLElement | null>(null);
   const navRef = useRef<HTMLDivElement | null>(null);
@@ -80,6 +82,42 @@ export default function SahanaHeader() {
     };
   }, []);
 
+  useEffect(() => {
+  const savedLanguage = localStorage.getItem("sahana-language");
+
+  if (savedLanguage === "si") {
+    setLanguage("si");
+  } else {
+    setLanguage("en");
+  }
+}, []);
+
+
+
+  const setGoogleTranslateCookie = (lang: "en" | "si") => {
+    const value = lang === "si" ? "/en/si" : "/en/en";
+
+    document.cookie = `googtrans=${value}; path=/`;
+    document.cookie = `googtrans=${value}; domain=${window.location.hostname}; path=/`;
+
+    const hostnameParts = window.location.hostname.split(".");
+    if (hostnameParts.length > 1) {
+      const rootDomain = hostnameParts.slice(-2).join(".");
+      document.cookie = `googtrans=${value}; domain=.${rootDomain}; path=/`;
+    }
+  };
+
+  const toggleLanguage = () => {
+    const nextLang = language === "en" ? "si" : "en";
+
+    setLanguage(nextLang);
+    localStorage.setItem("sahana-language", nextLang);
+    setGoogleTranslateCookie(nextLang);
+
+    window.location.reload();
+  };
+
+
   // 3. REUSABLE STYLING UTILITY FUNCTION FOR CLEAN MARGIN GENERATION
   const getLinkClass = (path: string) => {
     const baseClass = "rounded-full px-5 py-2.5 transition text-sm font-medium duration-200";
@@ -90,7 +128,30 @@ export default function SahanaHeader() {
   };
 
   return (
-    <header
+
+    <>
+  <div id="google_translate_element" className="hidden" />
+
+  <Script id="google-translate-init" strategy="afterInteractive">
+    {`
+      function googleTranslateElementInit() {
+        new google.translate.TranslateElement({
+          pageLanguage: 'en',
+          includedLanguages: 'en,si',
+          autoDisplay: false
+        }, 'google_translate_element');
+      }
+    `}
+  </Script>
+
+  <Script
+    src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"
+    strategy="afterInteractive"
+  />
+
+  <header
+
+   
       ref={headerRef}
       /* Added a hardware-accelerated css transition so the movement feels fluid and silky */
       className="fixed left-0 top-0 z-50 w-full px-5 pt-5 md:px-8 transition-transform duration-300 ease-in-out"
@@ -131,10 +192,14 @@ export default function SahanaHeader() {
 
         {/* Action Controls */}
         <div className="flex items-center gap-3">
-          <button className="hidden items-center gap-2 rounded-full bg-gray-100 hover:bg-gray-200/80 px-4 py-2 text-sm font-medium text-[#0D2B4D] transition md:flex">
-            <Globe2 size={16} />
-            Eng
-          </button>
+          <button
+  type="button"
+  onClick={toggleLanguage}
+  className="hidden items-center gap-2 rounded-full bg-gray-100 hover:bg-gray-200/80 px-4 py-2 text-sm font-medium text-[#0D2B4D] transition md:flex"
+>
+  <Globe2 size={16} />
+  {language === "en" ? "Eng" : "සිං"}
+</button>
 
           <Link
             href="/sign-in"
@@ -183,18 +248,32 @@ export default function SahanaHeader() {
             >
               Contact Us
             </Link>
-            <hr className="border-gray-100 my-1" />
-            <Link
-              href="/sign-in"
-              onClick={() => setIsMobileMenuOpen(false)}
-              className="bg-[#E6008E] text-white text-center py-3 rounded-xl font-bold shadow-md shadow-pink-500/10"
-            >
-              Sign in
-            </Link>
+            <button
+  type="button"
+  onClick={() => {
+    setIsMobileMenuOpen(false);
+    toggleLanguage();
+  }}
+  className="flex items-center gap-2 rounded-lg p-2 text-base font-semibold text-[#0D2B4D] hover:bg-gray-50"
+>
+  <Globe2 size={18} />
+  {language === "en" ? "Translate to Sinhala" : "Back to English"}
+</button>
+
+<hr className="border-gray-100 my-1" />
+
+<Link
+  href="/sign-in"
+  onClick={() => setIsMobileMenuOpen(false)}
+  className="bg-[#E6008E] text-white text-center py-3 rounded-xl font-bold shadow-md shadow-pink-500/10"
+>
+  Sign in
+</Link>
           </div>
         )}
 
       </div>
     </header>
+    </>
   );
 }

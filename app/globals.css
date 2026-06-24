@@ -74,3 +74,36 @@ html.site-dark.force-invert iframe {
     animation: none;
   }
 }
+
+
+/* Hide Google Translate top toolbar */
+iframe.goog-te-banner-frame,
+.goog-te-banner-frame,
+body > .skiptranslate {
+  display: none !important;
+  visibility: hidden !important;
+  height: 0 !important;
+}
+
+/* Stop Google from pushing page down */
+body {
+  top: 0 !important;
+  position: static !important;
+}
+
+/* Hide Google Translate widget/dropdown */
+#google_translate_element,
+.goog-te-gadget,
+.goog-te-combo {
+  display: none !important;
+}
+
+/* Remove Google tooltip/highlight effects */
+#goog-gt-tt,
+.goog-tooltip,
+.goog-tooltip:hover,
+.goog-text-highlight {
+  display: none !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
