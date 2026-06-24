@@ -52,3 +52,25 @@ html.site-dark.force-invert svg,
 html.site-dark.force-invert iframe {
   filter: invert(1) hue-rotate(180deg);
 }
+
+/* actionMenuPicbounce */
+
+@keyframes sahanaActionBounce {
+  0%, 100% {
+    transform: translateY(0) scale(1);
+  }
+
+  50% {
+    transform: translateY(-6px) scale(1.0);
+  }
+}
+
+.sahana-action-bounce {
+  animation: sahanaActionBounce 2.5s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sahana-action-bounce {
+    animation: none;
+  }
+}

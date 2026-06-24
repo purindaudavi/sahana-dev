@@ -185,11 +185,11 @@ export default function SahanaHeader() {
             </Link>
             <hr className="border-gray-100 my-1" />
             <Link
-              href="/contact"
+              href="/sign-in"
               onClick={() => setIsMobileMenuOpen(false)}
               className="bg-[#E6008E] text-white text-center py-3 rounded-xl font-bold shadow-md shadow-pink-500/10"
             >
-              Sign Up
+              Sign in
             </Link>
           </div>
         )}

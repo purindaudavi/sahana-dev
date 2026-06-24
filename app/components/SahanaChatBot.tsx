@@ -288,77 +288,106 @@ export default function SahanaChatBot() {
   return (
     <>
       {showFloatingActions && !isOpen && (
-        <div
-          ref={floatingActionsRef}
-          className="fixed bottom-5 right-5 z-[9999]"
-        >
-          {/* Desktop view - show both buttons normally */}
-          <div className="hidden items-center gap-4 md:flex">
-            <button
-              type="button"
-              onClick={() => setIsOpen(true)}
-              className="flex h-16 w-16 items-center justify-center rounded-full   hover:scale-110"
-            >
-              <img
-                src={chatpic.src}
-                alt="Sahana chat assistant"
-                className="h-16 w-16 object-contain"
-              />
-            </button>
+  <div
+    ref={floatingActionsRef}
+    className="fixed bottom-5 right-5 z-[9999]"
+  >
+    {/* Desktop view - first show actionMenuPic, then show icons horizontally */}
+    <div className="hidden items-center gap-3 md:flex">
+      {isMobileActionsOpen && (
+        <>
+          <button
+            type="button"
+            onClick={() => {
+              setIsOpen(true);
+              setIsMobileActionsOpen(false);
+            }}
+            className="flex h-14 w-14 items-center justify-center rounded-full bg-transparent transition hover:scale-110"
+          >
+            <img
+              src={chatpic.src}
+              alt="Sahana chat assistant"
+              className="h-14 w-14 rounded-full object-contain"
+            />
+          </button>
 
-            <a
-              href="https://api.whatsapp.com/send/?phone=%2B94772647356&text&type=phone_number&app_absent=0"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex h-12 w-12 items-center justify-center rounded-full bg-green-600 text-white shadow-xl transition hover:scale-110 hover:bg-green-700"
-            >
-              <FaWhatsapp size={25} />
-            </a>
-          </div>
-
-          {/* Mobile view - first show only one combined circle */}
-          <div className="flex flex-col items-center gap-3 md:hidden">
-            {isMobileActionsOpen && (
-              <a
-                href="https://api.whatsapp.com/send/?phone=%2B94772647356&text&type=phone_number&app_absent=0"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex h-10 w-10 items-center justify-center rounded-full bg-green-600 text-white transition hover:scale-110 hover:bg-green-700"
-              >
-                <FaWhatsapp size={25} />
-              </a>
-            )}
-
-            <button
-              type="button"
-              onClick={() => {
-                if (!isMobileActionsOpen) {
-                  setIsMobileActionsOpen(true);
-                  return;
-                }
-
-                setIsOpen(true);
-                setIsMobileActionsOpen(false);
-              }}
-              className="flex h-14 w-14 items-center justify-center rounded-full bg-transparent  transition hover:scale-110"
-            >
-              {!isMobileActionsOpen ? (
-                <img
-                  src={actionMenuPic.src}
-                  alt="Open contact options"
-                  className="h-15 w-20 objeact-contain"
-                />
-              ) : (
-                <img
-                  src={chatpic.src}
-                  alt="Sahana chat assistant"
-                  className="h-16 w-16 object-contain rounded-full "
-                />
-              )}
-            </button>
-          </div>
-        </div>
+          <a
+            href="https://api.whatsapp.com/send/?phone=%2B94772647356&text&type=phone_number&app_absent=0"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex h-11 w-11 items-center justify-center rounded-full bg-green-600 text-white shadow-xl transition hover:scale-110 hover:bg-green-700"
+          >
+            <FaWhatsapp size={25} />
+          </a>
+        </>
       )}
+
+     <button
+  type="button"
+  onClick={() => setIsMobileActionsOpen((prev) => !prev)}
+  className={`relative flex h-14 w-14 items-center justify-center rounded-full bg-transparent transition ${
+    !isMobileActionsOpen ? "sahana-action-bounce" : "hover:scale-110"
+  }`}
+>
+  <img
+    src={actionMenuPic.src}
+    alt="Open contact options"
+    className="h-14 w-14 object-contain"
+  />
+
+  {isMobileActionsOpen && (
+    <span className="absolute -right-1 -top-1 hidden h-6 w-6 items-center justify-center rounded-full bg-[#E6008E] text-white shadow-lg ring-2 ring-white md:flex">
+      <X size={14} strokeWidth={3} />
+    </span>
+  )}
+</button>
+    </div>
+
+    {/* Mobile view - first show actionMenuPic, then show icons vertically */}
+    <div className="flex flex-col items-center gap-3 md:hidden">
+      {isMobileActionsOpen && (
+        <a
+          href="https://api.whatsapp.com/send/?phone=%2B94772647356&text&type=phone_number&app_absent=0"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="flex h-11 w-11 items-center justify-center rounded-full bg-green-600 text-white transition hover:scale-110 hover:bg-green-700"
+        >
+          <FaWhatsapp size={25} />
+        </a>
+      )}
+
+      <button
+  type="button"
+  onClick={() => {
+    if (!isMobileActionsOpen) {
+      setIsMobileActionsOpen(true);
+      return;
+    }
+
+    setIsOpen(true);
+    setIsMobileActionsOpen(false);
+  }}
+  className={`flex h-14 w-14 items-center justify-center rounded-full bg-transparent transition ${
+    !isMobileActionsOpen ? "sahana-action-bounce" : "hover:scale-110"
+  }`}
+>
+        {!isMobileActionsOpen ? (
+          <img
+            src={actionMenuPic.src}
+            alt="Open contact options"
+            className="h-14 w-14 object-contain"
+          />
+        ) : (
+          <img
+            src={chatpic.src}
+            alt="Sahana chat assistant"
+            className="h-14 w-14 rounded-full object-contain"
+          />
+        )}
+      </button>
+    </div>
+  </div>
+)}
       {/* Chat Window */}
       {isOpen && (
         <div
