@@ -6,6 +6,7 @@ import chatpic from "../assets/chatbot.png";
 import { FaWhatsapp } from "react-icons/fa6";
 import { useState, useEffect, useRef } from "react";
 import actionMenuPic from "../assets/actionMenuPic.png";
+import { gsap } from "gsap";  
 
 type Message = {
   from: "bot" | "user";
@@ -225,6 +226,34 @@ export default function SahanaChatBot() {
     };
   }, [isOpen]);
 
+  useEffect(() => {
+  if (!isMobileActionsOpen || isOpen || !floatingActionsRef.current) return;
+
+  const items = floatingActionsRef.current.querySelectorAll(".sahana-pop-action");
+
+  if (!items.length) return;
+
+  const isDesktop = window.matchMedia("(min-width: 768px)").matches;
+
+ gsap.fromTo(
+  items,
+  {
+    opacity: 0,
+    scale: 0.5,
+    rotate: -180,
+    transformOrigin: "center center",
+  },
+  {
+    opacity: 1,
+    scale: 1,
+    rotate: 0,
+    duration: 0.5,
+    ease: "power3.out",
+   
+  }
+);
+}, [isMobileActionsOpen, isOpen]);
+
   const handleOptionClick = (option: Option) => {
     setMessages((prev) => [
       ...prev,
@@ -297,13 +326,13 @@ export default function SahanaChatBot() {
       {isMobileActionsOpen && (
         <>
           <button
-            type="button"
-            onClick={() => {
-              setIsOpen(true);
-              setIsMobileActionsOpen(false);
-            }}
-            className="flex h-14 w-14 items-center justify-center rounded-full bg-transparent transition hover:scale-110"
-          >
+  type="button"
+  onClick={() => {
+    setIsOpen(true);
+    setIsMobileActionsOpen(false);
+  }}
+  className="sahana-pop-action flex h-14 w-14 items-center justify-center rounded-full bg-transparent transition hover:scale-110"
+>
             <img
               src={chatpic.src}
               alt="Sahana chat assistant"
@@ -315,7 +344,7 @@ export default function SahanaChatBot() {
             href="https://api.whatsapp.com/send/?phone=%2B94772647356&text&type=phone_number&app_absent=0"
             target="_blank"
             rel="noopener noreferrer"
-            className="flex h-11 w-11 items-center justify-center rounded-full bg-green-600 text-white shadow-xl transition hover:scale-110 hover:bg-green-700"
+            className=" sahana-pop-action flex h-11 w-11 items-center justify-center rounded-full bg-green-600 text-white shadow-xl transition hover:scale-110 hover:bg-green-700"
           >
             <FaWhatsapp size={25} />
           </a>
@@ -350,7 +379,7 @@ export default function SahanaChatBot() {
           href="https://api.whatsapp.com/send/?phone=%2B94772647356&text&type=phone_number&app_absent=0"
           target="_blank"
           rel="noopener noreferrer"
-          className="flex h-11 w-11 items-center justify-center rounded-full bg-green-600 text-white transition hover:scale-110 hover:bg-green-700"
+          className=" sahana-pop-action flex h-11 w-11 items-center justify-center rounded-full bg-green-600 text-white transition hover:scale-110 hover:bg-green-700"
         >
           <FaWhatsapp size={25} />
         </a>
@@ -368,8 +397,10 @@ export default function SahanaChatBot() {
     setIsMobileActionsOpen(false);
   }}
   className={`flex h-14 w-14 items-center justify-center rounded-full bg-transparent transition ${
-    !isMobileActionsOpen ? "sahana-action-bounce" : "hover:scale-110"
-  }`}
+  !isMobileActionsOpen
+    ? "sahana-action-bounce"
+    : "sahana-pop-action hover:scale-110"
+}`}
 >
         {!isMobileActionsOpen ? (
           <img
