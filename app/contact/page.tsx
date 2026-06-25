@@ -246,7 +246,7 @@ export default function ContactUsPage() {
                   <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-white/10 text-[#E6008E]">
                     <MapPin size={22} />
                   </div>
-                  <h2 className="text-2xl font-semibold">Sahana Group Office</h2>
+                  <h2 className="text-2xl font-semibold">Sahana Group <br></br> Head Office</h2>
                 </div>
 
                 <p className="max-w-sm text-sm leading-relaxed text-white/75">

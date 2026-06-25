@@ -9,9 +9,9 @@ import mobileBackgroundImage from "./assets/mobbgimg.png";
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Autoplay, Navigation, FreeMode } from 'swiper/modules';
 import 'swiper/css';
-import land1 from "./assets/images/uragaha.jpg";
-import land2 from "./assets/images/dambulla.jpg";
-import land3 from "./assets/images/kaluthara.png"
+// import land1 from "./assets/images/uragaha.jpg";
+// import land2 from "./assets/images/dambulla.jpg";
+// import land3 from "./assets/images/kaluthara.jpg"
 import land4 from "./assets/images/dambulla2.png"
 import land5 from "./assets/images/yatidola.png"
 import land6 from "./assets/images/pitigala.png"
@@ -40,6 +40,8 @@ export default function HomePage() {
   const propertyIntroRef = useRef<HTMLDivElement | null>(null);
   const [premiumLands, setPremiumLands] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [slides, setSlides] = useState<any[]>([]);
+  const [slidesLoading, setSlidesLoading] = useState(true);
 
 
 
@@ -98,108 +100,128 @@ export default function HomePage() {
     fetchPremiumLands();
   }, []);
 
-  const slides = [
-    {
-      imageUrl: land1.src,
-      title: "Colombo Prime Residential Plot",
-      location: "Colombo 7",
-      price: "LKR 1,200,000 / Perch",
-      specs: ["12 Perches", "Gated Community", "Sea View"],
-      rating: "4.8",
-      badge: "For rent",
-    },
-    {
-      imageUrl: land2.src,
-      title: "Gampaha Commercial Land",
-      location: "Gampaha",
-      price: "LKR 900,000 / Perch",
-      specs: ["20 Perches", "High Traffic Area", "Corner Plot"],
-      rating: "4.5",
-      badge: "For sale",
+  useEffect(() => {
+    const fetchHeroSlides = async () => {
+      const supabase = createClient();
 
-    }
-  ]
+      const { data, error } = await supabase
+        .from("hero_slides")
+        .select("id, image_url")
+        .eq("is_active", true)
+        .order("id", { ascending: true });
 
-  const PREMIUM_LAND_LIST = [
-    {
-      id: 4,
-      title: "Ambalangoda Uragaha Plots",
-      district: "Galle District",
-      neighborhood: "Uragasmanhandiya",
-      price: "120,000",
-      currency: "LKR",
-      pricingNote: "Per Perch Upwards",
-      size: "-- Perches",
-      access: "50m to Bus Route",
-      zoning: "Residential / Investment",
-      imageUrl: land1.src
-    },
-    {
-      id: 2,
-      title: "Heritage Dambulla",
-      district: "Matale District",
-      neighborhood: "Dambulla (Municipal Council Limits)",
-      price: "125,000",
-      currency: "LKR",
-      pricingNote: "Per Perch Upwards",
-      size: "-- Perches",
-      access: "100m to Kandy Road",
-      zoning: "Residential / Commercial",
-      imageUrl: land2.src
-    },
-    {
-      id: 1,
-      title: "Kalutara Residences",
-      district: "Kalutara District",
-      neighborhood: "Kalutara",
-      price: "Contact for Price",
-      currency: "LKR",
-      pricingNote: "Best Investment",
-      size: " -- Perches",
-      access: "Facing Galle Road",
-      zoning: "Residential / Highly Commercial",
-      imageUrl: land3.src
-    },
-    {
-      id: 3,
-      title: "Sahana Lands - Dambulla",
-      district: "Matale District",
-      neighborhood: "Dambulla (Municipal Council Limits)",
-      price: "100,000",
-      currency: "LKR",
-      pricingNote: "Per Unit Upwards",
-      size: " -- Perches",
-      access: "100m to Kandy Road",
-      zoning: "Residential/Investment",
-      imageUrl: land4.src
-    },
-    {
-      id: 5,
-      title: "Sahana Lands - Yatidola",
-      district: "Kalutara District",
-      neighborhood: "Yatidola (Mathugama)",
-      price: "Coming Soon",
-      currency: "LKR",
-      pricingNote: "Upcoming Project Development",
-      size: "---",
-      access: "Initial Ground Clearing Stage",
-      zoning: "Residential/Investment",
-      imageUrl: land5.src
-    },
-    {
-      id: 6,
-      title: "Sahana Lands - Pitigala",
-      district: "Galle District",
-      neighborhood: "Pitigala",
-      price: "Coming soon",
-      currency: "LKR",
-      pricingNote: "Upcoming Project Development",
-      size: " -- ",
-      access: "Initial Ground Clearing Stage",
-      zoning: "Residential/Investment",
-      imageUrl: land6.src
-    }
-  ];
+      if (error) {
+        console.error("Error fetching hero slides:", error);
+        setSlidesLoading(false);
+        return;
+      }
+
+      setSlides(data || []);
+      setSlidesLoading(false);
+    };
+
+    fetchHeroSlides();
+  }, []);
+
+  // const slides = [
+  //   {
+  //     imageUrl: land1.src,
+
+
+  //   },
+  //   {
+  //     imageUrl: land2.src,
+
+
+  //   },
+
+  //   {
+  //     imageUrl: land3.src,
+
+
+  //   }
+  // ]
+
+  // const PREMIUM_LAND_LIST = [
+  //   {
+  //     id: 4,
+  //     title: "Ambalangoda Uragaha Plots",
+  //     district: "Galle District",
+  //     neighborhood: "Uragasmanhandiya",
+  //     price: "120,000",
+  //     currency: "LKR",
+  //     pricingNote: "Per Perch Upwards",
+  //     size: "-- Perches",
+  //     access: "50m to Bus Route",
+  //     zoning: "Residential / Investment",
+  //     imageUrl: land1.src
+  //   },
+  //   {
+  //     id: 2,
+  //     title: "Heritage Dambulla",
+  //     district: "Matale District",
+  //     neighborhood: "Dambulla (Municipal Council Limits)",
+  //     price: "125,000",
+  //     currency: "LKR",
+  //     pricingNote: "Per Perch Upwards",
+  //     size: "-- Perches",
+  //     access: "100m to Kandy Road",
+  //     zoning: "Residential / Commercial",
+  //     imageUrl: land2.src
+  //   },
+  //   {
+  //     id: 1,
+  //     title: "Kalutara Residences",
+  //     district: "Kalutara District",
+  //     neighborhood: "Kalutara",
+  //     price: "Contact for Price",
+  //     currency: "LKR",
+  //     pricingNote: "Best Investment",
+  //     size: " -- Perches",
+  //     access: "Facing Galle Road",
+  //     zoning: "Residential / Highly Commercial",
+  //     imageUrl: land3.src
+  //   },
+  //   {
+  //     id: 3,
+  //     title: "Sahana Lands - Dambulla",
+  //     district: "Matale District",
+  //     neighborhood: "Dambulla (Municipal Council Limits)",
+  //     price: "100,000",
+  //     currency: "LKR",
+  //     pricingNote: "Per Unit Upwards",
+  //     size: " -- Perches",
+  //     access: "100m to Kandy Road",
+  //     zoning: "Residential/Investment",
+  //     imageUrl: land4.src
+  //   },
+  //   {
+  //     id: 5,
+  //     title: "Sahana Lands - Yatidola",
+  //     district: "Kalutara District",
+  //     neighborhood: "Yatidola (Mathugama)",
+  //     price: "Coming Soon",
+  //     currency: "LKR",
+  //     pricingNote: "Upcoming Project Development",
+  //     size: "---",
+  //     access: "Initial Ground Clearing Stage",
+  //     zoning: "Residential/Investment",
+  //     imageUrl: land5.src
+  //   },
+  //   {
+  //     id: 6,
+  //     title: "Sahana Lands - Pitigala",
+  //     district: "Galle District",
+  //     neighborhood: "Pitigala",
+  //     price: "Coming soon",
+  //     currency: "LKR",
+  //     pricingNote: "Upcoming Project Development",
+  //     size: " -- ",
+  //     access: "Initial Ground Clearing Stage",
+  //     zoning: "Residential/Investment",
+  //     imageUrl: land6.src
+  //   }
+  // ];
 
 
 
@@ -414,27 +436,20 @@ export default function HomePage() {
               }}
               className="w-full rounded-[2.5rem] shadow-[0_20px_50px_rgba(13,43,77,0.25)]"
             >
-              {slides.map((slide, index) => (
-                <SwiperSlide key={index}>
-                  {/* Main Card Frame Box Layout */}
-                  <div className="w-full h-[26rem] rounded-[2.5rem] p-5 flex flex-col justify-between text-white relative overflow-hidden bg-gray-900 border border-white/10 group">
-
-                    {/* A. Dynamic Background Image Cover */}
-                    <div className="absolute inset-0 z-0">
-                      <img
-                        src={slide.imageUrl}
-                        alt={slide.title}
-                        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                      />
+              {!slidesLoading &&
+                slides.map((slide, index) => (
+                  <SwiperSlide key={slide.id || index}>
+                    <div className="w-full h-[26rem] rounded-[2.5rem] p-5 flex flex-col justify-between text-white relative overflow-hidden bg-gray-900 border border-white/10 group">
+                      <div className="absolute inset-0 z-0">
+                        <img
+                          src={slide.image_url}
+                          alt="Sahana land project slide"
+                          className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                        />
+                      </div>
                     </div>
-
-
-
-
-
-                  </div>
-                </SwiperSlide>
-              ))}
+                  </SwiperSlide>
+                ))}
             </Swiper>
           </div>
 

@@ -140,6 +140,10 @@ export default function PropertyDetailPage({ params }: PropertyPageProps) {
         fetchdata();
     }, [resolvedParams.id])
 
+    const overviewPoints: string[] = Array.isArray(property?.overview_points)
+  ? property.overview_points
+  : [];
+
     return (
         <main className="relative min-h-screen overflow-hidden bg-[#F8FAFC] pb-20 text-[#0D2B4D]">
 
@@ -212,11 +216,11 @@ export default function PropertyDetailPage({ params }: PropertyPageProps) {
                                     {property?.type || "Residential Land"}
                                 </span>
 
-                                <button className="gallery-swiper-prev absolute left-4 top-1/2 z-20 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full border border-white/40 bg-white/85 text-[#0D2B4D] shadow-md backdrop-blur transition hover:bg-[#2196F3] hover:text-white">
+                                <button className="gallery-swiper-prev absolute left-4 top-1/2 z-20 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full border border-white/40 bg-white/85 text-[#0D2B4D] shadow-md backdrop-blur transition hover:bg-[#2196F3] hover:text-white opacity-0">
                                     ←
                                 </button>
 
-                                <button className="gallery-swiper-next absolute right-4 top-1/2 z-20 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full border border-white/40 bg-white/85 text-[#0D2B4D] shadow-md backdrop-blur transition hover:bg-[#2196F3] hover:text-white">
+                                <button className="gallery-swiper-next absolute right-4 top-1/2 z-20 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full border border-white/40 bg-white/85 text-[#0D2B4D] shadow-md backdrop-blur transition hover:bg-[#2196F3] hover:text-white opacity-0">
                                     →
                                 </button>
                             </div>
@@ -331,9 +335,28 @@ export default function PropertyDetailPage({ params }: PropertyPageProps) {
 
                     <div className="mb-5 h-[3px] w-12 rounded-full bg-[#E6008E]" />
 
-                    <p className="max-w-4xl text-sm leading-relaxed text-[#0D2B4D]/70">
-                        {property?.desc || "gg"}
-                    </p>
+                    <div className="max-w-5xl space-y-5">
+                        <p className="text-sm leading-relaxed text-[#0D2B4D]/70">
+                            {property?.desc || "gg"}
+                        </p>
+
+                        {overviewPoints.length > 0 && (
+                            <ul className="grid grid-cols-1 gap-3 md:grid-cols-2">
+                                {overviewPoints.map((item, index) => (
+                                    <li
+                                        key={index}
+                                        className="flex gap-3 rounded-2xl border border-gray-100 bg-[#F8FAFC] p-4 text-sm leading-relaxed text-[#0D2B4D]/75"
+                                    >
+                                        <span className="mt-1 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-[#E6008E] text-[10px] font-black text-white">
+                                            ✓
+                                        </span>
+
+                                        <span>{item}</span>
+                                    </li>
+                                ))}
+                            </ul>
+                        )}
+                    </div>
                 </section>
 
                 {/* Infrastructure */}
@@ -342,7 +365,7 @@ export default function PropertyDetailPage({ params }: PropertyPageProps) {
                     <div className="mt-3 h-[3px] w-12 rounded-full bg-[#E6008E]" />
 
                     <div className="mt-7 grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-6">
-                        {property?.amenities.map( (amenity: { title: string; description: string; icon: string },index: number ) => (
+                        {property?.amenities.map((amenity: { title: string; description: string; icon: string }, index: number) => (
                             <AmenityCard
                                 key={index}
                                 title={amenity.title}
@@ -394,7 +417,12 @@ export default function PropertyDetailPage({ params }: PropertyPageProps) {
 
                     {/* LAND PLAN CARD */}
                     <div className="rounded-[1.5rem] border border-gray-200 bg-white p-7 shadow-sm lg:col-span-5">
-                        <h2 className="text-xl font-black">Land Plan (Master Plan)</h2>
+                        <div className="lg:col-span-6 w-full transform-gpu flex flex-row items-center gap-6 lg:justify-self-end"    >
+                            <h2 className="text-xl font-black">Land Plan (Master Plan)</h2>
+                            <div className="grid grid-cols-2 sm:grid-cols-2">
+                                <h2 className="text-sm font-black text-center">{property?.perches_P || "120+"} Perches</h2> 
+                            </div>
+                        </div>
                         <div className="mt-3 h-[3px] w-12 rounded-full bg-[#E6008E]" />
 
                         <div className="mt-6 overflow-hidden rounded-2xl bg-[#F1F4FA]">
@@ -405,10 +433,13 @@ export default function PropertyDetailPage({ params }: PropertyPageProps) {
                             />
                         </div>
 
+                        {/* <div className="lg:col-span-6 w-full transform-gpu flex flex-row items-center gap-6 lg:justify-self-end"> */}
                         <button className="mt-5 inline-flex items-center gap-2 rounded-full border border-[#2196F3] px-5 py-3 text-sm font-bold text-[#2196F3] transition hover:bg-[#2196F3] hover:text-white">
                             Download Plan
                             <Download size={16} />
                         </button>
+
+
                     </div>
                 </section>
                 {/* ========================================================== */}
@@ -564,12 +595,11 @@ export default function PropertyDetailPage({ params }: PropertyPageProps) {
                                                 <div className="absolute inset-x-0 top-0 h-20 bg-gradient-to-b from-black/30 to-transparent" />
 
                                                 <span
-                                className={`absolute left-4 top-4 rounded-full px-4 py-2 text-xs font-black text-white shadow-md ${
-                                    land.typeColor || "bg-[#E6008E]"
-                                }`}
-                                >
-                                {land.type}
-                                </span>
+                                                    className={`absolute left-4 top-4 rounded-full px-4 py-2 text-xs font-black text-white shadow-md ${land.typeColor || "bg-[#E6008E]"
+                                                        }`}
+                                                >
+                                                    {land.type}
+                                                </span>
 
                                                 <div className="absolute bottom-4 right-4 rounded-2xl border border-white/10 bg-[#0D2B4D]/90 px-4 py-2.5 text-right text-white shadow-lg backdrop-blur-md">
                                                     <p className="text-[10px] font-bold uppercase tracking-wider text-blue-200/80">

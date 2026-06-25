@@ -14,7 +14,10 @@ gsap.registerPlugin(ScrollTrigger);
 // Import your custom background asset
 import sectionbg from "../assets/aboutbg.png";
 import callusbg from "../assets//call-us.png";
-import { Calendar, MapPin } from "lucide-react";
+import { Calendar, MapPin,Building2,
+  Users,
+  BadgeCheck,
+  Landmark, } from "lucide-react";
 import { GraduationCap, BriefcaseBusiness, Scale } from "lucide-react";
 import CTASection from "../components/CTASection";
 import trusted from "../assets/proffessional.png";
@@ -165,80 +168,146 @@ useEffect(() => {
         <div className="absolute top-12 left-12 w-96 h-96 bg-brand-pink/10 rounded-full blur-3xl pointer-events-none"></div>
         <div className="absolute bottom-12 right-12 w-96 h-96 bg-brand-cyan/20 rounded-full blur-3xl pointer-events-none"></div>
 
-        <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center relative z-10">
+  <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center relative z-10">
 
-          {/* LEFT COLUMN: CONTENT */}
-          <div className="lg:col-span-5 space-y-6 ">
+  {/* LEFT COLUMN: CONTENT */}
+  <div className="lg:col-span-6 space-y-6">
 
-            {/* Section Small Tagline */}
-            <div className="inline-block">
-              <span className="inline-flex items-center bg-[#fffc42] text-black px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider shadow-sm">
-                About Sahana Group
-              </span>
-            </div>
+    {/* Section Small Tagline */}
+    <div className="inline-block">
+      <span className="inline-flex items-center bg-[#fffc42] text-black px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider shadow-sm">
+        About Sahana Group
+      </span>
+    </div>
 
-            {/* Main Content Headline */}
-            <h2 className="text-4xl md:text-5xl font-black text-[#0D2B4D] tracking-tight leading-tight">
-              A Trusted Partner for Your Real Estate and Financing Needs.
-            </h2>
+    {/* Main Content Headline */}
+    <h2 className="text-4xl md:text-5xl font-black text-[#0D2B4D] tracking-tight leading-tight">
+      A Trusted Partner for Your Real Estate and Financing Needs.
+    </h2>
 
-            {/* Small Brand Divider Line */}
-            <div className="w-12 h-1 bg-[#2196F3] rounded-full shadow-lg shadow-blue-500/50"></div>
+    {/* Small Brand Divider Line */}
+    <div className="w-12 h-1 bg-[#2196F3] rounded-full shadow-lg shadow-blue-500/50"></div>
 
-            {/* Description Paragraphs */}
-            <p className="text-gray-600 font-normal leading-relaxed text-base">
-              Established on 27 July 1999, Sahana Group has grown into one of Sri Lanka's
-              most trusted names in real estate and financing. With over 25 years of
-              proven experience, we have earned the confidence of thousands through our
-              commitment to honesty, transparency, and long-term value.
-            </p>
+    {/* Description Paragraphs */}
+    <div className="space-y-4">
+      <p className="text-gray-600 font-normal leading-relaxed text-base">
+        Sahana Group was established on 27 July 1999. The Group now has a
+        25-year professional, unblemished track record and has earned a sound
+        reputation as an honest and trustworthy company in the real estate and
+        financing fields.
+      </p>
 
-            <p className="text-gray-600 font-normal leading-relaxed text-base">
-              From our head office in Horana, we continue to deliver reliable land
-              development and customer-first financial solutions that help families
-              build a secure future.
-            </p>
+      <p className="text-gray-600 font-normal leading-relaxed text-base">
+        Sahana Group currently employs 30 staff and the office is located in
+        Horana Town, at 240, Ratnapura Road, Horana. The Group operates from
+        its own five-storied, 15,000 sq. ft. ultra-modern building.
+      </p>
 
-            {/* Quick Metrics Data Row - Adapted with crisp borders for light backgrounds */}
-            <div className="pt-6 flex flex-wrap items-center gap-6 border-t border-gray-100">
+      <p className="text-gray-600 font-normal leading-relaxed text-base">
+        In the land development field, the company has completed 130 major
+        projects and sold 3,300 land lots to fully satisfied clients. All land
+        title deeds are clear, acceptable to banks, and supported by required
+        development approvals from government authorities.
+      </p>
+    </div>
 
-              {/* Metric Item 1 */}
-              <div className="flex items-center gap-3 bg-gray-50 p-3 rounded-2xl border border-gray-200 min-w-[180px]">
-                <div className="w-10 h-10 rounded-xl bg-[#E6008E]/10 flex items-center justify-center text-[#E6008E]">
-                  <Calendar size={18} className="stroke-[2.5]" />
-                </div>
-                <div>
-                  <p className="text-[10px] font-medium text-gray-400 uppercase tracking-wide">Established</p>
-                  <p className="text-sm font-bold text-[#0D2B4D]">27 July 1999</p>
-                </div>
-              </div>
-
-              {/* Metric Item 2 */}
-              <div className="flex items-center gap-3 bg-gray-50 p-3 rounded-2xl border border-gray-200 min-w-[180px]">
-                <div className="w-10 h-10 rounded-xl bg-[#2196F3]/10 flex items-center justify-center text-[#2196F3]">
-                  <MapPin size={18} className="stroke-[2.5]" />
-                </div>
-                <div>
-                  <p className="text-[10px] font-medium text-gray-400 uppercase tracking-wide">Head Office</p>
-                  <p className="text-sm font-bold text-[#0D2B4D]">Horana, Sri Lanka</p>
-                </div>
-              </div>
-
-            </div>
-          </div>
-
-          {/* RIGHT COLUMN: BRANDING IMAGE SHOWCASE */}
-          <div className="lg:col-span-7 w-full transform-gpu lg:flex lg:justify-self-end ">
-            <div className="w-full relative rounded-[2rem] overflow-hidden shadow-2xl border border-gray-100 aspect-[16/10] bg-[#0A223C]">
-              <img
-                src={trusted.src}
-                alt="Sahana Group Corporate Showcase"
-                className="w-full h-full object-cover object-center"
-              />
-            </div>
-          </div>
-
+    {/* Sister Companies */}
+    <div className="rounded-3xl border border-gray-200 bg-white/80 p-5 shadow-sm">
+      <div className="mb-4 flex items-center gap-2">
+        <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#E6008E]/10 text-[#E6008E]">
+          <Building2 size={18} />
         </div>
+        <h3 className="text-sm font-black uppercase tracking-wide text-[#0D2B4D]">
+          Sister Companies
+        </h3>
+      </div>
+
+      <div className="space-y-3">
+        <div className="flex items-start gap-3 rounded-2xl bg-gray-50 p-3 border border-gray-100">
+          <BadgeCheck size={18} className="mt-0.5 text-[#2196F3]" />
+          <p className="text-sm font-bold text-[#0D2B4D]">
+            Sahana Idam (Pvt) Ltd - <span className="text-gray-500">PV 1641</span>
+          </p>
+        </div>
+
+        <div className="flex items-start gap-3 rounded-2xl bg-gray-50 p-3 border border-gray-100">
+          <BadgeCheck size={18} className="mt-0.5 text-[#2196F3]" />
+          <p className="text-sm font-bold text-[#0D2B4D]">
+            Sahana Lanka Investments (Pvt) Ltd - <span className="text-gray-500">PV 1321</span>
+          </p>
+        </div>
+
+        <div className="flex items-start gap-3 rounded-2xl bg-gray-50 p-3 border border-gray-100">
+          <BadgeCheck size={18} className="mt-0.5 text-[#2196F3]" />
+          <p className="text-sm font-bold text-[#0D2B4D]">
+            Sahana Commercial Developments (Pvt) Ltd - <span className="text-gray-500">PV 65171</span>
+          </p>
+        </div>
+      </div>
+    </div>
+
+    {/* Quick Metrics Data Row */}
+    
+  </div>
+
+  {/* RIGHT COLUMN: BRANDING IMAGE SHOWCASE */}
+  <div className="lg:col-span-6 w-full transform-gpu space-y-6 lg:justify-self-end">
+    <div className="w-full relative rounded-[2rem] overflow-hidden shadow-2xl border border-gray-100 aspect-[16/10] bg-[#0A223C]">
+      <img
+        src={trusted.src}
+        alt="Sahana Group Corporate Showcase"
+        className="w-full h-full object-cover object-center"
+      />
+    </div>
+    <div className="pt-6 grid grid-cols-1 sm:grid-cols-2 gap-4 border-t border-gray-100">
+
+      <div className="flex items-center gap-3 bg-gray-50 p-3 rounded-2xl border border-gray-200">
+        <div className="w-10 h-10 rounded-xl bg-[#E6008E]/10 flex items-center justify-center text-[#E6008E]">
+          <Calendar size={18} className="stroke-[2.5]" />
+        </div>
+        <div>
+          <p className="text-[10px] font-medium text-gray-400 uppercase tracking-wide">Established</p>
+          <p className="text-sm font-bold text-[#0D2B4D]">27 July 1999</p>
+        </div>
+      </div>
+
+      <div className="flex items-center gap-3 bg-gray-50 p-3 rounded-2xl border border-gray-200">
+        <div className="w-10 h-10 rounded-xl bg-[#2196F3]/10 flex items-center justify-center text-[#2196F3]">
+          <MapPin size={18} className="stroke-[2.5]" />
+        </div>
+        <div>
+          <p className="text-[10px] font-medium text-gray-400 uppercase tracking-wide">Head Office</p>
+          <p className="text-sm font-bold text-[#0D2B4D]">Horana Town</p>
+        </div>
+      </div>
+
+      <div className="flex items-center gap-3 bg-gray-50 p-3 rounded-2xl border border-gray-200">
+        <div className="w-10 h-10 rounded-xl bg-[#29D6ED]/10 flex items-center justify-center text-[#2196F3]">
+          <Users size={18} className="stroke-[2.5]" />
+        </div>
+        <div>
+          <p className="text-[10px] font-medium text-gray-400 uppercase tracking-wide">Staff</p>
+          <p className="text-sm font-bold text-[#0D2B4D]">30 Professionals</p>
+        </div>
+      </div>
+
+      <div className="flex items-center gap-3 bg-gray-50 p-3 rounded-2xl border border-gray-200">
+        <div className="w-10 h-10 rounded-xl bg-[#0D2B4D]/10 flex items-center justify-center text-[#0D2B4D]">
+          <Landmark size={18} className="stroke-[2.5]" />
+        </div>
+        <div>
+          <p className="text-[10px] font-medium text-gray-400 uppercase tracking-wide">Completed</p>
+          <p className="text-sm font-bold text-[#0D2B4D]">130 Projects / 3,300 Lots</p>
+        </div>
+      </div>
+
+    </div>
+    
+  </div>
+  
+
+</div>
+
       </section>
 
 
