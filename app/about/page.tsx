@@ -323,8 +323,15 @@ export default function AboutJourneySection() {
 
             {/* Right Paragraph Column */}
             <div className=" md:pt-2 md:flex md:justify-end  0  ">
-              <p className="text-gray-500 font-light text-base md:text-lg leading-relaxed max-w- md:text-right  ">
-                aboutLegacyTitle
+              <p>
+                <div>
+
+                    {t.aboutLegacyPara.split("\n").map((line, index) => (
+                      <h2 key={`${line}-${index}`}  className="text-gray-500 font-light text-base md:text-lg leading-relaxed max-w- md:text-right  ">
+                        {line}
+                      </h2>
+                    ))}
+                  </div>
               </p>
             </div>
           </div>

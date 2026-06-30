@@ -88,7 +88,7 @@ export const translations = {
 
     aboutLegacyTitle: "25+ Years of Excellence. A Legacy You Can Rely On.",
     aboutLegacyPara:
-      "From reliable land development to customer-first financial solutions, we continue to build lasting relationships and communities across Sri Lanka.",
+      "From reliable land development to customer-first financial solutions, \n we continue to build lasting relationships \n and communities across Sri Lanka.",
     yearsOfExperience: "Years  of Experience",
     years: "years",
     ofExperience: "of Experience",
