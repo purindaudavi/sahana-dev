@@ -3,6 +3,8 @@
 
 import React from "react";
 import Link from "next/link";
+import { translations } from "../lib/translations";
+import { useLanguage } from "../lib/useLanguage";
 
 // Define flexible parameters (Props) so you can change text or links on different pages
 interface CTASectionProps {
@@ -16,7 +18,7 @@ interface CTASectionProps {
 }
 
 export default function CTASection({
-  headline = <>Let&apos;s Build Your <br />Future Together</>, // Default fallback headline
+  headline,
   description,
   primaryBtnText,
   primaryBtnHref,
@@ -24,6 +26,15 @@ export default function CTASection({
   secondaryBtnHref,
   bgImageSrc
 }: CTASectionProps) {
+  const { language } = useLanguage();
+  const t = translations[language];
+
+  const defaultHeadline = (
+    <>
+      {t.ctaHeadlineLine1} <br />
+      {t.ctaHeadlineLine2}
+    </>
+  );
   return (
     <section className="w-full py-16 md:py-24 text-[#0D2B4D]">
       <div className="max-w-7xl mx-auto px-6">
@@ -39,7 +50,7 @@ export default function CTASection({
 
             {/* Dynamic Headline */}
             <h2 className="text-4xl md:text-5xl font-black md:text-[#0D2B4D] text-white  tracking-tight leading-tight max-w-md  drop-shadow-[0_4px_18px_rgba(13,43,77,0.65)] md:drop-shadow-none">
-              {headline}
+             {headline || defaultHeadline}
             </h2>
 
             {/* Signature Magenta Accent Line */}

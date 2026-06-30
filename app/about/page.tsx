@@ -3,21 +3,22 @@
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import Link from "next/link";
 
-import { Swiper, SwiperSlide } from 'swiper/react';
-import { Autoplay, Navigation, FreeMode } from 'swiper/modules';
+import { translations } from "../lib/translations";
+import { useLanguage } from "../lib/useLanguage";
 import 'swiper/css';
 
 gsap.registerPlugin(ScrollTrigger);
 
 // Import your custom background asset
 import sectionbg from "../assets/aboutbg.png";
-import callusbg from "../assets//call-us.png";
-import { Calendar, MapPin,Building2,
+import callusbg from "../assets/call-us.png";
+import {
+  Calendar, MapPin, Building2,
   Users,
   BadgeCheck,
-  Landmark, } from "lucide-react";
+  Landmark,
+} from "lucide-react";
 import { GraduationCap, BriefcaseBusiness, Scale } from "lucide-react";
 import CTASection from "../components/CTASection";
 import trusted from "../assets/proffessional.png";
@@ -25,6 +26,8 @@ import trusted from "../assets/proffessional.png";
 
 export default function AboutJourneySection() {
   //curved element track
+  const { language } = useLanguage();
+  const t = translations[language];
   const curvedMaskRef = useRef<HTMLDivElement | null>(null);
 
 
@@ -82,40 +85,40 @@ export default function AboutJourneySection() {
     }
   ];
 
-useEffect(() => {
-  if (!curvedMaskRef.current) return;
+  useEffect(() => {
+    if (!curvedMaskRef.current) return;
 
 
 
-  // Prevent browser from restoring old scroll position on reload
-  if ("scrollRestoration" in window.history) {
-    window.history.scrollRestoration = "manual";
-  }
+    // Prevent browser from restoring old scroll position on reload
+    if ("scrollRestoration" in window.history) {
+      window.history.scrollRestoration = "manual";
+    }
 
-  // Force page to start from top on reload
-  window.scrollTo(0, 0);
-  const ctx = gsap.context(() => {
-    gsap.to(curvedMaskRef.current, {
-    
-      scaleY: 10,
+    // Force page to start from top on reload
+    window.scrollTo(0, 0);
+    const ctx = gsap.context(() => {
+      gsap.to(curvedMaskRef.current, {
+
+        scaleY: 10,
         transformOrigin: "bottom center",
         ease: "none",
-   
-      
-    
 
-      scrollTrigger: {
-        trigger: curvedMaskRef.current?.parentElement,
-        start: "bottom 40%",
-        end: "bottom 20%",
-        scrub: 1.5,
-        markers: false,
-      },
+
+
+
+        scrollTrigger: {
+          trigger: curvedMaskRef.current?.parentElement,
+          start: "bottom 40%",
+          end: "bottom 20%",
+          scrub: 1.5,
+          markers: false,
+        },
+      });
     });
-  });
 
-  return () => ctx.revert();
-}, []);
+    return () => ctx.revert();
+  }, []);
 
 
 
@@ -140,7 +143,7 @@ useEffect(() => {
         {/* Centralized Title Layer */}
         <div className="relative z-10 flex h-full w-full items-center justify-center pt-16 text-center pointer-events-none">
           <h1 className="text-4xl sm:text-5xl md:text-6xl font-black text-white tracking-tight drop-shadow-md pointer-events-none">
-            About Us
+            {t.aboutHeroTitle}
           </h1>
         </div>
 
@@ -168,145 +171,137 @@ useEffect(() => {
         <div className="absolute top-12 left-12 w-96 h-96 bg-brand-pink/10 rounded-full blur-3xl pointer-events-none"></div>
         <div className="absolute bottom-12 right-12 w-96 h-96 bg-brand-cyan/20 rounded-full blur-3xl pointer-events-none"></div>
 
-  <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center relative z-10">
+        <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center relative z-10">
 
-  {/* LEFT COLUMN: CONTENT */}
-  <div className="lg:col-span-6 space-y-6">
+          {/* LEFT COLUMN: CONTENT */}
+          <div className="lg:col-span-6 space-y-6">
 
-    {/* Section Small Tagline */}
-    <div className="inline-block">
-      <span className="inline-flex items-center bg-[#fffc42] text-black px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider shadow-sm">
-        About Sahana Group
-      </span>
-    </div>
+            {/* Section Small Tagline */}
+            <div className="inline-block">
+              <span className="inline-flex items-center bg-[#fffc42] text-black px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider shadow-sm">
+                {t.aboutBadge}
+              </span>
+            </div>
 
-    {/* Main Content Headline */}
-    <h2 className="text-4xl md:text-5xl font-black text-[#0D2B4D] tracking-tight leading-tight">
-      A Trusted Partner for Your Real Estate and Financing Needs.
-    </h2>
+            {/* Main Content Headline */}
+            <h2 className="text-4xl md:text-5xl font-black text-[#0D2B4D] tracking-tight leading-tight">
+              {t.aboutMainTitle}
+            </h2>
 
-    {/* Small Brand Divider Line */}
-    <div className="w-12 h-1 bg-[#2196F3] rounded-full shadow-lg shadow-blue-500/50"></div>
+            {/* Small Brand Divider Line */}
+            <div className="w-12 h-1 bg-[#2196F3] rounded-full shadow-lg shadow-blue-500/50"></div>
 
-    {/* Description Paragraphs */}
-    <div className="space-y-4">
-      <p className="text-gray-600 font-normal leading-relaxed text-base">
-        Sahana Group was established on 27 July 1999. The Group now has a
-        25-year professional, unblemished track record and has earned a sound
-        reputation as an honest and trustworthy company in the real estate and
-        financing fields.
-      </p>
+            {/* Description Paragraphs */}
+            <div className="space-y-4">
+              <p className="text-gray-600 font-normal leading-relaxed text-base">
+                {t.aboutPara1}
+              </p>
 
-      <p className="text-gray-600 font-normal leading-relaxed text-base">
-        Sahana Group currently employs 30 staff and the office is located in
-        Horana Town, at 240, Ratnapura Road, Horana. The Group operates from
-        its own five-storied, 15,000 sq. ft. ultra-modern building.
-      </p>
+              <p className="text-gray-600 font-normal leading-relaxed text-base">
+                {t.aboutPara2}
+              </p>
 
-      <p className="text-gray-600 font-normal leading-relaxed text-base">
-        In the land development field, the company has completed 130 major
-        projects and sold 3,300 land lots to fully satisfied clients. All land
-        title deeds are clear, acceptable to banks, and supported by required
-        development approvals from government authorities.
-      </p>
-    </div>
+              <p className="text-gray-600 font-normal leading-relaxed text-base">
+                {t.aboutPara3}
+              </p>
+            </div>
 
-    {/* Sister Companies */}
-    <div className="rounded-3xl border border-gray-200 bg-white/80 p-5 shadow-sm">
-      <div className="mb-4 flex items-center gap-2">
-        <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#E6008E]/10 text-[#E6008E]">
-          <Building2 size={18} />
+            {/* Sister Companies */}
+            <div className="rounded-3xl border border-gray-200 bg-white/80 p-5 shadow-sm">
+              <div className="mb-4 flex items-center gap-2">
+                <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#E6008E]/10 text-[#E6008E]">
+                  <Building2 size={18} />
+                </div>
+                <h3 className="text-sm font-black uppercase tracking-wide text-[#0D2B4D]">
+                  {t.sisterCompanies}
+                </h3>
+              </div>
+
+              <div className="space-y-3">
+                <div className="flex items-start gap-3 rounded-2xl bg-gray-50 p-3 border border-gray-100">
+                  <BadgeCheck size={18} className="mt-0.5 text-[#2196F3]" />
+                  <p className="text-sm font-bold text-[#0D2B4D]">
+                    Sahana Idam (Pvt) Ltd - <span className="text-gray-500">PV 1641</span>
+                  </p>
+                </div>
+
+                <div className="flex items-start gap-3 rounded-2xl bg-gray-50 p-3 border border-gray-100">
+                  <BadgeCheck size={18} className="mt-0.5 text-[#2196F3]" />
+                  <p className="text-sm font-bold text-[#0D2B4D]">
+                    Sahana Lanka Investments (Pvt) Ltd - <span className="text-gray-500">PV 1321</span>
+                  </p>
+                </div>
+
+                <div className="flex items-start gap-3 rounded-2xl bg-gray-50 p-3 border border-gray-100">
+                  <BadgeCheck size={18} className="mt-0.5 text-[#2196F3]" />
+                  <p className="text-sm font-bold text-[#0D2B4D]">
+                    Sahana Commercial Developments (Pvt) Ltd - <span className="text-gray-500">PV 65171</span>
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* Quick Metrics Data Row */}
+
+          </div>
+
+          {/* RIGHT COLUMN: BRANDING IMAGE SHOWCASE */}
+          <div className="lg:col-span-6 w-full transform-gpu space-y-6 lg:justify-self-end">
+            <div className="w-full relative rounded-[2rem] overflow-hidden shadow-2xl border border-gray-100 aspect-[16/10] bg-[#0A223C]">
+              <img
+                src={trusted.src}
+                alt="Sahana Group Corporate Showcase"
+                className="w-full h-full object-cover object-center"
+              />
+            </div>
+            <div className="pt-6 grid grid-cols-1 sm:grid-cols-2 gap-4 border-t border-gray-100">
+
+              <div className="flex items-center gap-3 bg-gray-50 p-3 rounded-2xl border border-gray-200">
+                <div className="w-10 h-10 rounded-xl bg-[#E6008E]/10 flex items-center justify-center text-[#E6008E]">
+                  <Calendar size={18} className="stroke-[2.5]" />
+                </div>
+                <div>
+                  <p className="text-[10px] font-medium text-gray-400 uppercase tracking-wide">{t.established}</p>
+                  <p className="text-sm font-bold text-[#0D2B4D]">27 July 1999</p>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-3 bg-gray-50 p-3 rounded-2xl border border-gray-200">
+                <div className="w-10 h-10 rounded-xl bg-[#2196F3]/10 flex items-center justify-center text-[#2196F3]">
+                  <MapPin size={18} className="stroke-[2.5]" />
+                </div>
+                <div>
+                  <p className="text-[10px] font-medium text-gray-400 uppercase tracking-wide">{t.headOffice}</p>
+                  <p className="text-sm font-bold text-[#0D2B4D]">{t.horanaTown}</p>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-3 bg-gray-50 p-3 rounded-2xl border border-gray-200">
+                <div className="w-10 h-10 rounded-xl bg-[#29D6ED]/10 flex items-center justify-center text-[#2196F3]">
+                  <Users size={18} className="stroke-[2.5]" />
+                </div>
+                <div>
+                  <p className="text-[10px] font-medium text-gray-400 uppercase tracking-wide">{t.staff}</p>
+                  <p className="text-sm font-bold text-[#0D2B4D]">{t.thirtyProfessionals}</p>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-3 bg-gray-50 p-3 rounded-2xl border border-gray-200">
+                <div className="w-10 h-10 rounded-xl bg-[#0D2B4D]/10 flex items-center justify-center text-[#0D2B4D]">
+                  <Landmark size={18} className="stroke-[2.5]" />
+                </div>
+                <div>
+                  <p className="text-[10px] font-medium text-gray-400 uppercase tracking-wide">{t.completed}</p>
+                  <p className="text-sm font-bold text-[#0D2B4D]">{t.completedProjectsLots}</p>
+                </div>
+              </div>
+
+            </div>
+
+          </div>
+
+
         </div>
-        <h3 className="text-sm font-black uppercase tracking-wide text-[#0D2B4D]">
-          Sister Companies
-        </h3>
-      </div>
-
-      <div className="space-y-3">
-        <div className="flex items-start gap-3 rounded-2xl bg-gray-50 p-3 border border-gray-100">
-          <BadgeCheck size={18} className="mt-0.5 text-[#2196F3]" />
-          <p className="text-sm font-bold text-[#0D2B4D]">
-            Sahana Idam (Pvt) Ltd - <span className="text-gray-500">PV 1641</span>
-          </p>
-        </div>
-
-        <div className="flex items-start gap-3 rounded-2xl bg-gray-50 p-3 border border-gray-100">
-          <BadgeCheck size={18} className="mt-0.5 text-[#2196F3]" />
-          <p className="text-sm font-bold text-[#0D2B4D]">
-            Sahana Lanka Investments (Pvt) Ltd - <span className="text-gray-500">PV 1321</span>
-          </p>
-        </div>
-
-        <div className="flex items-start gap-3 rounded-2xl bg-gray-50 p-3 border border-gray-100">
-          <BadgeCheck size={18} className="mt-0.5 text-[#2196F3]" />
-          <p className="text-sm font-bold text-[#0D2B4D]">
-            Sahana Commercial Developments (Pvt) Ltd - <span className="text-gray-500">PV 65171</span>
-          </p>
-        </div>
-      </div>
-    </div>
-
-    {/* Quick Metrics Data Row */}
-    
-  </div>
-
-  {/* RIGHT COLUMN: BRANDING IMAGE SHOWCASE */}
-  <div className="lg:col-span-6 w-full transform-gpu space-y-6 lg:justify-self-end">
-    <div className="w-full relative rounded-[2rem] overflow-hidden shadow-2xl border border-gray-100 aspect-[16/10] bg-[#0A223C]">
-      <img
-        src={trusted.src}
-        alt="Sahana Group Corporate Showcase"
-        className="w-full h-full object-cover object-center"
-      />
-    </div>
-    <div className="pt-6 grid grid-cols-1 sm:grid-cols-2 gap-4 border-t border-gray-100">
-
-      <div className="flex items-center gap-3 bg-gray-50 p-3 rounded-2xl border border-gray-200">
-        <div className="w-10 h-10 rounded-xl bg-[#E6008E]/10 flex items-center justify-center text-[#E6008E]">
-          <Calendar size={18} className="stroke-[2.5]" />
-        </div>
-        <div>
-          <p className="text-[10px] font-medium text-gray-400 uppercase tracking-wide">Established</p>
-          <p className="text-sm font-bold text-[#0D2B4D]">27 July 1999</p>
-        </div>
-      </div>
-
-      <div className="flex items-center gap-3 bg-gray-50 p-3 rounded-2xl border border-gray-200">
-        <div className="w-10 h-10 rounded-xl bg-[#2196F3]/10 flex items-center justify-center text-[#2196F3]">
-          <MapPin size={18} className="stroke-[2.5]" />
-        </div>
-        <div>
-          <p className="text-[10px] font-medium text-gray-400 uppercase tracking-wide">Head Office</p>
-          <p className="text-sm font-bold text-[#0D2B4D]">Horana Town</p>
-        </div>
-      </div>
-
-      <div className="flex items-center gap-3 bg-gray-50 p-3 rounded-2xl border border-gray-200">
-        <div className="w-10 h-10 rounded-xl bg-[#29D6ED]/10 flex items-center justify-center text-[#2196F3]">
-          <Users size={18} className="stroke-[2.5]" />
-        </div>
-        <div>
-          <p className="text-[10px] font-medium text-gray-400 uppercase tracking-wide">Staff</p>
-          <p className="text-sm font-bold text-[#0D2B4D]">30 Professionals</p>
-        </div>
-      </div>
-
-      <div className="flex items-center gap-3 bg-gray-50 p-3 rounded-2xl border border-gray-200">
-        <div className="w-10 h-10 rounded-xl bg-[#0D2B4D]/10 flex items-center justify-center text-[#0D2B4D]">
-          <Landmark size={18} className="stroke-[2.5]" />
-        </div>
-        <div>
-          <p className="text-[10px] font-medium text-gray-400 uppercase tracking-wide">Completed</p>
-          <p className="text-sm font-bold text-[#0D2B4D]">130 Projects / 3,300 Lots</p>
-        </div>
-      </div>
-
-    </div>
-    
-  </div>
-  
-
-</div>
 
       </section>
 
@@ -322,16 +317,14 @@ useEffect(() => {
             {/* Left Headline Column */}
             <div>
               <h2 className=" text-4xl md:text-5xl font-black tracking-tight text-[#0D2B4D] leading-tight max-w-xl  ">
-                25+ Years of Excellence. <br></br>A Legacy You Can Rely On.
+                {t.aboutLegacyTitle}
               </h2>
             </div>
 
             {/* Right Paragraph Column */}
             <div className=" md:pt-2 md:flex md:justify-end  0  ">
               <p className="text-gray-500 font-light text-base md:text-lg leading-relaxed max-w- md:text-right  ">
-                From reliable land development to customer-first financial solutions,<br></br>
-                we continue to build lasting relationships <br></br>and communities
-                across Sri Lanka.
+                aboutLegacyTitle
               </p>
             </div>
           </div>
@@ -348,8 +341,10 @@ useEffect(() => {
               <p className="text-4xl md:text-5xl font-black tracking-tight text-[#0D2B4D]">
                 25+
               </p>
-              <p className="text-xs md:text-sm font-semibold text-gray-400 uppercase tracking-wider max-w-[150px] mx-auto leading-snug">
-                Years <br className="hidden sm:inline" /> of Experience
+              <p className="text-xs md:text-sm font-semibold text-gray-400 uppercase tracking-wider max-w-[150px] mx-auto leading-snug ">
+                {/* Years <br className="hidden sm:inline" /> of Experience */}
+                {t.years} <br className="hidden sm:inline" /> {t.ofExperience}
+
               </p>
             </div>
 
@@ -359,7 +354,7 @@ useEffect(() => {
                 130
               </p>
               <p className="text-xs md:text-sm font-semibold text-gray-400 uppercase tracking-wider max-w-[150px] mx-auto leading-snug">
-                Major Projects <br className="hidden sm:inline" /> Completed
+                {t.majorProjectsCompleted}
               </p>
             </div>
 
@@ -369,7 +364,7 @@ useEffect(() => {
                 3,300
               </p>
               <p className="text-xs md:text-sm font-semibold text-gray-400 uppercase tracking-wider max-w-[150px] mx-auto leading-snug">
-                Land Lots <br className="hidden sm:inline" /> Sold
+                {t.landLotsSold}
               </p>
             </div>
 
@@ -379,7 +374,7 @@ useEffect(() => {
                 30
               </p>
               <p className="text-xs md:text-sm font-semibold text-gray-400 uppercase tracking-wider max-w-[150px] mx-auto leading-snug">
-                Professional <br className="hidden sm:inline" /> Staff
+                {t.professionalStaff}
               </p>
             </div>
 
@@ -399,13 +394,13 @@ useEffect(() => {
           {/* SECTION HEADER BLOCK */}
           <div className="max-w-3xl space-y-3">
             <span className="inline-block text-xs font-black uppercase tracking-widest text-[#E6008E]">
-              Our Leadership Team
+              {t.leadershipBadge}
             </span>
             <h2 className="text-3xl sm:text-4xl md:text-5xl font-black tracking-tight text-[#0D2B4D] leading-tight">
-              Meet the People Behind Sahana Group
+              {t.leadershipTitle}
             </h2>
             <p className="text-gray-500 font-light text-base md:text-lg leading-relaxed max-w-2xl pt-2">
-              Our leadership team combines decades of experience in real estate, finance, and development to guide Sahana Group with vision, integrity, and commitment.
+              {t.leadershipPara}
             </p>
           </div>
 
@@ -419,13 +414,7 @@ useEffect(() => {
                   className="w-full bg-white border border-gray-100 rounded-[2rem] p-6 shadow-[0_15px_40px_rgba(0,0,0,0.02)] flex flex-col justify-between items-center text-center transition-all duration-300 hover:shadow-[0_20px_50px_rgba(13,43,77,0.06)] hover:-translate-y-1"
                 >
                   {/* PROFILE PICTURE BOX WITH FIXED ROUND CIRCLE MASK */}
-                  <div className="w-44 h-44 rounded-full overflow-hidden border border-gray-100 bg-gray-50 flex items-center justify-center mb-6">
-                    <img
-                      src={member.imageUrl}
-                      alt={member.name}
-                      className="w-full h-full object-cover object-center"
-                    />
-                  </div>
+                  
 
                   {/* PROFILE DETAILS CONTAINER */}
                   <div className="space-y-4 flex-1 flex flex-col justify-between w-full">
@@ -472,10 +461,10 @@ useEffect(() => {
       </section>
 
       <CTASection
-        description="Whether you're looking to buy, sell, or invest, our team is here to help you every step of the way. Let's turn your property goals into reality."
-        primaryBtnText="Explore Properties"
+        description={t.ctaDescription}
+        primaryBtnText={t.ctaPrimary}
         primaryBtnHref="/properties"
-        secondaryBtnText="Contact Our Team"
+        secondaryBtnText={t.ctaSecondary}
         secondaryBtnHref="/contact"
         bgImageSrc={callusbg.src}
       />

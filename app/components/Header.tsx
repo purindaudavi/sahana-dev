@@ -9,12 +9,16 @@ import { usePathname } from "next/navigation";
 import { gsap } from "gsap";
 import { Globe2, Menu, X } from "lucide-react";
 import logo from "../assets/logo-light.png";
-import Script from "next/script";
+import { translations } from "../lib/translations";
+import { useLanguage } from "../lib/useLanguage";
+
+
+
 
 export default function SahanaHeader() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [language, setLanguage] = useState<"en" | "si">("en");
-
+  const { language, toggleLanguage } = useLanguage();
+  const t = translations[language];
   const headerRef = useRef<HTMLElement | null>(null);
   const navRef = useRef<HTMLDivElement | null>(null);
   const logoRef = useRef<HTMLAnchorElement | null>(null);
@@ -46,6 +50,8 @@ export default function SahanaHeader() {
         ease: "power3.out",
       });
     });
+
+   
 
     // 2. Optimized Scroll Listener for Show/Hide logic
     let lastScrollY = window.scrollY;
@@ -82,41 +88,13 @@ export default function SahanaHeader() {
     };
   }, []);
 
-  useEffect(() => {
-  const savedLanguage = localStorage.getItem("sahana-language");
 
-  if (savedLanguage === "si") {
-    setLanguage("si");
-  } else {
-    setLanguage("en");
-  }
-}, []);
+ 
 
 
 
-  const setGoogleTranslateCookie = (lang: "en" | "si") => {
-    const value = lang === "si" ? "/en/si" : "/en/en";
 
-    document.cookie = `googtrans=${value}; path=/`;
-    document.cookie = `googtrans=${value}; domain=${window.location.hostname}; path=/`;
-
-    const hostnameParts = window.location.hostname.split(".");
-    if (hostnameParts.length > 1) {
-      const rootDomain = hostnameParts.slice(-2).join(".");
-      document.cookie = `googtrans=${value}; domain=.${rootDomain}; path=/`;
-    }
-  };
-
-  const toggleLanguage = () => {
-    const nextLang = language === "en" ? "si" : "en";
-
-    setLanguage(nextLang);
-    localStorage.setItem("sahana-language", nextLang);
-    setGoogleTranslateCookie(nextLang);
-
-    window.location.reload();
-  };
-
+ 
 
   // 3. REUSABLE STYLING UTILITY FUNCTION FOR CLEAN MARGIN GENERATION
   const getLinkClass = (path: string) => {
@@ -128,27 +106,7 @@ export default function SahanaHeader() {
   };
 
   return (
-
     <>
-  <div id="google_translate_element" className="hidden" />
-
-  <Script id="google-translate-init" strategy="afterInteractive">
-    {`
-      function googleTranslateElementInit() {
-        new google.translate.TranslateElement({
-          pageLanguage: 'en',
-          includedLanguages: 'en,si',
-          autoDisplay: false
-        }, 'google_translate_element');
-      }
-    `}
-  </Script>
-
-  <Script
-    src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"
-    strategy="afterInteractive"
-  />
-
   <header
 
    
@@ -176,36 +134,36 @@ export default function SahanaHeader() {
           className="hidden items-center gap-1 rounded-full border border-gray-200/60 bg-gray-100/80 p-1 text-[#0D2B4D] shadow-inner backdrop-blur-xl md:flex"
         >
           <Link href="/" className={getLinkClass("/")}>
-            Home
+            {t.home}
           </Link>
           <Link href="/about" className={getLinkClass("/about")}>
-            About Us
+            {t.about}
           </Link>
           <Link href="/properties" className={getLinkClass("/properties")}>
-            Property List
+           {t.properties}
           </Link>
           <Link href="/contact" className={getLinkClass("/contact")}>
-            Contact Us
+            {t.contact}
           </Link>
         </nav>
 
 
         {/* Action Controls */}
         <div className="flex items-center gap-3">
-          <button
+<button
   type="button"
   onClick={toggleLanguage}
   className="hidden items-center gap-2 rounded-full bg-gray-100 hover:bg-gray-200/80 px-4 py-2 text-sm font-medium text-[#0D2B4D] transition md:flex"
 >
   <Globe2 size={16} />
-  {language === "en" ? "Eng" : "සිං"}
+  {t.languageButton}
 </button>
 
           <Link
             href="/sign-in"
             className="hidden rounded-full bg-[#E6008E] px-6 py-3 text-sm font-bold text-white shadow-lg shadow-pink-500/25 transition hover:bg-[#FF2FA6] md:inline-flex"
           >
-            Sign in
+           { t.signIn}
           </Link>
 
           {/* Interactive Mobile Hamburger Button */}
@@ -225,30 +183,31 @@ export default function SahanaHeader() {
               onClick={() => setIsMobileMenuOpen(false)}
               className="text-base font-semibold text-[#0D2B4D] p-2 hover:bg-gray-50 rounded-lg"
             >
-              Home
+              {t.home}
             </Link>
             <Link
               href="/about"
               onClick={() => setIsMobileMenuOpen(false)}
               className="text-base font-semibold text-[#0D2B4D] p-2 hover:bg-gray-50 rounded-lg"
             >
-              About Us
+              {t.about}
             </Link>
             <Link
               href="/properties"
               onClick={() => setIsMobileMenuOpen(false)}
               className="text-base font-semibold text-[#0D2B4D] p-2 hover:bg-gray-50 rounded-lg"
             >
-              Property List
+              {t.properties}
             </Link>
             <Link
               href="/contact"
               onClick={() => setIsMobileMenuOpen(false)}
               className="text-base font-semibold text-[#0D2B4D] p-2 hover:bg-gray-50 rounded-lg"
             >
-              Contact Us
+              {t.contact}
             </Link>
-            <button
+
+<button
   type="button"
   onClick={() => {
     setIsMobileMenuOpen(false);
@@ -257,7 +216,7 @@ export default function SahanaHeader() {
   className="flex items-center gap-2 rounded-lg p-2 text-base font-semibold text-[#0D2B4D] hover:bg-gray-50"
 >
   <Globe2 size={18} />
-  {language === "en" ? "Translate to Sinhala" : "Back to English"}
+  {t.languageButton}
 </button>
 
 <hr className="border-gray-100 my-1" />
@@ -267,7 +226,7 @@ export default function SahanaHeader() {
   onClick={() => setIsMobileMenuOpen(false)}
   className="bg-[#E6008E] text-white text-center py-3 rounded-xl font-bold shadow-md shadow-pink-500/10"
 >
-  Sign in
+  {t.signIn}
 </Link>
           </div>
         )}

@@ -27,6 +27,9 @@ import callusbg from "../app/assets/call-us.png";
 import "swiper/css/navigation";
 import "swiper/css/free-mode";
 
+import { translations } from "./lib/translations";
+import { useLanguage } from "./lib/useLanguage";
+
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
 }
@@ -47,15 +50,32 @@ export default function HomePage() {
 
 
   const router = useRouter();
+  const { language } = useLanguage();
+  const t = translations[language];
 
   const [landType, setLandType] = useState("");
   const [district, setDistrict] = useState("");
   const [priceRange, setPriceRange] = useState("");
   const [blockSize, setBlockSize] = useState("");
-  const [activeTab, setActiveTab] = useState("All Projects");
+  const [activeTab, setActiveTab] = useState("");
   const [priceValue, setPriceValue] = useState(0);
 
+const propertyTabs = [
+  { label: t.allProjects, value: "" },
+  { label: t.residentialLand, value: "Residential" },
+  { label: t.commercialLand, value: "Commercial" },
+  { label: t.agriculturalLand, value: "Agricultural" },
+];
 
+const introBubbles = [t.house, t.apartment, t.residential];
+
+const getLandTypeLabel = (type?: string) => {
+  if (type === "Residential") return t.residentialLand;
+  if (type === "Commercial") return t.commercialLand;
+  if (type === "Agricultural") return t.agriculturalLand;
+
+  return type || "";
+};
 
 
   useEffect(() => {
@@ -382,42 +402,41 @@ export default function HomePage() {
         {/* Readability contrast balance tint mask */}
         {/* <div className="absolute inset-0 z-10 bg-gradient-to-b from-black/50 via-black/30 to-[#F1F4FA]/20"></div> */}
 
-        <div className="mx-auto flex w-full max-w-7xl flex-col items-center gap-12 md:flex-row md:justify-between mt-25 ">
+        <div className="mx-auto flex w-full max-w-7xl flex-col items-center gap-12 md:flex-row md:justify-between mt-25 backdrop-blur-[3px]">
           {/* B. FIXED HTML: Added text-wrapper container reference along with GSAP style strings */}
           <div ref={heroTextRef} className="w-full md:w-3/5 text-center md:text-left space-y-6">
 
             <div className="hero-badge inline-block">
               <span className="inline-flex items-center gap-2 bg-[#F6DBB8] text-[#0D2B4D] px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider shadow-sm">
-                Trusted Property Investments
+                {t.heroBadge}
               </span>
             </div>
 
             <h1 className="hero-heading max-w-3xl text-4xl font-bold leading-tight tracking-tight text-gray-100 sm:text-4xl md:text-5xl">
-              Find Your Ideal <br className="sm:hidden" />
-              Plot of Land With <br className="hidden sm:inline" />
+              {t.heroTitle}<br/>
               <span className="bg-gradient-to-r from-[#e80190] to-[#FF8BE8] bg-clip-text text-transparent drop-shadow-[0_3px_12px_rgba(230,0,142,0.45)] [-webkit-text-stroke:0.2px_black]">
-                Sahana Group
+                {t.sahananama}
               </span>
             </h1>
 
 
 
             <p className="hero-paragraph text-white text-base sm:text-lg max-w-2xl leading-relaxed">
-              Secure your future with certified residential and commercial land plots across prime locations in Sri Lanka. Clear deeds and hassle-free processing guaranteed.
-            </p>
+              {t.heroParagraph}
+              </p>
 
             <div className="hero-buttons flex flex-wrap justify-center md:justify-start gap-4 pt-4">
               <Link
                 href="/properties"
                 className="bg-[#2196F3] hover:bg-[#0D2B4D] text-white px-8 py-3.5 rounded-xl font-bold shadow-lg shadow-blue-500/25 transition-all duration-200 transform hover:-translate-y-0.5"
               >
-                Browse Available Lands
+                {t.browseAvailableLands}
               </Link>
               <Link
                 href="/contact"
                 className="bg-white hover:bg-gray-50 text-[#0D2B4D] border border-gray-300 px-8 py-3.5 rounded-xl font-bold shadow-sm transition-all duration-200 transform hover:-translate-y-0.5"
               >
-                Talk to an Expert
+                {t.talkToExpert}
               </Link>
             </div>
           </div>
@@ -470,112 +489,103 @@ export default function HomePage() {
         >
           <div className="mb-6 flex flex-col gap-2">
             <h2 className="text-2xl font-black tracking-tight text-[#0D2B4D] md:text-3xl">
-              Find the best place
+              {t.searchTitle}       {/* find the best pace  */}
             </h2>
             <p className="text-sm text-gray-500">
-              Search lands by location, price, category and land size.
+               {t.searchDescription}{/* Search lands by location, price, category and land size. */}
             </p>
           </div>
 
           <div className="grid grid-cols-1 gap-4 md:grid-cols-4">
             <div>
               <label className="mb-2 block text-sm font-bold text-[#0D2B4D]">
-                Looking for
+                {t.lookingFor}  {/*Looking for */}
               </label>
               <select
                 value={landType}
                 onChange={(e) => setLandType(e.target.value)}
                 className="w-full rounded-2xl bg-gray-100 px-4 py-4"
               >
-                <option value="">Enter type</option>
-                <option value="Residential">Residential Land</option>
-                <option value="Commercial">Commercial Land</option>
-                <option value="Agricultural">Agricultural Land</option>
+                <option value="">{t.enterType}</option>
+                <option value="Residential">{t.residentialLand}</option>
+                <option value="Commercial">{t.commercialLand}</option>
+                <option value="Agricultural">{t.agriculturalLand}</option>
               </select>
             </div>
 
             <div>
               <label className="mb-2 block text-sm font-bold text-[#0D2B4D]">
-                Price
+                  {t.price}  {/* Price */}
               </label>
               <select
                 value={priceRange}
                 onChange={(e) => setPriceRange(e.target.value)}
                 className="w-full rounded-2xl bg-gray-100 px-4 py-4"
               >
-                <option value="">Any Price</option>
-                <option value="500000">Below LKR 500,000</option>
-                <option value="1000000">LKR 500,000 - 1,000,000</option>
-                <option value="above1000000">Above LKR 1,000,000</option>
+                <option value="">{t.anyPrice}</option>
+                <option value="500000">{t.below500}</option>
+                <option value="1000000">{t.between500And1M}</option>
+                <option value="above1000000">{t.above1M}</option>
               </select>
             </div>
 
             <div>
               <label className="mb-2 block text-sm font-bold text-[#0D2B4D]">
-                Disrtrict
+                {t.district}  {/* Disrtrict */}
               </label>
               <select
                 value={district}
                 onChange={(e) => setDistrict(e.target.value)}
                 className="w-full rounded-2xl bg-gray-100 px-4 py-4"
               >
-                <option value="">Location</option>
-                <option value="Colombo">Colombo</option>
-                <option value="Gampaha">Gampaha</option>
-                <option value="Kurunegala">Kurunegala</option>
-                <option value="Kalutara">Kalutara</option>
+                <option value="">{t.location}</option>
+                <option value="Colombo">{t.colombo}</option>
+                <option value="Gampaha">{t.gampaha}</option>
+                <option value="Kurunegala">{t.kurunegala}</option>
+                <option value="Kalutara">{t.kaluthara}</option>
               </select>
             </div>
 
             <div>
               <label className="mb-2 block text-sm font-bold text-[#0D2B4D]">
-                Block size
+                {t.blockSize }{/* Block size */}
               </label>
               <select
                 value={blockSize}
                 onChange={(e) => setBlockSize(e.target.value)}
                 className="w-full rounded-2xl bg-gray-100 px-4 py-4"
               >
-                <option value="">Any Block Size</option>
-                <option value="below10">Below 10 Block Size</option>
-                <option value="10to20">10 - 20 Block Size</option>
-                <option value="above20">Above 20 Block Size</option>
+                <option value="">{t.anyBlockSize}</option>
+                <option value="below10">{t.below10Block}</option>
+                <option value="10to20">{t.between10And20Block}</option>
+                <option value="above20">{t.above20Block}</option>
               </select>
             </div>
           </div>
 
           <div className="mt-6 flex flex-wrap items-center justify-between gap-4">
             <div className="flex flex-wrap items-center gap-3">
-              <span className="text-sm font-bold text-[#0D2B4D]">Filter:</span>
+              <span className="text-sm font-bold text-[#0D2B4D]">{t.filter}</span>
 
-              {["All Projects", "Residential Land", "Commercial Land", "Agricultural Land"]
 
-                .map((tab) => (
-                  <button
-                    key={tab}
-                    onClick={() => {
-                      setActiveTab(tab);
+ {/*allProjects", "Residential Land", "Commercial Land", "Agricultural Land"*/}
 
-                      if (tab === "All Projects") setLandType("");
-                      else if (tab === "Residential Land") setLandType("Residential");
-                      else if (tab === "Commercial Land") setLandType("Commercial");
-                      else if (tab === "Agricultural Land") setLandType("Agricultural");
-                    }}
-                    className={`rounded-full px-7 py-3 text-sm font-semibold transition ${activeTab === tab
-                      ? "bg-[#0D2B4D] text-white shadow-lg"
-                      : "bg-white text-[#0D2B4D] shadow-sm hover:bg-[#F1F4FA]"
-                      }`}
-                  >
-                    {tab}
-                  </button>
-                  // .map((item) => (
-                  //   <button
-                  //     key={item}
-                  //     className="rounded-full border border-gray-200 bg-white px-5 py-2.5 text-sm font-medium text-gray-600 shadow-sm transition hover:border-[#2196F3] hover:text-[#2196F3]"
-                  //   >
-                  //     {item}
-                  //   </button>
-                ))}
+              {propertyTabs.map((tab) => (       
+  <button                                            
+    key={tab.value || "all"}
+    onClick={() => {
+      setActiveTab(tab.value);
+      setLandType(tab.value);
+    }}
+    className={`rounded-full px-7 py-3 text-sm font-semibold transition ${
+      activeTab === tab.value
+        ? "bg-[#0D2B4D] text-white shadow-lg"
+        : "bg-white text-[#0D2B4D] shadow-sm hover:bg-[#F1F4FA]"
+    }`}
+  >
+    {tab.label}
+  </button>
+))}
             </div>
 
             <button
@@ -591,7 +601,7 @@ export default function HomePage() {
               }}
               className="rounded-full bg-[#FF2FA6] px-8 py-3.5 text-sm font-bold text-white"
             >
-              Search Properties
+             { t.searchProperties}
             </button>
           </div>
         </div>
@@ -615,7 +625,7 @@ export default function HomePage() {
             <div className="space-y-6  ">
               {/* Top white bubbles */}
               <div className="property-bubble-row flex flex-wrap items-center gap-3">
-                {["House", "Apartment", "Residential"].map((item) => (
+               {introBubbles.map((item) => (
                   <button
                     key={item}
                     type="button"
@@ -631,16 +641,14 @@ export default function HomePage() {
                 {/* Left headline */}
                 <div className="md:col-span-7">
                   <h2 className="max-w-5xl text-5xl font-light leading-[1.05] tracking-[-0.04em] text-white sm:text-6xl lg:text-7xl">
-                    Build Your Future, One Property at a Time.
+                    {t.introHeadline}
                   </h2>
                 </div>
 
                 {/* Right text field */}
                 <div className="md:col-span-5  ">
                   <p className="max-w-md text-base font-light leading-relaxed text-white/85 md:text-lg  ">
-                    Own your world, one property at a time. Discover carefully selected
-                    lands and properties designed for secure living, smart investment,
-                    and long-term peace of mind.
+                    {t.introParagraph}
                   </p>
                 </div>
               </div>
@@ -660,21 +668,21 @@ export default function HomePage() {
           <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-6 mb-16">
             <div className="space-y-2">
               <h2 className="text-3xl sm:text-4xl font-black text-[#0D2B4D] tracking-tight">
-                Latest Land Releases
+                {t.latestLandReleases}
               </h2>
             </div>
             <Link
               href="/properties"
               className="inline-flex items-center gap-2 text-sm font-bold text-[#0D2B4D] hover:text-[#2196F3] transition-colors duration-200 group pb-1 border-b-2 border-gray-100 hover:border-[#2196F3]"
             >
-              <span>View All Portfolios</span>
+              <span>{t.viewAllPortfolios}</span>
               <span className="transform transition-transform duration-200 group-hover:translate-x-1">→</span>
             </Link>
           </div>
 
           <div className="relative w-full">
             {loading ? (
-              <div className="flex justify-center py-20 text-gray-400 font-medium">Loading premium listings...</div>
+              <div className="flex justify-center py-20 text-gray-400 font-medium">{t.loadingPremiumListings}</div>
             ) : (
               <Swiper
                 modules={[Navigation, Autoplay, FreeMode]}
@@ -733,7 +741,7 @@ export default function HomePage() {
 
                         <div className="absolute bottom-4 right-4 bg-[#0D2B4D]/90 backdrop-blur-md px-4 py-2.5 rounded-2xl border border-white/10 text-white shadow-lg">
                           <p className="text-xs font-medium text-blue-200/80 uppercase tracking-wider text-right -mb-0.5">
-                            Starting From
+                            {t.startingFrom}
                           </p>
                           <p className="text-lg font-black tracking-wide">
                             {land.price.toLocaleString()} <span className="text-xs font-bold text-gray-300">LKR</span>
@@ -756,10 +764,10 @@ export default function HomePage() {
 
                           <div className="flex flex-wrap gap-2 pt-1 min-h-[4.5rem] items-start">
                             <span className="bg-[#F1F4FA] px-3 py-1.5 rounded-xl text-xs font-bold text-[#0D2B4D]/80">
-                              {land.perch} Perches
+                              {land.perch} {t.perches}
                             </span>
                             <span className="bg-[#F1F4FA] px-3 py-1.5 rounded-xl text-xs font-bold text-[#0D2B4D]/80">
-                              {land.type}
+                              {getLandTypeLabel(land.type)}
                             </span>
                           </div>
                         </div>
@@ -771,7 +779,7 @@ export default function HomePage() {
                             className="flex items-center justify-between w-full group/link"
                           >
                             <span className="text-sm font-black text-[#0D2B4D] group-hover/link:text-[#E6008E] transition-colors duration-200">
-                              Explore Land Plot
+                              {t.exploreLandPlot}
                             </span>
                             <div className="w-9 h-9 rounded-full bg-gray-50 flex items-center justify-center border border-gray-100 text-[#0D2B4D] group-hover/link:bg-[#E6008E] group-hover/link:text-white transition-all duration-300">
                               ➔
@@ -799,13 +807,13 @@ export default function HomePage() {
 
 
         <CTASection
-          description="Whether you're looking to buy, sell, or invest, our team is here to help you every step of the way. Let's turn your property goals into reality."
-          primaryBtnText="Explore Properties"
-          primaryBtnHref="/properties"
-          secondaryBtnText="Contact Our Team"
-          secondaryBtnHref="/contact"
-          bgImageSrc={callusbg.src}
-        />
+  description={t.ctaDescription}
+  primaryBtnText={t.ctaPrimary}
+  primaryBtnHref="/properties"
+  secondaryBtnText={t.ctaSecondary}
+  secondaryBtnHref="/contact"
+  bgImageSrc={callusbg.src}
+/>
       </section>
 
 

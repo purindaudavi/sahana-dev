@@ -4,9 +4,11 @@
 import { MessageCircle, X, Send, } from "lucide-react";
 import chatpic from "../assets/chatbot.png";
 import { FaWhatsapp } from "react-icons/fa6";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef ,useMemo } from "react";
 import actionMenuPic from "../assets/actionMenuPic.png";
-import { gsap } from "gsap";  
+import { gsap } from "gsap";
+import { translations } from "../lib/translations";
+import { useLanguage } from "../lib/useLanguage";
 
 type Message = {
   from: "bot" | "user";
@@ -18,153 +20,158 @@ type Option = {
   next: string;
 };
 
-const flows: Record<
+type ChatText = typeof translations.en.chat;
+
+const createChatFlows = (
+  c: ChatText
+): Record<
   string,
   {
     bot: string;
     options?: Option[];
   }
-> = {
+> => ({
   start: {
-    bot: "Hi! Welcome to Sahana Group. How can I help you today?",
+    bot: c.startBot,
     options: [
-      { label: "View Available Lands", next: "lands" },
-      { label: "Search by Location", next: "location" },
-      { label: "Payment Plans", next: "payments" },
-      { label: "Contact Sales Team", next: "contact" },
+      { label: c.viewAvailableLands, next: "lands" },
+      { label: c.searchByLocation, next: "location" },
+      { label: c.paymentPlans, next: "payments" },
+      { label: c.contactSalesTeam, next: "contact" },
     ],
   },
 
   lands: {
-    bot: "Great! What type of land are you looking for?",
+    bot: c.landsBot,
     options: [
-      { label: "Residential Land", next: "residential" },
-      { label: "Commercial Land", next: "commercial" },
-      { label: "Investment Land", next: "investment" },
+      { label: c.residentialLand, next: "residential" },
+      { label: c.commercialLand, next: "commercial" },
+      { label: c.investmentLand, next: "investment" },
     ],
   },
 
   residential: {
-    bot: "We have residential lands in selected locations. Would you like to view available projects?",
+    bot: c.residentialBot,
     options: [
-      { label: "View Projects", next: "viewProjects" },
-      { label: "Talk to Consultant", next: "contact" },
+      { label: c.viewProjects, next: "viewProjects" },
+      { label: c.talkToConsultant, next: "contact" },
     ],
   },
 
   commercial: {
-    bot: "Commercial lands are available in high-growth areas. Our team can share the latest availability and prices.",
+    bot: c.commercialBot,
     options: [
-      { label: "Contact Sales Team", next: "contact" },
-      { label: "View Projects", next: "viewProjects" },
+      { label: c.contactSalesTeam, next: "contact" },
+      { label: c.viewProjects, next: "viewProjects" },
     ],
   },
 
   investment: {
-    bot: "Land is a strong long-term investment. We can help you choose a project based on budget, location, and future value.",
+    bot: c.investmentBot,
     options: [
-      { label: "Get Guidance", next: "contact" },
-      { label: "View Projects", next: "viewProjects" },
+      { label: c.getGuidance, next: "contact" },
+      { label: c.viewProjects, next: "viewProjects" },
     ],
   },
 
   location: {
-    bot: "Which location are you interested in?",
+    bot: c.locationBot,
     options: [
       { label: "Kalutara", next: "kalutara" },
       { label: "Gampaha", next: "gampaha" },
       { label: "Colombo", next: "colombo" },
       { label: "Kurunegala", next: "kurunegala" },
-      { label: "Other Location", next: "contact" },
+      { label: c.otherLocation, next: "contact" },
     ],
   },
 
   kalutara: {
-    bot: "We have land projects around Kalutara. You can view available lands or speak with our team for updated prices.",
+    bot: c.kalutaraBot,
     options: [
-      { label: "View Kalutara Lands", next: "viewKalutara" },
-      { label: "Contact Sales Team", next: "contact" },
+      { label: c.viewKalutaraLands, next: "viewKalutara" },
+      { label: c.contactSalesTeam, next: "contact" },
     ],
   },
 
   gampaha: {
-    bot: "We have selected projects around Gampaha. Our team can guide you with current availability.",
+    bot: c.gampahaBot,
     options: [
-      { label: "View Gampaha Lands", next: "viewGampaha" },
-      { label: "Contact Sales Team", next: "contact" },
+      { label: c.viewGampahaLands, next: "viewGampaha" },
+      { label: c.contactSalesTeam, next: "contact" },
     ],
   },
 
   colombo: {
-    bot: "We have land opportunities in Colombo with good investment potential.",
+    bot: c.colomboBot,
     options: [
-      { label: "View Colombo Lands", next: "viewColombo" },
-      { label: "Contact Sales Team", next: "contact" },
+      { label: c.viewColomboLands, next: "viewColombo" },
+      { label: c.contactSalesTeam, next: "contact" },
     ],
   },
 
   kurunegala: {
-    bot: "We have land opportunities in Kurunegala with good investment potential.",
+    bot: c.kurunegalaBot,
     options: [
-      { label: "View Kurunegala Lands", next: "viewKurunegala" },
-      { label: "Contact Sales Team", next: "contact" },
+      { label: c.viewKurunegalaLands, next: "viewKurunegala" },
+      { label: c.contactSalesTeam, next: "contact" },
     ],
   },
 
   payments: {
-    bot: "Selected Sahana Group projects offer flexible payment plans. Final plans depend on the project and plot selection.",
+    bot: c.paymentsBot,
     options: [
-      { label: "Ask Payment Details", next: "contact" },
-      { label: "View Available Lands", next: "lands" },
+      { label: c.askPaymentDetails, next: "contact" },
+      { label: c.viewAvailableLands, next: "lands" },
     ],
   },
 
   contact: {
-    bot: "Please contact our sales team on WhatsApp. They will help you with prices, availability, deeds, and payment plans.",
+    bot: c.contactBot,
     options: [
-      { label: "Contact-us", next: "contactus" },
-      { label: "Open WhatsApp", next: "whatsapp" },
-      { label: "Start Again", next: "start" },
+      { label: c.contactUs, next: "contactus" },
+      { label: c.openWhatsapp, next: "whatsapp" },
+      { label: c.startAgain, next: "start" },
     ],
   },
 
   viewProjects: {
-    bot: "Sure! Click below to view all available land projects.",
+    bot: c.viewProjectsBot,
     options: [
-      { label: "Go to Properties", next: "properties" },
-      { label: "Start Again", next: "start" },
+      { label: c.goToProperties, next: "properties" },
+      { label: c.startAgain, next: "start" },
     ],
   },
 
   viewKalutara: {
-    bot: "Opening Kalutara land projects for you.",
-    options: [{ label: "Go to Kalutara Lands", next: "kalutaraLink" }],
+    bot: c.openingKalutara,
+    options: [{ label: c.goToKalutara, next: "kalutaraLink" }],
   },
 
   viewGampaha: {
-    bot: "Opening Gampaha land projects for you.",
-    options: [{ label: "Go to Gampaha Lands", next: "gampahaaLink" }],
+    bot: c.openingGampaha,
+    options: [{ label: c.goToGampaha, next: "gampahaaLink" }],
   },
 
   viewColombo: {
-    bot: "Opening Colombo land projects for you.",
-    options: [{ label: "Go to Colombo Lands", next: "colomboLink" }],
+    bot: c.openingColombo,
+    options: [{ label: c.goToColombo, next: "colomboLink" }],
   },
 
   viewKurunegala: {
-    bot: "Opening Kurunegala land projects for you.",
-    options: [{ label: "Go to Kurunegala Lands", next: "kurunegalaLink" }],
+    bot: c.openingKurunegala,
+    options: [{ label: c.goToKurunegala, next: "kurunegalaLink" }],
   },
-};
+});
 
 export default function SahanaChatBot() {
   const [isOpen, setIsOpen] = useState(false);
-  const [messages, setMessages] = useState<Message[]>([
-    {
-      from: "bot",
-      text: flows.start.bot,
-    },
-  ]);
+  const { language } = useLanguage();
+  const t = translations[language];
+  const c = t.chat;
+
+  const flows = useMemo(() => createChatFlows(c), [language]);
+
+ const [messages, setMessages] = useState<Message[]>([]);
   const [currentFlow, setCurrentFlow] = useState("start");
 
   const chatWindowRef = useRef<HTMLDivElement>(null);
@@ -172,6 +179,7 @@ export default function SahanaChatBot() {
   const [isMobileActionsOpen, setIsMobileActionsOpen] = useState(false);
   const floatingActionsRef = useRef<HTMLDivElement>(null);
   const [showFloatingActions, setShowFloatingActions] = useState(false);
+
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -202,6 +210,16 @@ export default function SahanaChatBot() {
     };
   }, [isMobileActionsOpen]);
 
+  useEffect(() => {
+  setMessages([
+    {
+      from: "bot",
+      text: flows.start.bot,
+    },
+  ]);
+  setCurrentFlow("start");
+}, [language, flows]);
+
 
 
   // Effect to close the chat when clicking outside
@@ -227,32 +245,32 @@ export default function SahanaChatBot() {
   }, [isOpen]);
 
   useEffect(() => {
-  if (!isMobileActionsOpen || isOpen || !floatingActionsRef.current) return;
+    if (!isMobileActionsOpen || isOpen || !floatingActionsRef.current) return;
 
-  const items = floatingActionsRef.current.querySelectorAll(".sahana-pop-action");
+    const items = floatingActionsRef.current.querySelectorAll(".sahana-pop-action");
 
-  if (!items.length) return;
+    if (!items.length) return;
 
-  const isDesktop = window.matchMedia("(min-width: 768px)").matches;
+    const isDesktop = window.matchMedia("(min-width: 768px)").matches;
 
- gsap.fromTo(
-  items,
-  {
-    opacity: 0,
-    scale: 0.5,
-    rotate: -180,
-    transformOrigin: "center center",
-  },
-  {
-    opacity: 1,
-    scale: 1,
-    rotate: 0,
-    duration: 0.5,
-    ease: "power3.out",
-   
-  }
-);
-}, [isMobileActionsOpen, isOpen]);
+    gsap.fromTo(
+      items,
+      {
+        opacity: 0,
+        scale: 0.5,
+        rotate: -180,
+        transformOrigin: "center center",
+      },
+      {
+        opacity: 1,
+        scale: 1,
+        rotate: 0,
+        duration: 0.5,
+        ease: "power3.out",
+
+      }
+    );
+  }, [isMobileActionsOpen, isOpen]);
 
   const handleOptionClick = (option: Option) => {
     setMessages((prev) => [
@@ -294,7 +312,7 @@ export default function SahanaChatBot() {
     }
 
     if (option.next === "contactus") {
-      window.location.href = "/contact  ";
+      window.location.href = "/contact";
       return;
     }
 
@@ -317,108 +335,106 @@ export default function SahanaChatBot() {
   return (
     <>
       {showFloatingActions && !isOpen && (
-  <div
-    ref={floatingActionsRef}
-    className="fixed bottom-5 right-5 z-[9999]"
-  >
-    {/* Desktop view - first show actionMenuPic, then show icons horizontally */}
-    <div className="hidden items-center gap-3 md:flex">
-      {isMobileActionsOpen && (
-        <>
-          <button
-  type="button"
-  onClick={() => {
-    setIsOpen(true);
-    setIsMobileActionsOpen(false);
-  }}
-  className="sahana-pop-action flex h-14 w-14 items-center justify-center rounded-full bg-transparent transition hover:scale-110"
->
-            <img
-              src={chatpic.src}
-              alt="Sahana chat assistant"
-              className="h-14 w-14 rounded-full object-contain"
-            />
-          </button>
-
-          <a
-            href="https://api.whatsapp.com/send/?phone=%2B94772647356&text&type=phone_number&app_absent=0"
-            target="_blank"
-            rel="noopener noreferrer"
-            className=" sahana-pop-action flex h-11 w-11 items-center justify-center rounded-full bg-green-600 text-white shadow-xl transition hover:scale-110 hover:bg-green-700"
-          >
-            <FaWhatsapp size={25} />
-          </a>
-        </>
-      )}
-
-     <button
-  type="button"
-  onClick={() => setIsMobileActionsOpen((prev) => !prev)}
-  className={`relative flex h-14 w-14 items-center justify-center rounded-full bg-transparent transition ${
-    !isMobileActionsOpen ? "sahana-action-bounce" : "hover:scale-110"
-  }`}
->
-  <img
-    src={actionMenuPic.src}
-    alt="Open contact options"
-    className="h-14 w-14 object-contain"
-  />
-
-  {isMobileActionsOpen && (
-    <span className="absolute -right-1 -top-1 hidden h-6 w-6 items-center justify-center rounded-full bg-[#E6008E] text-white shadow-lg ring-2 ring-white md:flex">
-      <X size={14} strokeWidth={3} />
-    </span>
-  )}
-</button>
-    </div>
-
-    {/* Mobile view - first show actionMenuPic, then show icons vertically */}
-    <div className="flex flex-col items-center gap-3 md:hidden">
-      {isMobileActionsOpen && (
-        <a
-          href="https://api.whatsapp.com/send/?phone=%2B94772647356&text&type=phone_number&app_absent=0"
-          target="_blank"
-          rel="noopener noreferrer"
-          className=" sahana-pop-action flex h-11 w-11 items-center justify-center rounded-full bg-green-600 text-white transition hover:scale-110 hover:bg-green-700"
+        <div
+          ref={floatingActionsRef}
+          className="fixed bottom-5 right-5 z-[9999]"
         >
-          <FaWhatsapp size={25} />
-        </a>
+          {/* Desktop view - first show actionMenuPic, then show icons horizontally */}
+          <div className="hidden items-center gap-3 md:flex">
+            {isMobileActionsOpen && (
+              <>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setIsOpen(true);
+                    setIsMobileActionsOpen(false);
+                  }}
+                  className="sahana-pop-action flex h-14 w-14 items-center justify-center rounded-full bg-transparent transition hover:scale-110"
+                >
+                  <img
+                    src={chatpic.src}
+                    alt={c.chatAssistantAlt}
+                    className="h-14 w-14 rounded-full object-contain"
+                  />
+                </button>
+
+                <a
+                  href="https://api.whatsapp.com/send/?phone=%2B94772647356&text&type=phone_number&app_absent=0"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className=" sahana-pop-action flex h-11 w-11 items-center justify-center rounded-full bg-green-600 text-white shadow-xl transition hover:scale-110 hover:bg-green-700"
+                >
+                  <FaWhatsapp size={25} />
+                </a>
+              </>
+            )}
+
+            <button
+              type="button"
+              onClick={() => setIsMobileActionsOpen((prev) => !prev)}
+              className={`relative flex h-14 w-14 items-center justify-center rounded-full bg-transparent transition ${!isMobileActionsOpen ? "sahana-action-bounce" : "hover:scale-110"
+                }`}
+            >
+              <img
+                src={actionMenuPic.src}
+                alt={c.openContactOptions}
+                className="h-14 w-14 object-contain"
+              />
+
+              {isMobileActionsOpen && (
+                <span className="absolute -right-1 -top-1 hidden h-6 w-6 items-center justify-center rounded-full bg-[#E6008E] text-white shadow-lg ring-2 ring-white md:flex">
+                  <X size={14} strokeWidth={3} />
+                </span>
+              )}
+            </button>
+          </div>
+
+          {/* Mobile view - first show actionMenuPic, then show icons vertically */}
+          <div className="flex flex-col items-center gap-3 md:hidden">
+            {isMobileActionsOpen && (
+              <a
+                href="https://api.whatsapp.com/send/?phone=%2B94772647356&text&type=phone_number&app_absent=0"
+                target="_blank"
+                rel="noopener noreferrer"
+                className=" sahana-pop-action flex h-11 w-11 items-center justify-center rounded-full bg-green-600 text-white transition hover:scale-110 hover:bg-green-700"
+              >
+                <FaWhatsapp size={25} />
+              </a>
+            )}
+
+            <button
+              type="button"
+              onClick={() => {
+                if (!isMobileActionsOpen) {
+                  setIsMobileActionsOpen(true);
+                  return;
+                }
+
+                setIsOpen(true);
+                setIsMobileActionsOpen(false);
+              }}
+              className={`flex h-14 w-14 items-center justify-center rounded-full bg-transparent transition ${!isMobileActionsOpen
+                  ? "sahana-action-bounce"
+                  : "sahana-pop-action hover:scale-110"
+                }`}
+            >
+              {!isMobileActionsOpen ? (
+                <img
+                  src={actionMenuPic.src}
+                  alt={c.openContactOptions}
+                  className="h-14 w-14 object-contain"
+                />
+              ) : (
+                <img
+                  src={chatpic.src}
+                  alt="Sahana chat assistant"
+                  className="h-14 w-14 rounded-full object-contain"
+                />
+              )}
+            </button>
+          </div>
+        </div>
       )}
-
-      <button
-  type="button"
-  onClick={() => {
-    if (!isMobileActionsOpen) {
-      setIsMobileActionsOpen(true);
-      return;
-    }
-
-    setIsOpen(true);
-    setIsMobileActionsOpen(false);
-  }}
-  className={`flex h-14 w-14 items-center justify-center rounded-full bg-transparent transition ${
-  !isMobileActionsOpen
-    ? "sahana-action-bounce"
-    : "sahana-pop-action hover:scale-110"
-}`}
->
-        {!isMobileActionsOpen ? (
-          <img
-            src={actionMenuPic.src}
-            alt="Open contact options"
-            className="h-14 w-14 object-contain"
-          />
-        ) : (
-          <img
-            src={chatpic.src}
-            alt="Sahana chat assistant"
-            className="h-14 w-14 rounded-full object-contain"
-          />
-        )}
-      </button>
-    </div>
-  </div>
-)}
       {/* Chat Window */}
       {isOpen && (
         <div
@@ -427,8 +443,8 @@ export default function SahanaChatBot() {
           {/* Header */}
           <div className="flex items-center justify-between bg-[#0D2B4D] px-5 py-4 text-white">
             <div>
-              <h3 className="text-sm font-black">Sahana Property Assistant</h3>
-              <p className="text-xs text-white/70">Online now</p>
+              <h3 className="text-sm font-black">{c.assistantName}</h3>
+              <p className="text-xs text-white/70">{c.onlineNow}</p>
             </div>
 
             <button
@@ -450,8 +466,8 @@ export default function SahanaChatBot() {
               >
                 <div
                   className={`max-w-[80%] rounded-2xl px-4 py-3 text-sm leading-relaxed ${message.from === "user"
-                      ? "bg-[#2196F3] text-white"
-                      : "bg-white text-[#0D2B4D] shadow-sm"
+                    ? "bg-[#2196F3] text-white"
+                    : "bg-white text-[#0D2B4D] shadow-sm"
                     }`}
                 >
                   {message.text}
@@ -477,7 +493,7 @@ export default function SahanaChatBot() {
 
             <div className="mt-3 flex items-center gap-2 rounded-full bg-[#F1F4FA] px-4 py-3 text-xs text-gray-400">
               <Send size={14} />
-              Click an option to continue
+              {c.continueHint}
             </div>
           </div>
         </div>

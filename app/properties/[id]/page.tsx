@@ -6,6 +6,9 @@ import headerBg from "../../assets/aboutbg.png";
 
 import { createClient } from "@/app/utils/supabase/client";
 
+import { translations } from "../../lib/translations";
+import { useLanguage } from "../../lib/useLanguage";
+
 import Link from "next/link";
 import {
     ArrowLeft,
@@ -41,6 +44,8 @@ interface PropertyPageProps {
 }
 
 export default function PropertyDetailPage({ params }: PropertyPageProps) {
+    const { language } = useLanguage();
+    const t = translations[language];
     const [thumbsSwiper, setThumbsSwiper] = useState<any>(null);
     const [isPlayingVideo, setIsPlayingVideo] = useState<boolean>(false);
     const resolvedParams = React.use(params);
@@ -99,7 +104,7 @@ export default function PropertyDetailPage({ params }: PropertyPageProps) {
         4
     );
 
-    const amenities = []
+    //const amenities = []
     //     property.amenities && property.amenities.length > 0
     //         ? property.amenities
     //         : [
@@ -140,10 +145,54 @@ export default function PropertyDetailPage({ params }: PropertyPageProps) {
         fetchdata();
     }, [resolvedParams.id])
 
-    const overviewPoints: string[] = Array.isArray(property?.overview_points)
-  ? property.overview_points
-  : [];
+    const getProjectName = (item: any) => {
+        return language === "si" && item?.project_name_si
+            ? item.project_name_si
+            : item?.project_name || item?.title || t.landForSale;
+    };
 
+    const getProjectDesc = (item: any) => {
+        return language === "si" && item?.desc_si
+            ? item.desc_si
+            : item?.desc || "";
+    };
+
+    const getLandTypeLabel = (type?: string) => {
+        if (type === "Residential") return t.residentialLand;
+        if (type === "Commercial") return t.commercialLand;
+        if (type === "Agricultural") return t.agriculturalLand;
+
+        return type || "";
+    };
+
+    const overviewPoints: string[] =
+        language === "si" && Array.isArray(property?.overview_points_si)
+            ? property.overview_points_si
+            : Array.isArray(property?.overview_points)
+                ? property.overview_points
+                : [];
+
+    const amenities = Array.isArray(property?.amenities) ? property.amenities : [];
+
+    const landmarks = Array.isArray(property?.landmarks) ? property.landmarks : [];
+
+    const getAmenityTitle = (amenity: any) => {
+        return language === "si" && amenity?.title_si
+            ? amenity.title_si
+            : amenity?.title || "";
+    };
+
+    const getAmenityDescription = (amenity: any) => {
+        return language === "si" && amenity?.description_si
+            ? amenity.description_si
+            : amenity?.description || "";
+    };
+
+    const getLandmarkName = (landmark: any) => {
+        return language === "si" && landmark?.name_si
+            ? landmark.name_si
+            : landmark?.name || "";
+    };
     return (
         <main className="relative min-h-screen overflow-hidden bg-[#F8FAFC] pb-20 text-[#0D2B4D]">
 
@@ -168,7 +217,7 @@ export default function PropertyDetailPage({ params }: PropertyPageProps) {
                     className="mb-6 inline-flex items-center gap-2 text-sm font-bold text-[#d2e6f7] transition hover:text-[#0D2B4D]"
                 >
                     <ArrowLeft size={16} />
-                    Back to Listings
+                    {t.backToListings}
                 </Link>
 
                 {/* Top Gallery + Details */}
@@ -202,7 +251,7 @@ export default function PropertyDetailPage({ params }: PropertyPageProps) {
                                         <SwiperSlide key={index}>
                                             <img
                                                 src={imgUrl}
-                                                alt={`${property.title} view ${index + 1}`}
+                                                alt={`${getProjectName(property)} view ${index + 1}`}
                                                 className="h-full w-full object-cover object-center"
                                             />
                                         </SwiperSlide>
@@ -213,7 +262,7 @@ export default function PropertyDetailPage({ params }: PropertyPageProps) {
                                     className={`absolute left-4 top-4 z-20 rounded-full px-4 py-2 text-xs font-black text-white shadow-md ${property?.type_color || "bg-[#E6008E]"
                                         }`}
                                 >
-                                    {property?.type || "Residential Land"}
+                                    {getLandTypeLabel(property?.type) || t.residentialLand}
                                 </span>
 
                                 <button className="gallery-swiper-prev absolute left-4 top-1/2 z-20 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full border border-white/40 bg-white/85 text-[#0D2B4D] shadow-md backdrop-blur transition hover:bg-[#2196F3] hover:text-white opacity-0">
@@ -259,11 +308,11 @@ export default function PropertyDetailPage({ params }: PropertyPageProps) {
                     <aside className="lg:col-span-4">
                         <div className="sticky top-28 rounded-[2rem] border border-gray-200 bg-white p-8 shadow-[0_18px_55px_rgba(13,43,77,0.08)]">
                             <p className="text-xs font-black uppercase tracking-widest text-[#2196F3]">
-                                Premium Land Project
+                                {t.premiumLandProject}
                             </p>
 
                             <h1 className="mt-4 text-3xl font-black leading-tight tracking-[-0.03em] text-[#0D2B4D]">
-                                {property?.project_name || "Land for sale"}
+                                {getProjectName(property)}
                             </h1>
 
                             <div className="mt-3 flex items-center gap-2 text-sm font-medium text-[#0D2B4D]/60">
@@ -276,17 +325,17 @@ export default function PropertyDetailPage({ params }: PropertyPageProps) {
                             <div className="grid grid-cols-2 gap-5">
                                 <div>
                                     <p className="text-[11px] font-bold uppercase tracking-wider text-gray-400">
-                                        Price
+                                        {t.price}
                                     </p>
                                     <p className="mt-1 text-2xl font-black text-[#E6008E]">
                                         {property?.price || "0"}
                                     </p>
-                                    <p className="text-xs text-gray-500">Per Perch</p>
+                                    <p className="text-xs text-gray-500">{t.perPerch}</p>
                                 </div>
 
                                 <div className="border-l border-gray-200 pl-5">
                                     <p className="text-[11px] font-bold uppercase tracking-wider text-gray-400">
-                                        Total Acres
+                                        {t.totalAcres}
                                     </p>
                                     <p className="mt-1 text-2xl font-black">
                                         {property?.acres || "25"}
@@ -295,7 +344,7 @@ export default function PropertyDetailPage({ params }: PropertyPageProps) {
 
                                 <div>
                                     <p className="text-[11px] font-bold uppercase tracking-wider text-gray-400">
-                                        Available Plots
+                                        {t.availablePlots}
                                     </p>
                                     <p className="mt-1 text-2xl font-black">
                                         {property?.available_plots || "120+"}
@@ -308,14 +357,14 @@ export default function PropertyDetailPage({ params }: PropertyPageProps) {
                                     href="/contact"
                                     className="flex w-full items-center justify-center gap-2 rounded-full bg-[#0D2B4D] px-6 py-4 text-sm font-bold text-white shadow-lg shadow-blue-500/25 transition hover:bg-[#E6008E]"
                                 >
-                                    Enquire Now
+                                    {t.enquireNow}
                                     <ArrowRight size={17} />
                                 </Link>
 
 
 
                                 <button className="flex w-full items-center justify-center gap-2 rounded-full bg-[#F1F4FA] px-6 py-4 text-sm font-bold text-[#0D2B4D] transition hover:bg-gray-200">
-                                    Share Property
+                                    {t.shareProperty}
                                     <Share2 size={16} />
                                 </button>
                             </div>
@@ -330,14 +379,14 @@ export default function PropertyDetailPage({ params }: PropertyPageProps) {
                             <BriefcaseBusiness size={21} />
                         </div>
 
-                        <h2 className="text-xl font-black">Property Overview</h2>
+                        <h2 className="text-xl font-black">{t.propertyOverview}</h2>
                     </div>
 
                     <div className="mb-5 h-[3px] w-12 rounded-full bg-[#E6008E]" />
 
                     <div className="max-w-5xl space-y-5">
                         <p className="text-sm leading-relaxed text-[#0D2B4D]/70">
-                            {property?.desc || "gg"}
+                            {getProjectDesc(property)}
                         </p>
 
                         {overviewPoints.length > 0 && (
@@ -361,15 +410,15 @@ export default function PropertyDetailPage({ params }: PropertyPageProps) {
 
                 {/* Infrastructure */}
                 <section className="mt-8 rounded-[1.5rem] border border-gray-200 bg-white p-7 shadow-sm">
-                    <h2 className="text-xl font-black">Infrastructure & Amenities</h2>
+                    <h2 className="text-xl font-black">{t.infrastructureAmenities}</h2>
                     <div className="mt-3 h-[3px] w-12 rounded-full bg-[#E6008E]" />
 
                     <div className="mt-7 grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-6">
-                        {property?.amenities.map((amenity: { title: string; description: string; icon: string }, index: number) => (
+                        {amenities.map((amenity: any, index: number) => (
                             <AmenityCard
                                 key={index}
-                                title={amenity.title}
-                                description={amenity.description}
+                                title={getAmenityTitle(amenity)}
+                                description={getAmenityDescription(amenity)}
                                 icon={amenity.icon}
                             />
                         ))}
@@ -380,7 +429,7 @@ export default function PropertyDetailPage({ params }: PropertyPageProps) {
                 <section className="mt-8 grid grid-cols-1 gap-8 lg:grid-cols-12">
                     {/* LOCATION CARD */}
                     <div className="rounded-[1.5rem] border border-gray-200 bg-white p-7 shadow-sm lg:col-span-7">
-                        <h2 className="text-xl font-black">Location</h2>
+                        <h2 className="text-xl font-black">{t.location}</h2>
                         <div className="mt-3 h-[3px] w-12 rounded-full bg-[#E6008E]" />
 
                         <div className="mt-6 grid grid-cols-1 gap-6 lg:grid-cols-[2fr_1fr]">
@@ -400,13 +449,13 @@ export default function PropertyDetailPage({ params }: PropertyPageProps) {
 
                             {/* Smaller Nearby Landmarks Area */}
                             <div className="rounded-2xl border border-gray-100 bg-[#F8FAFC] p-5">
-                                <h3 className="mb-4 text-sm font-black">Nearby Landmarks</h3>
+                                <h3 className="mb-4 text-sm font-black">{t.nearbyLandmarks}</h3>
 
                                 {/* DYNAMIC MATRIX LOOP: Maps out whatever landmarks belong to this ID page */}
-                                {property?.landmarks?.map((landmark: { name: string; distance: string }, index: number) => (
+                                {landmarks.map((landmark: any, index: number) => (
                                     <LocationRow
                                         key={index}
-                                        name={landmark.name}
+                                        name={getLandmarkName(landmark)}
                                         distance={landmark.distance}
                                     />
                                 ))}
@@ -418,9 +467,9 @@ export default function PropertyDetailPage({ params }: PropertyPageProps) {
                     {/* LAND PLAN CARD */}
                     <div className="rounded-[1.5rem] border border-gray-200 bg-white p-7 shadow-sm lg:col-span-5">
                         <div className="lg:col-span-6 w-full transform-gpu flex flex-row items-center gap-6 lg:justify-self-end"    >
-                            <h2 className="text-xl font-black">Land Plan (Master Plan)</h2>
+                            <h2 className="text-xl font-black">{t.landPlan} ({t.masterPlan})</h2>
                             <div className="grid grid-cols-2 sm:grid-cols-2">
-                                <h2 className="text-sm font-black text-center">{property?.perches_P || "120+"} Perches</h2> 
+                                <h2 className="text-sm font-black text-center">{property?.perches_P || "120+"} {t.perches}</h2>
                             </div>
                         </div>
                         <div className="mt-3 h-[3px] w-12 rounded-full bg-[#E6008E]" />
@@ -428,14 +477,14 @@ export default function PropertyDetailPage({ params }: PropertyPageProps) {
                         <div className="mt-6 overflow-hidden rounded-2xl bg-[#F1F4FA]">
                             <img
                                 src={property?.plan_image || galleryImages[0]}
-                                alt={`${property?.title} master plan`}
+                                alt={`${getProjectName(property)} ${t.masterPlan}`}
                                 className="h-[380px] w-full object-cover"
                             />
                         </div>
 
                         {/* <div className="lg:col-span-6 w-full transform-gpu flex flex-row items-center gap-6 lg:justify-self-end"> */}
                         <button className="mt-5 inline-flex items-center gap-2 rounded-full border border-[#2196F3] px-5 py-3 text-sm font-bold text-[#2196F3] transition hover:bg-[#2196F3] hover:text-white">
-                            Download Plan
+                           {t.downloadPlan}
                             <Download size={16} />
                         </button>
 
@@ -447,7 +496,7 @@ export default function PropertyDetailPage({ params }: PropertyPageProps) {
                 {/* ========================================================== */}
                 <section className="mt-8 grid grid-cols-1 gap-8 rounded-[1.5rem] border border-gray-200 bg-white p-7 shadow-sm lg:grid-cols-12">
                     <div className="lg:col-span-7">
-                        <h2 className="text-xl font-black">Project Video</h2>
+                        <h2 className="text-xl font-black">{t.projectVideo}</h2>
                         <div className="mt-3 h-[3px] w-12 rounded-full bg-[#E6008E]" />
 
                         <div className="relative mt-6 aspect-video overflow-hidden rounded-2xl bg-[#0D2B4D]">
@@ -458,7 +507,7 @@ export default function PropertyDetailPage({ params }: PropertyPageProps) {
                                     {/* Display static placeholder thumbnail image layout by default */}
                                     <img
                                         src={property?.video_Image}
-                                        alt={`${property?.title} project video preview thumbnail`}
+                                        alt={`${getProjectName(property)} ${t.projectVideo}`}
                                         className="h-full w-full object-cover opacity-80"
                                     />
 
@@ -489,17 +538,15 @@ export default function PropertyDetailPage({ params }: PropertyPageProps) {
 
                     <div className="flex flex-col justify-center lg:col-span-5">
                         <p className="text-xs font-black uppercase tracking-widest text-[#29D6ED]">
-                            Explore {property?.project_name}
+                           {t.exploreProject} {getProjectName(property)}
                         </p>
 
                         <h2 className="mt-3 text-3xl font-black tracking-[-0.03em]">
-                            See the Potential. Feel the Difference.
+                            {t.videoTitle}
                         </h2>
 
                         <p className="mt-4 text-sm leading-relaxed text-[#0D2B4D]/65">
-                            Watch our project video to experience the surrounding
-                            neighbourhood, infrastructure, access roads, and the lifestyle this
-                            land development offers.
+                            {t.videoDescription}
                         </p>
 
                         {/* Anchored direct attachment download capability path trigger */}
@@ -508,7 +555,7 @@ export default function PropertyDetailPage({ params }: PropertyPageProps) {
                             download={`${property?.project_name}-Project-Video.mp4`}
                             className="mt-6 inline-flex w-fit items-center gap-2 rounded-full border border-[#2196F3] px-6 py-3 text-sm font-bold text-[#2196F3] transition hover:bg-[#2196F3] hover:text-white"
                         >
-                            Download Video
+                            {t.downloadVideo}
                             <Download size={16} />
                         </a>
                     </div>
@@ -520,11 +567,11 @@ export default function PropertyDetailPage({ params }: PropertyPageProps) {
                     <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
                         <div>
                             <p className="text-xs font-black uppercase tracking-widest text-[#2196F3]">
-                                More Land Opportunities
+                                {t.moreLandOpportunities}
                             </p>
 
                             <h2 className="mt-2 text-2xl font-black tracking-tight text-[#0D2B4D]">
-                                Other Premium Land Projects
+                               {t.otherPremiumLandProjects}
                             </h2>
                         </div>
 
@@ -532,7 +579,7 @@ export default function PropertyDetailPage({ params }: PropertyPageProps) {
                             href="/properties"
                             className="inline-flex items-center gap-2 text-sm font-bold text-[#0D2B4D] transition-colors duration-200 hover:text-[#2196F3]"
                         >
-                            View All Projects
+                            {t.viewAllProjects}
                             <span>→</span>
                         </Link>
                     </div>
@@ -603,7 +650,7 @@ export default function PropertyDetailPage({ params }: PropertyPageProps) {
 
                                                 <div className="absolute bottom-4 right-4 rounded-2xl border border-white/10 bg-[#0D2B4D]/90 px-4 py-2.5 text-right text-white shadow-lg backdrop-blur-md">
                                                     <p className="text-[10px] font-bold uppercase tracking-wider text-blue-200/80">
-                                                        Starting From
+                                                        {t.startingFrom}
                                                     </p>
                                                     <p className="text-lg font-black tracking-wide">
                                                         {land.price}
@@ -632,7 +679,7 @@ export default function PropertyDetailPage({ params }: PropertyPageProps) {
                                                         </span>
 
                                                         <span className="rounded-xl bg-[#F1F4FA] px-3 py-1.5 text-xs font-bold text-[#0D2B4D]/80">
-                                                            {land.acres || "25"} Acres
+                                                            {land.acres || "25"} {t.acres}
                                                         </span>
 
                                                         <span className="rounded-xl bg-[#F1F4FA] px-3 py-1.5 text-xs font-bold text-[#0D2B4D]/80">
@@ -644,7 +691,7 @@ export default function PropertyDetailPage({ params }: PropertyPageProps) {
                                                 <div className="mt-6 border-t border-gray-100 pt-4">
                                                     <div className="flex items-center justify-between">
                                                         <span className="text-sm font-black text-[#0D2B4D] transition group-hover:text-[#2196F3]">
-                                                            Explore Land Plot
+                                                            {t.exploreLandPlot}
                                                         </span>
 
                                                         <div className="flex h-9 w-9 items-center justify-center rounded-full border border-gray-100 bg-gray-50 text-[#0D2B4D] transition group-hover:border-[#2196F3] group-hover:bg-[#2196F3] group-hover:text-white">

@@ -6,8 +6,10 @@ import gsap from "gsap";
 import contactHeroBg from "../assets/contact-HeroBg.png";
 import faqImage from "../assets/contact-faq.png"
 import single from "../assets/sahana-single-logo.png"
-import { Map, Eye, Icon } from "lucide-react";
+import { Map, Eye, } from "lucide-react";
 import { BsInstagram, BsFacebook, BsWhatsapp, BsMailbox } from "react-icons/bs";
+import { translations } from "../lib/translations";
+import { useLanguage } from "../lib/useLanguage";
 
 
 
@@ -60,6 +62,8 @@ const FAQ_DATA = [
 ];
 
 export default function ContactUsPage() {
+  const { language } = useLanguage();
+  const t = translations[language];
   const pageRef = useRef<HTMLDivElement | null>(null);
   const [activeFaq, setActiveFaq] = useState<number | null>(null);
   const [agreed, setAgreed] = useState(false);
@@ -67,7 +71,28 @@ export default function ContactUsPage() {
 
   const map3dSrc = "https://www.google.com/maps/embed?pb=!3m2!1sen!2slk!4v1780553484597!5m2!1sen!2slk!6m8!1m7!1sLPwT4eDTzgavoPMtzwEnhw!2m2!1d6.717587260683677!2d80.06653117233996!3f99.69158502655553!4f20.324966829397795!5f0.7820865974627469";
   const mapNormalSrc = "https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d10236.274414800615!2d80.0615734!3d6.7174122!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3ae24b4ffff0d5b1%3A0x9c974cc28a117f40!2sSahana%20Group!5e1!3m2!1sen!2slk!4v1780553667586!5m2!1sen!2slk";
-
+  const faqData = [
+    {
+      id: 1,
+      question: t.faqResponseQuestion,
+      answer: t.faqResponseAnswer,
+    },
+    {
+      id: 2,
+      question: t.faqVisitQuestion,
+      answer: t.faqVisitAnswer,
+    },
+    {
+      id: 3,
+      question: t.faqAreasQuestion,
+      answer: t.faqAreasAnswer,
+    },
+    {
+      id: 4,
+      question: t.faqFinancingQuestion,
+      answer: t.faqFinancingAnswer,
+    },
+  ];
 
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -106,21 +131,19 @@ export default function ContactUsPage() {
             <div className="animate-fade-up lg:col-span-7">
               <div className="mb-5 flex items-center gap-5">
                 <span className="text-xs font-black uppercase tracking-[0.35em] text-[#E6008E]">
-                  Contact Us
+                  {t.contactHeroBadge}
                 </span>
                 <span className="h-[2px] w-16 bg-[#E6008E]" />
               </div>
 
               <h1 className="max-w-3xl text-5xl font-medium leading-[1.05] tracking-[-0.04em] text-[#0D2B4D] sm:text-6xl lg:text-7xl">
-                We’re here to help you find your perfect space
+                {t.contactHeroTitle}
                 <span className="text-[#E6008E]">.</span>
               </h1>
 
               <div className="mt-8 flex max-w-xl gap-5 border-l-2 border-[#E6008E] pl-5">
                 <p className="text-base leading-relaxed text-[#0D2B4D]/70">
-                  Whether you have a question about our properties, need
-                  guidance, or want to schedule a visit — our team is ready to
-                  assist you.
+                  {t.contactHeroDescription}
                 </p>
               </div>
             </div>
@@ -136,10 +159,10 @@ export default function ContactUsPage() {
 
                   <div>
                     <h3 className="text-xl font-bold text-white drop-shadow-sm">
-                      Trusted real estate partner in Sri Lanka
+                      {t.contactTrustTitle}
                     </h3>
                     <p className="mt-3 text-sm leading-relaxed text-white/85">
-                      Local expertise. Transparent process. Exceptional service.
+                      {t.contactTrustDescription}
                     </p>
                   </div>
                 </div>
@@ -157,42 +180,42 @@ export default function ContactUsPage() {
                     <Mail size={22} />
                   </div>
                   <h2 className="text-2xl font-semibold text-[#0D2B4D]">
-                    Send us a message
+                    {t.sendMessageTitle}
                   </h2>
                 </div>
 
                 <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                   <input
                     type="text"
-                    placeholder="Full Name"
+                    placeholder={t.fullName}
                     className="rounded-xl border border-gray-200 bg-white px-4 py-3.5 text-sm outline-none transition focus:border-[#2196F3]"
                   />
                   <input
                     type="email"
-                    placeholder="Email Address"
+                    placeholder={t.emailAddress}
                     className="rounded-xl border border-gray-200 bg-white px-4 py-3.5 text-sm outline-none transition focus:border-[#2196F3]"
                   />
                   <input
                     type="tel"
-                    placeholder="Phone Number"
+                    placeholder={t.phoneNumber}
                     className="rounded-xl border border-gray-200 bg-white px-4 py-3.5 text-sm outline-none transition focus:border-[#2196F3]"
                   />
                   <select className="rounded-xl border border-gray-200 bg-white px-4 py-3.5 text-sm text-gray-400 outline-none transition focus:border-[#2196F3]">
-                    <option>Preferred Contact Method</option>
-                    <option>WhatsApp</option>
-                    <option>Phone Call</option>
-                    <option>Email</option>
+                    <option>{t.preferredContactMethod}</option>
+                    <option>{t.whatsapp}</option>
+                    <option>{t.phoneCall}</option>
+                    <option>{t.email}</option>
                   </select>
                 </div>
 
                 <input
                   type="text"
-                  placeholder="Subject"
+                  placeholder={t.subject}
                   className="mt-4 w-full rounded-xl border border-gray-200 bg-white px-4 py-3.5 text-sm outline-none transition focus:border-[#2196F3]"
                 />
 
                 <textarea
-                  placeholder="How can we help you?"
+                  placeholder={t.helpMessage}
                   rows={5}
                   className="mt-4 w-full resize-none rounded-xl border border-gray-200 bg-white px-4 py-3.5 text-sm outline-none transition focus:border-[#2196F3]"
                 />
@@ -213,13 +236,13 @@ export default function ContactUsPage() {
                     {agreed && <Check size={11} className="text-white" />}
                   </span>
                   <span>
-                    I agree to the{" "}
+                    {t.privacyAgree}{" "}
                     <Link href="/privacy" className="text-[#2196F3]">
-                      Privacy Policy
+                      {t.privacyPolicy}
                     </Link>{" "}
-                    and{" "}
+                    {t.and}{" "}
                     <Link href="/terms" className="text-[#2196F3]">
-                      Terms of Use
+                      {t.termsOfUse}
                     </Link>
                     .
                   </span>
@@ -227,13 +250,13 @@ export default function ContactUsPage() {
 
                 <div className="mt-7 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                   <button className="inline-flex items-center justify-center gap-3 rounded-full bg-[#E6008E] px-7 py-4 text-sm font-bold text-white shadow-lg shadow-pink-500/25 transition hover:bg-[#0D2B4D]">
-                    Send Message
+                    {t.sendMessage}
                     <ArrowRight size={18} />
                   </button>
 
                   <div className="flex items-center gap-2 text-xs font-medium text-gray-500">
                     <Check size={16} className="text-emerald-500" />
-                    We typically respond within 1 business day.
+                    {t.responseTimeNote}
                   </div>
                 </div>
               </div>
@@ -246,13 +269,22 @@ export default function ContactUsPage() {
                   <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-white/10 text-[#E6008E]">
                     <MapPin size={22} />
                   </div>
-                  <h2 className="text-2xl font-semibold">Sahana Group <br></br> Head Office</h2>
+                  <div>
+
+                    {t.headOfficeTitle.split("\n").map((line, index) => (
+                      <h2 key={`${line}-${index}`} className="text-2xl font-semibold">
+                        {line}
+                      </h2>
+                    ))}
+                  </div>
+                  {/* <h2 className="text-2xl font-semibold">Sahana Group <br></br> Head Office</h2> */}
+
                 </div>
 
                 <p className="max-w-sm text-sm leading-relaxed text-white/75">
-                  240 Ratnapura - Horana ,
+                  {t.officeAddressLine1}
                   <br />
-                  Panadura Hwy, Horana.
+                  {t.officeAddressLine2}
                 </p>
 
                 <div className="my-7 h-px bg-white/15" />
@@ -292,8 +324,8 @@ export default function ContactUsPage() {
                   <div className="flex items-start gap-4 text-white/90">
                     <Clock size={18} className="mt-1 text-white/70" />
                     <div className="text-sm font-light">
-                      <p>Mon - Fri: 8:30 AM - 5:30 PM</p>
-                      <p>Sat | Sun: closed</p>
+                      <p>{t.officeHours1}</p>
+                      <p>{t.officeHours2}</p>
                     </div>
                   </div>
                 </div>
@@ -302,7 +334,7 @@ export default function ContactUsPage() {
 
                 {/* SOCIAL MEDIA HOVER SYSTEM */}
                 <div className="flex items-center justify-between">
-                  <span className="text-sm text-white/70">Follow us</span>
+                  <span className="text-sm text-white/70">{t.followUs}</span>
                   <div className="flex gap-3">
                     {[
                       { icon: BsFacebook, url: "https://www.facebook.com/SahanaIdamHorana" },
@@ -341,34 +373,37 @@ export default function ContactUsPage() {
             <div className="grid grid-cols-1 divide-y divide-gray-200 md:grid-cols-4 md:divide-x md:divide-y-0">
               <QuickContact
                 icon={<MessageCircle size={22} />}
-                title="WhatsApp"
-                text="Chat with our team instantly on WhatsApp."
-                link="Chat Now"
-                href="https://api.whatsapp.com/send/?phone=%2B94772647356&text&type=phone_number&app_absent=0" // 👈 Replace with phone number
+                title={t.quickWhatsappTitle}
+                text={t.quickWhatsappText}
+                link={t.quickWhatsappLink}
+                href="https://api.whatsapp.com/send/?phone=%2B94772647356&text&type=phone_number&app_absent=0"
                 color="text-emerald-500 bg-emerald-50"
               />
+
               <QuickContact
                 icon={<Phone size={22} />}
-                title="Call Us"
-                text="Speak with our property experts directly."
-                link="Call Now"
-                href="tel:+1234567890" // 👈 Replace with phone number
+                title={t.quickCallTitle}
+                text={t.quickCallText}
+                link={t.quickCallLink}
+                href="tel:+94342267979"
                 color="text-[#2196F3] bg-blue-50"
               />
+
               <QuickContact
                 icon={<Mail size={22} />}
-                title="Email Us"
-                text="Drop us an email anytime, we’ll reply soon."
-                link="Send Email"
-                href="mailto:info@yourdomain.com" // 👈 Replace with email address
+                title={t.quickEmailTitle}
+                text={t.quickEmailText}
+                link={t.quickEmailLink}
+                href="mailto:info@sahanagroup.lk"
                 color="text-[#E6008E] bg-pink-50"
               />
+
               <QuickContact
                 icon={<MapPin size={22} />}
-                title="Visit Office"
-                text="Walk in anytime during office hours."
-                link="Get Directions"
-                href="https://maps.app.goo.gl/BvSyJFNM2Umd9pTv6" // 👈 Replace with address
+                title={t.quickVisitTitle}
+                text={t.quickVisitText}
+                link={t.quickVisitLink}
+                href="https://maps.app.goo.gl/BvSyJFNM2Umd9pTv6"
                 color="text-orange-500 bg-orange-50"
               />
             </div>
@@ -393,6 +428,8 @@ export default function ContactUsPage() {
               referrerPolicy="no-referrer-when-downgrade"
             ></iframe>
 
+
+
             {/* 3. FLOATING VIEPORT VIEW TOGGLE TRIGGER BUTTON CONTROLS */}
             {/* Placed in the top right corner so it balances out against your left address information card */}
             <div className="absolute right-6 top-6 z-20 bg-white/90 backdrop-blur-md p-1.5 rounded-2xl border border-white/50 shadow-lg flex items-center gap-1.5">
@@ -406,7 +443,7 @@ export default function ContactUsPage() {
                   }`}
               >
                 <Eye size={14} />
-                3D View
+                {t.view3d}
               </button>
 
               {/* Standard Grid Route Map Switch Button */}
@@ -419,17 +456,17 @@ export default function ContactUsPage() {
                   }`}
               >
                 <Map size={14} />
-                Map View
+                {t.mapView}
               </button>
             </div>
 
             {/* Floating High-End Glassmorphic Navigation Card */}
             <div className="relative  md:absolute  md:left-6 md:bottom-6 md:top-65  top-95 right-8 z-10 max-w-sm m-4 md:m-0 rounded-2xl md:bg-white/90 md:backdrop-blur-md p-6 md:shadow-xl md:border md:border-white/50 block">
               <h3 className="text-xl font-bold text-[#0D2B4D] hidden md:block">
-                Our Head Office
+                {t.ourHeadOffice}
               </h3>
               <p className="mt-2 text-sm : text-gray-500 leading-relaxed hidden md:block">
-                Sahana Group, Horana, Sri Lanka. Open for walk-ins and consultation appointments.
+                {t.mapCardDescription}
               </p>
 
               <Link
@@ -438,7 +475,7 @@ export default function ContactUsPage() {
                 rel="noopener noreferrer"
                 className="md:mt-5 inline-flex  b items-center gap-2 rounded-xl border border-gray-300 bg-white px-5 py-3 text-sm font-bold text-[#0D2B4D] transition hover:border-[#2196F3] hover:text-[#2196F3]"
               >
-                Get Directions
+                {t.getDirections}
                 <ExternalLink size={16} />
               </Link>
             </div>
@@ -465,21 +502,21 @@ export default function ContactUsPage() {
             <div className="mb-6 flex items-start justify-between gap-6">
               <div>
                 <h2 className="text-3xl font-semibold text-[#0D2B4D]">
-                  Quick Answers
+                  {t.quickAnswers}
                 </h2>
                 <p className="mt-2 text-sm text-gray-500">
-                  Common questions from property seekers.
+                  {t.quickAnswersDescription}
                 </p>
               </div>
 
               <div className="hidden rounded-2xl bg-gray-50 px-5 py-4 md:block">
-                <p className="text-xs text-gray-500">We respond within</p>
-                <p className="font-bold text-[#0D2B4D]">24 hours</p>
+                <p className="text-xs text-gray-500">{t.weRespondWithin}</p>
+                <p className="font-bold text-[#0D2B4D]">{t.twentyFourHours}</p>
               </div>
             </div>
 
             <div className="divide-y divide-gray-200">
-              {FAQ_DATA.map((faq) => {
+              {faqData.map((faq) => {
                 const isOpen = activeFaq === faq.id;
 
                 return (
@@ -542,7 +579,7 @@ function QuickContact({
       <div className="flex flex-col flex-grow">
         <h3 className="font-bold text-[#0D2B4D]">{title}</h3>
         <p className="mt-1 text-xs leading-relaxed text-gray-500 flex-grow">{text}</p>
-        
+
         {/* 4. Swapped static '#' with the dynamic href prop */}
         <Link
           href={href}
@@ -550,7 +587,7 @@ function QuickContact({
           rel={isExternal ? "noopener noreferrer" : undefined}
           className="mt-3 inline-flex text-xs font-bold text-[#2196F3] items-center hover:underline"
         >
-          {link} 
+          {link}
           <span className="ml-1 transition-transform duration-200 group-hover:translate-x-1">→</span>
         </Link>
       </div>

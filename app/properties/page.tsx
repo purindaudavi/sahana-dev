@@ -2,10 +2,12 @@
 
 export const dynamic = "force-dynamic";
 
-import React, { useState, useEffect ,Suspense } from "react";
+import React, { useState, useEffect, Suspense } from "react";
 import Link from "next/link";
-import { Search, RotateCcw, SlidersHorizontal, MapPin } from "lucide-react";
+import { Search, RotateCcw, MapPin } from "lucide-react";
 import { LAND_PROJECTS } from "./data";
+import { translations } from "../lib/translations";
+import { useLanguage } from "../lib/useLanguage";
 
 
 import propertyHeroBg from "../assets/property-hero.png";
@@ -15,14 +17,16 @@ import { createClient } from "@/app/utils/supabase/client";
 // Replace these with your real land images later
 import landBg from "../assets/property-hero.png";
 import CTASection from "../components/CTASection";
-import callusbg from "../assets//call-us.png";
+import callusbg from "../assets/call-us.png";
 import { error } from "console";
 import { useSearchParams } from "next/navigation";
 
 
 
- function PropertyListContent() {
-  const [activeTab, setActiveTab] = useState("All Projects");
+function PropertyListContent() {
+  const { language } = useLanguage();
+  const t = translations[language];
+  const [activeTab, setActiveTab] = useState("");
   const [priceValue, setPriceValue] = useState(0);
   const [landType, setLandType] = useState("");
   const [property, setProperty] = useState<any[]>([]);
@@ -34,6 +38,46 @@ import { useSearchParams } from "next/navigation";
   const [showSearch, setShowSearch] = useState(false);
   const searchParams = useSearchParams();
   const [paramsReady, setParamsReady] = useState(false);
+
+
+  const landTypeOptions = [
+    { label: t.residentialLand, value: "Residential" },
+    { label: t.commercialLand, value: "Commercial" },
+    { label: t.agriculturalLand, value: "Agricultural" },
+  ];
+
+  const blockSizeOptions = [
+    { label: t.below10Block, value: "below10" },
+    { label: t.between10And20Block, value: "10to20" },
+    { label: t.above20Block, value: "above20" },
+  ];
+
+  const propertyTabs = [
+    { label: t.allProjects, value: "" },
+    { label: t.residentialLand, value: "Residential" },
+    { label: t.commercialLand, value: "Commercial" },
+    { label: t.agriculturalLand, value: "Agricultural" },
+  ];
+
+  const getLandTypeLabel = (type?: string) => {
+    if (type === "Residential") return t.residentialLand;
+    if (type === "Commercial") return t.commercialLand;
+    if (type === "Agricultural") return t.agriculturalLand;
+
+    return type || "";
+  };
+
+  const getProjectName = (item: any) => {
+    return language === "si" && item.project_name_si
+      ? item.project_name_si
+      : item.project_name;
+  };
+
+  const getProjectDesc = (item: any) => {
+    return language === "si" && item.desc_si
+      ? item.desc_si
+      : item.desc;
+  };
 
 
   const fetchFromDB = async () => {
@@ -138,7 +182,7 @@ import { useSearchParams } from "next/navigation";
   const resetFilters = () => {
     setLandType("");
     setPriceValue(0)
-    setActiveTab("All Projects")
+    setActiveTab("")
     setDistrict("")
     setBlockSize("")
     setSortBY(1)
@@ -186,30 +230,27 @@ import { useSearchParams } from "next/navigation";
       setPriceValue(0);
     }
 
-    if (typeParam === "") setActiveTab("All Projects");
-    else if (typeParam === "Residential") setActiveTab("Residential Land");
-    else if (typeParam === "Commercial") setActiveTab("Commercial Land");
-    else if (typeParam === "Agricultural") setActiveTab("Agricultural Land");
+    setActiveTab(typeParam);
     setParamsReady(true);
   }, [searchParams]);
 
 
   useEffect(() => {
-  if (!paramsReady) return;
+    if (!paramsReady) return;
 
-  const hasAnyFilter =
-    priceValue > 0 ||
-    landType !== "" ||
-    district !== "" ||
-    blockSize !== "" ||
-    searchTerm !== "";
+    const hasAnyFilter =
+      priceValue > 0 ||
+      landType !== "" ||
+      district !== "" ||
+      blockSize !== "" ||
+      searchTerm !== "";
 
-  if (hasAnyFilter) {
-    fetchfromDB();
-  } else {
-    fetchFromDB();
-  }
-    }, [paramsReady, priceValue, landType, district, blockSize, sortBy, searchTerm]);
+    if (hasAnyFilter) {
+      fetchfromDB();
+    } else {
+      fetchFromDB();
+    }
+  }, [paramsReady, priceValue, landType, district, blockSize, sortBy, searchTerm]);
 
 
   return (
@@ -229,13 +270,12 @@ import { useSearchParams } from "next/navigation";
 
         <div className="relative z-10 mx-auto max-w-7xl px-6 pt-16">
           <h1 className="max-w-2xl text-4xl font-medium leading-tight tracking-[-0.04em] text-white drop-shadow-sm sm:text-5xl md:text-6xl">
-            Discover Premium Lands <br />
-            Across Sri Lanka
+            {t.propertiesHeroTitle1} <br />
+            {t.propertiesHeroTitle2}
           </h1>
 
           <p className="mt-5 max-w-xl text-base leading-relaxed text-white/90 md:text-lg">
-            Explore handpicked residential, commercial and agricultural lands in
-            prime locations with excellent potential.
+            {t.propertiesHeroDescription}
           </p>
 
           <div className="mt-3">
@@ -256,25 +296,26 @@ import { useSearchParams } from "next/navigation";
           <div className="space-y-4 border-gray-100 lg:border-r lg:pr-6">
             <h3 className="flex items-center gap-3 text-lg font-bold text-[#0D2B4D]">
               <span className="text-[#E6008E]">⌘</span>
-              Land Type
+              {t.landType}
             </h3>
 
             <div className="space-y-3 text-sm text-[#0D2B4D]/70">
-              {["Residential", "Commercial", "Agricultural"].map(
-                (item) => (
-                  <label key={item} className="flex cursor-pointer items-center gap-3">
-                    <input
-                      type="radio"
-                      name="landType"
-                      checked={landType === item}
+              {landTypeOptions.map((item) => (
+                <label key={item.value} className="flex cursor-pointer items-center gap-3">
+                  <input
+                    type="radio"
+                    name="landType"
+                    checked={landType === item.value}
 
-                      onChange={e => { setLandType(item); console.log(landType) }}
-
-                      className="h-4 w-4 accent-[#E6008E]"
-                    />
-                    {item} Land
-                  </label>
-                )
+                    onChange={() => {
+                      setLandType(item.value);
+                      setActiveTab(item.value);
+                    }}
+                    className="h-4 w-4 accent-[#E6008E]"
+                  />
+                  {item.label}
+                </label>
+              )
               )}
             </div>
           </div>
@@ -283,7 +324,7 @@ import { useSearchParams } from "next/navigation";
           <div className="space-y-4 border-gray-100 lg:border-r lg:pr-6">
             <h3 className="flex items-center gap-3 text-lg font-bold text-[#0D2B4D]">
               <span className="text-[#E6008E]">◇</span>
-              Price
+              {t.price}
             </h3>
 
 
@@ -318,7 +359,7 @@ import { useSearchParams } from "next/navigation";
           <div className="space-y-4 border-gray-100 lg:border-r lg:pr-6">
             <h3 className="flex items-center gap-3 text-lg font-bold text-[#0D2B4D]">
               <span className="text-[#E6008E]">⌖</span>
-              District
+              {t.district}
             </h3>
 
             <select
@@ -326,7 +367,7 @@ import { useSearchParams } from "next/navigation";
               onChange={(e) => setDistrict(e.target.value)}
               className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm outline-none focus:border-[#E6008E]"
             >
-              <option value="">All Districts</option>
+              <option value="">{t.allDistricts}</option>
               <option value="Colombo">Colombo</option>
               <option value="Gampaha">Gampaha</option>
               <option value="Kurunegala">Kurunegala</option>
@@ -364,15 +405,11 @@ import { useSearchParams } from "next/navigation";
           <div className="space-y-4 border-gray-100 lg:border-r lg:pr-6">
             <h3 className="flex items-center gap-3 text-lg font-bold text-[#0D2B4D]">
               <span className="text-[#E6008E]">▦</span>
-              Block Size
+              {t.blockSize}
             </h3>
 
             <div className="space-y-3 text-sm text-[#0D2B4D]/70">
-              {[
-                { label: "Below 10 Block Size", value: "below10" },
-                { label: "10 - 20 Block Size", value: "10to20" },
-                { label: "Above 20 Block Size", value: "above20" },
-              ].map((item) => (
+              {blockSizeOptions.map((item) => (
                 <label
                   key={item.value}
                   className="flex cursor-pointer items-center gap-3"
@@ -399,13 +436,13 @@ import { useSearchParams } from "next/navigation";
                 className="flex w-full items-center justify-center gap-3 rounded-full bg-[#0D2B4D] px-6 py-4 text-sm font-bold text-white"
               >
                 <Search size={18} />
-                Search Lands
+                {t.searchLands}
               </button>
             ) : (
               <>
                 <input
                   type="text"
-                  placeholder="Search land by name..."
+                  placeholder={t.searchPlaceholder}
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                   className="w-full rounded-full border border-gray-300 px-4 py-3"
@@ -415,7 +452,7 @@ import { useSearchParams } from "next/navigation";
                   onClick={fetchfromDB}
                   className="flex w-full items-center justify-center gap-3 rounded-full bg-[#0D2B4D] px-6 py-4 text-sm font-bold text-white"
                 >
-                  Search
+                  {t.search}
                 </button>
 
 
@@ -428,7 +465,7 @@ import { useSearchParams } from "next/navigation";
               onClick={resetFilters}
               className="flex w-full items-center justify-center gap-3 rounded-full border border-gray-200 bg-white px-6 py-4 text-sm font-bold text-[#0D2B4D] transition hover:border-[#2196F3] hover:text-[#2196F3]">
               <RotateCcw size={18} />
-              Reset Filters
+              {t.resetFilters}
             </button>
 
           </div>
@@ -440,40 +477,31 @@ import { useSearchParams } from "next/navigation";
       {/* ========================================================== */}
       <section className="mx-auto flex max-w-7xl flex-col gap-5 px-6 pb-8 pt-12 sm:flex-row sm:items-center sm:justify-between">
         <div className="flex flex-wrap items-center gap-4">
-          {[
-            "All Projects",
-            "Residential Land",
-            "Commercial Land",
-            "Agricultural Land",
-          ].map((tab) => (
+          {propertyTabs.map((tab) => (
             <button
-              key={tab}
+              key={tab.value || "all"}
               onClick={() => {
-                setActiveTab(tab);
-
-                if (tab === "All Projects") setLandType("");
-                else if (tab === "Residential Land") setLandType("Residential");
-                else if (tab === "Commercial Land") setLandType("Commercial");
-                else if (tab === "Agricultural Land") setLandType("Agricultural");
+                setActiveTab(tab.value);
+                setLandType(tab.value);
               }}
-              className={`rounded-full px-7 py-3 text-sm font-semibold transition ${activeTab === tab
+              className={`rounded-full px-7 py-3 text-sm font-semibold transition ${activeTab === tab.value
                 ? "bg-[#0D2B4D] text-white shadow-lg"
                 : "bg-white text-[#0D2B4D] shadow-sm hover:bg-[#F1F4FA]"
                 }`}
             >
-              {tab}
+              {tab.label}
             </button>
           ))}
         </div>
 
         <div className="flex items-center gap-3 rounded-full border border-gray-200 bg-white px-5 py-3 text-sm shadow-sm">
-          <span className="text-gray-500">Sort by:</span>
+          <span className="text-gray-500">{t.sortBy}</span>
           <select
             onChange={e => { setSortBY(parseInt(e.target.value)) }}
             className="bg-transparent font-bold text-[#0D2B4D] outline-none">
-            <option value={1}>Newest First</option>
-            <option value={2}>Price: Low to High</option>
-            <option value={3} >Price: High to Low</option>
+            <option value={1}>{t.newestFirst}</option>
+            <option value={2}>{t.priceLowToHigh}</option>
+            <option value={3}>{t.priceHighToLow}</option>
           </select>
         </div>
       </section>
@@ -491,15 +519,15 @@ import { useSearchParams } from "next/navigation";
             > <Link href={`/properties/${property.id}`}>
                 <div className="relative aspect-[4/3] overflow-hidden bg-gray-100">
                   <img
-                    src={property?.images[0]}
-                    alt={property.title}
+                    src={property?.images?.[0] || "/placeholder-land.jpg"}
+                    alt={getProjectName(property)}
                     className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
                   />
 
                   <span
                     className={`absolute left-4 top-4 rounded-md px-3 py-1.5 text-[10px] font-black text-white ${property.typeColor}`}
                   >
-                    {property.type}
+                    {getLandTypeLabel(property.type)}
                   </span>
                 </div>
 
@@ -510,21 +538,21 @@ import { useSearchParams } from "next/navigation";
                   </div>
 
                   <h3 className="mt-3 text-lg font-bold text-[#0D2B4D]">
-                    {property.project_name}
+                    {getProjectName(property)}
                   </h3>
 
                   <p className="mt-2 line-clamp-2 text-sm leading-relaxed text-gray-500">
-                    {property.desc}
+                    {getProjectDesc(property)}
                   </p>
 
                   <div className="mt-4 flex items-center justify-between">
                     <p className="text-sm font-black text-[#E6008E]">
-                      {property.price}{" LKR"}
-                      <span className="text-xs text-gray-400">/ Perch</span>
+                      {Number(property.price).toLocaleString()}{" LKR"}
+                      <span className="text-xs text-gray-400">{t.perPerch}</span>
                     </p>
 
                     <p className="text-sm font-bold text-[#0D2B4D]">
-                      {property.perch} perches
+                      {property.perch} {t.perches}
                     </p>
                   </div>
 
@@ -532,7 +560,7 @@ import { useSearchParams } from "next/navigation";
 
                     className="mt-5 flex w-full items-center justify-center gap-2 rounded-xl border border-gray-200 py-3 text-sm font-bold text-[#0D2B4D] transition hover:border-[#E6008E] hover:bg-[#E6008E] hover:text-white"
                   >
-                    View Details →
+                    {t.viewDetails} →
                   </div>
 
 
@@ -572,10 +600,10 @@ import { useSearchParams } from "next/navigation";
       </section> */}
 
       <CTASection
-        description="Whether you're looking to buy, sell, or invest, our team is here to help you every step of the way. Let's turn your property goals into reality."
-        primaryBtnText="Explore Properties"
+        description={t.ctaDescription}
+        primaryBtnText={t.ctaPrimary}
         primaryBtnHref="/properties"
-        secondaryBtnText="Contact Our Team"
+        secondaryBtnText={t.ctaSecondary}
         secondaryBtnHref="/contact"
         bgImageSrc={callusbg.src}
       />
